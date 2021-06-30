@@ -20,7 +20,8 @@ wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/GRCh38_referen
 wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00599/sequence_read/SRR590764_1.filt.fastq.gz && \
 gunzip SRR590764_1.filt.fastq.gz && \
 wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00599/sequence_read/SRR590764_2.filt.fastq.gz && \
-gunzip SRR590764_2.filt.fastq.gz
+gunzip SRR590764_2.filt.fastq.gz && \
+wget https://github.com/BilkentCompGen/sonic-prebuilt/raw/master/GRCh38_1kg.sonic
 
 # updates / packages
 
@@ -118,16 +119,29 @@ cpan GD::Graph && \
 cpan Statistics::Descriptive && \
 cpan GD::Graph::histogram
 
-ENV PATH=${PATH}:/tools/samtools-1.12:/tools/bcftools-1.12:/tools/bwa-0.7.17:/tools/anaconda/bin:/tools/biobambam2/2.0.87-release-20180301132713/x86_64-etch-linux-gnu/bin
-
-RUN conda init bash
-
 # GATK
 
 RUN cd tools && \
 wget https://github.com/broadinstitute/gatk/releases/download/4.2.0.0/gatk-4.2.0.0.zip && \
 unzip gatk-4.2.0.0.zip && \
 rm gatk-4.2.0.0.zip
+
+# FastQC
+
+RUN cd tools && \
+wget https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.9.zip && \
+unzip fastqc_v0.11.9.zip && \
+rm fastqc_v0.11.9.zip && \
+chmod +x FastQC/fastqc
+
+RUN cd tools && \
+wget https://downloads.sourceforge.net/project/vcftools/vcftools_0.1.13.tar.gz && \
+tar -xzf vcftools_0.1.13.tar.gz && \ 
+rm vcftools_0.1.13.tar.gz
+
+ENV PATH=${PATH}:/tools/samtools-1.12:/tools/bcftools-1.12:/tools/bwa-0.7.17:/tools/anaconda/bin:/tools/biobambam2/2.0.87-release-20180301132713/x86_64-etch-linux-gnu/bin:/tools/gatk-4.2.0.0:/tools/FastQC:/tools/vcftools_0.1.13/cpp
+
+RUN conda init bash
 
 # SV callers
 
@@ -150,7 +164,7 @@ rm master.zip && \
 cd breakdancer-master/ && \
 cmake . && \
 make -Wnoparentheses -Wnounused-local-typedefs -Wnodeprecated-declarations && \
-cd /tools/breakdancer-master && \
+cd /tools/breakdancer-master/bin && \
 wget https://raw.githubusercontent.com/PapenfussLab/sv_benchmark/master/breakdancer2vcf.py
 
 # delly
@@ -217,6 +231,6 @@ git clone https://github.com/czc/nb_distribution.git
 RUN cd /tools && \
     wget https://github.com/MateuszChilinski/ConsensuSV.git
 
-ENV PATH=$PATH:/tools/lumpy-sv/bin:/tools/manta-1.6.0.centos6_x86_64/bin:/tools/tardis:/tools/gatk-4.2.0.0:/tools/wham/bin:/tools/breakdancer-master/bin:/tools/breakdancer-master/perl:/tools:/tools/ConsensuSV
+ENV PATH=$PATH:/tools/lumpy-sv/bin:/tools/manta-1.6.0.centos6_x86_64/bin:/tools/tardis:/tools/wham/bin:/tools/breakdancer-master/bin:/tools/breakdancer-master/perl:/tools/nb_distribution/:/tools/CNVnator-master:/tools:/tools/ConsensuSV
 
 RUN pip install luigi

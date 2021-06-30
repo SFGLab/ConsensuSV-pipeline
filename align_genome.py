@@ -1,21 +1,28 @@
 import luigi
-import subprocess
 import os
 
-reference_genome = "/tools/GRCh38_full_analysis_set_plus_decoy_hla.fa"
-debug = 1
+from common import reference_genome, debug, run_command, get_path_no_ext
 
-def run_command(command):
-        if(debug):
-            print("___COMMAND: " + command)
-        result = subprocess.getoutput(command)
-        if(debug):
-            print("___OUTPUT:" + result)
+class QCAnalysis(luigi.Task):
+    file_name_1 = luigi.Parameter()
+    file_name_2 = luigi.Parameter()
+    output_file_name = luigi.Parameter()
+
+    def output(self):
+        return [luigi.LocalTarget("/pipeline/"+get_path_no_ext(self.file_name_1).split("/")[-1]+'_fastqc.html'), 
+        luigi.LocalTarget("/pipeline/"+get_path_no_ext(self.file_name_2).split("/")[-1]+'_fastqc.html')]
+
+    def run(self):
+        run_command("fastqc -f fastq -o %s %s" % ("/pipeline/", self.file_name_1))
+        run_command("fastqc -f fastq -o %s %s" % ("/pipeline/", self.file_name_2))
 
 class AlignGenome(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     output_file_name = luigi.Parameter()
+
+    def requires(self):
+        return QCAnalysis(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)
 
     def output(self):
         return luigi.LocalTarget("/pipeline/"+self.output_file_name+'.sam')
@@ -35,10 +42,10 @@ class ConvertToBam(luigi.Task):
         return AlignGenome(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)
 
     def output(self):
-        return luigi.LocalTarget(self.input().path.split(".")[0]+".bam")
+        return luigi.LocalTarget(get_path_no_ext(self.input().path)+".bam")
 
     def run(self):
-        full_path_output = self.input().path.split(".")[0]+".bam"
+        full_path_output = get_path_no_ext(self.input().path)+".bam"
         run_command("samtools view -S -b %s > %s" % (self.input().path, full_path_output))
 
 class SortBam(luigi.Task):
@@ -50,10 +57,10 @@ class SortBam(luigi.Task):
         return ConvertToBam(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)
 
     def output(self):
-        return luigi.LocalTarget(self.input().path.split(".")[0]+"_sorted.bam")
+        return luigi.LocalTarget(get_path_no_ext(self.input().path)+"_sorted.bam")
 
     def run(self):
-        full_path_output = self.input().path.split(".")[0]+"_sorted.bam"
+        full_path_output = get_path_no_ext(self.input().path)+"_sorted.bam"
         run_command("samtools sort %s > %s" % (self.input().path, full_path_output))
 
 class IndexBam(luigi.Task):
@@ -81,11 +88,11 @@ class BaseRecalibrator(luigi.Task):
         return IndexBam(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)
 
     def output(self):
-        return luigi.LocalTarget(self.input().path.split(".")[0]+".recal_table")
+        return luigi.LocalTarget(get_path_no_ext(self.input().path, 2)+".recal_table")
 
     def run(self):
-        input_file = self.input().path.split(".")[0]+".bam"
-        recal_table = input_file.split(".")[0]+".recal_table"
+        input_file = get_path_no_ext(self.input().path, 2)+".bam"
+        recal_table = get_path_no_ext(input_file)+".recal_table"
 
         run_command("gatk BaseRecalibrator -R %s -O %s -I %s -known-sites %s" % (reference_genome, recal_table, input_file, self.known_sites))
 
@@ -98,12 +105,12 @@ class ApplyBQSR(luigi.Task):
         return BaseRecalibrator(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)
 
     def output(self):
-        return luigi.LocalTarget(self.input().path.split(".")[0]+"_final.bam")
+        return luigi.LocalTarget(get_path_no_ext(self.input().path)+"_final.bam")
 
     def run(self):
         recal_table = self.input().path
-        input_file = recal_table.split(".")[0]+".bam"
-        output_file = recal_table.split(".")[0]+"_final.bam"
+        input_file = get_path_no_ext(recal_table)+".bam"
+        output_file = get_path_no_ext(recal_table)+"_final.bam"
 
         run_command("gatk ApplyBQSR -R %s -O %s -I %s -bqsr-recal-file %s" % (reference_genome, output_file, input_file, recal_table))
 
@@ -116,11 +123,11 @@ class SortFinal(luigi.Task):
         return ApplyBQSR(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)
 
     def output(self):
-        return luigi.LocalTarget(self.input().path.split(".")[0]+"_sorted.bam")
+        return luigi.LocalTarget(get_path_no_ext(self.input().path)+"_sorted.bam")
 
     def run(self):
-        input_file = self.input().path.split(".")[0]+"_sorted.bam"
-        output_file = self.input().path.split(".")[0]+"_sorted.bam"
+        input_file = get_path_no_ext(self.input().path)+"_sorted.bam"
+        output_file = get_path_no_ext(self.input().path)+"_sorted.bam"
 
         run_command("samtools sort %s > %s" % (self.input().path, output_file))
 
@@ -133,7 +140,7 @@ class IndexFinal(luigi.Task):
         return SortFinal(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)
 
     def output(self):
-        return luigi.LocalTarget(self.input().path.split(".")[0]+".bam.bai")
+        return luigi.LocalTarget(get_path_no_ext(self.input().path)+".bam.bai")
 
     def run(self):
         run_command("samtools index %s" % self.input().path)
@@ -160,81 +167,7 @@ class PerformAlignment(luigi.Task):
     def requires(self):
         return IndexFinal(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)
 
-class SNPCalling(luigi.Task):
-    file_name_1 = luigi.Parameter()
-    file_name_2 = luigi.Parameter()
-    output_file_name = luigi.Parameter()
 
-    def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)
-
-    def output(self):
-        return luigi.LocalTarget(self.input()[0].path.split(".")[0]+"_SNPs.vcf")
-
-    def run(self):
-        input_file = self.input()[0].path
-        inter_file = self.input()[0].path.split(".")[0]+"_SNPs.bcf"
-        output_file = self.input()[0].path.split(".")[0]+"_SNPs.vcf"
-
-        run_command("bcftools mpileup -Ou -f %s %s | bcftools call -mv -Ob -o %s && bcftools view -i '%%QUAL>=20' %s > %s" % (reference_genome, input_file, inter_file, inter_file, output_file))
-
-class SVDelly(luigi.Task):
-    file_name_1 = luigi.Parameter()
-    file_name_2 = luigi.Parameter()
-    output_file_name = luigi.Parameter()
-
-    def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)
-
-    def output(self):
-        return luigi.LocalTarget(self.input()[0].path.split(".")[0]+"_delly.vcf")
-
-    def run(self):
-        input_file = self.input()[0].path
-        inter_file = self.input()[0].path.split(".")[0]+"_delly.bcf"
-        output_file = self.input()[0].path.split(".")[0]+"_delly.vcf"
-
-        run_command("delly_v0.8.7_linux_x86_64bit call -o %s -g %s %s && bcftools view %s > %s" % (inter_file, reference_genome, input_file, inter_file, output_file))
-
-class SVDelly(luigi.Task):
-    file_name_1 = luigi.Parameter()
-    file_name_2 = luigi.Parameter()
-    output_file_name = luigi.Parameter()
-
-    def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)
-
-    def output(self):
-        return luigi.LocalTarget(self.input()[0].path.split(".")[0]+"_delly.vcf")
-
-    def run(self):
-        input_file = self.input()[0].path
-        inter_file = self.input()[0].path.split(".")[0]+"_breakdancer.cfg"
-        output_file = self.input()[0].path.split(".")[0]+"_breakdancer.vcf"
-
-        run_command("bam2cfg.pl %s > %s" % (input_file, config_file))
-        run_command("breakdancer-max %s > %s" % (config_file, inter_file))
-        run_command("python breakdancer2vcf.py <%s > %s" % (inter_file, output_file))
-
-class CallVariants(luigi.Task):
-    file_name_1 = luigi.Parameter()
-    file_name_2 = luigi.Parameter()
-    output_file_name = luigi.Parameter()
-
-    def requires(self):
-        return [SNPCalling(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name),
-        SVDelly(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)]
-
-    def output(self):
-        return luigi.LocalTarget(self.input()[0].path.split(".")[0]+"_SNPs.vcf")
-
-    def run(self):
-        os.remove(self.input()[0].path.split(".")[0]+".bcf")
-        os.remove(self.input()[1].path.split(".")[0]+".bcf")
-        os.remove(self.input()[1].path.split(".")[0]+".bcf.csi")
 
 if __name__ == '__main__':
     luigi.run()
-
-# INSTALLED: SNPs, BreakDancer, delly
-# TODO: CNVnator, breakseq, lumpy, Manta (run on breakseq conda), tardis, svelter (run on breakseq conda), whamg, novoBreak
