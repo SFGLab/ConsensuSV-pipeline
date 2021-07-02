@@ -21,13 +21,23 @@ wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00599/sequence_read/
 gunzip SRR590764_1.filt.fastq.gz && \
 wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00599/sequence_read/SRR590764_2.filt.fastq.gz && \
 gunzip SRR590764_2.filt.fastq.gz && \
-wget https://github.com/BilkentCompGen/sonic-prebuilt/raw/master/GRCh38_1kg.sonic
+wget https://github.com/BilkentCompGen/sonic-prebuilt/raw/master/GRCh38_1kg.sonic && \
+wget http://sv.gersteinlab.org/phase1bkpts/breakseq2_bplib_20150129.zip && \
+unzip breakseq2_bplib_20150129.zip && \
+cat breakseq2_bplib_20150129.gff | awk -v OFS='\t' '$1="chr"$1' > breakseq2_bplib_20150129_chr.gff && \
+sed -E 's/[0-9,X,Y].*/chr&/' breakseq2_bplib_20150129.ins > breakseq2_bplib_20150129_chr.ins && \
+sed -E 's/[0-9,X,Y].*/chr&/' breakseq2_bplib_20150129.fna > breakseq2_bplib_20150129_chr.fna && \
+rm breakseq2_bplib_20150129.*
 
 # updates / packages
+ENV LANGUAGE=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
 
 RUN apt-get install -y build-essential gfortran xorg-dev libpcre3-dev \
         libncurses5-dev zlib1g-dev libbz2-dev liblzma-dev libcurl3-dev git fort77 libreadline-dev \
-        unzip cmake curl libboost-all-dev libgd-dev default-jre nano
+        unzip cmake curl libboost-all-dev libgd-dev default-jre nano libncurses5 bc locales bsdmainutils gawk && \
+        locale-gen en_US.UTF-8
 
 # necessary toolkits
 
@@ -49,7 +59,6 @@ RUN cd /tools && \
     cd htslib-1.12 && \
     ./configure --prefix $(pwd) && \
     make
-
 # samtools
 
 RUN cd /tools && \
@@ -58,6 +67,13 @@ RUN cd /tools && \
     rm samtools-1.12.tar.bz2 && \
     cd samtools-1.12 && \
     ./configure --prefix $(pwd) && \
+    make
+
+RUN cd /tools && \
+    wget https://jztkft.dl.sourceforge.net/project/samtools/samtools/0.1.19/samtools-0.1.19.tar.bz2 && \
+    tar xjf samtools-0.1.19.tar.bz2 && \
+    rm samtools-0.1.19.tar.bz2 && \
+    cd samtools-0.1.19 && \
     make
 
 # bcftools
@@ -184,7 +200,7 @@ RUN apt-get install libssl-dev && \
 cd /tools/ && \
 git clone --recursive https://github.com/arq5x/lumpy-sv.git && \
 cd lumpy-sv && \
-make
+conda run -n breakseq make
 
 # manta
 
@@ -206,8 +222,9 @@ make
 RUN cd /tools/ && \
 git clone https://github.com/mills-lab/svelter.git && \
 cd svelter && \
-conda run -n breakseq python setup.py install
-
+conda run -n breakseq python setup.py install && \
+sed -i-e '351,353d;849,851d;1825,1828d;1946,1949d;6381,6384d;10935,10938d' svelter_sv/svelter.py && \
+sed -i "s/if not chrom_single in chromos:/chromos=chrom_single.split(',')/g" svelter_sv/svelter.py
 # wham
 
 RUN cd /tools/ && \
@@ -233,4 +250,5 @@ RUN cd /tools && \
 
 ENV PATH=$PATH:/tools/lumpy-sv/bin:/tools/manta-1.6.0.centos6_x86_64/bin:/tools/tardis:/tools/wham/bin:/tools/breakdancer-master/bin:/tools/breakdancer-master/perl:/tools/nb_distribution/:/tools/CNVnator-master:/tools:/tools/ConsensuSV
 
-RUN pip install luigi
+RUN pip install luigi pysam
+

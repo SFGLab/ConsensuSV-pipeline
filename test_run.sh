@@ -1,0 +1,1 @@
+python sv_callings.py CallVariants --file-name-1 /tools/SRR590764_1.filt.fastq --file-name-2 /tools/SRR590764_2.filt.fastq --sample-name SRR --local-scheduler

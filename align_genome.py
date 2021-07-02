@@ -6,7 +6,7 @@ from common import reference_genome, debug, run_command, get_path_no_ext
 class QCAnalysis(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
-    output_file_name = luigi.Parameter()
+    sample_name = luigi.Parameter()
 
     def output(self):
         return [luigi.LocalTarget("/pipeline/"+get_path_no_ext(self.file_name_1).split("/")[-1]+'_fastqc.html'), 
@@ -19,27 +19,27 @@ class QCAnalysis(luigi.Task):
 class AlignGenome(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
-    output_file_name = luigi.Parameter()
+    sample_name = luigi.Parameter()
 
     def requires(self):
-        return QCAnalysis(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)
+        return QCAnalysis(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
 
     def output(self):
-        return luigi.LocalTarget("/pipeline/"+self.output_file_name+'.sam')
+        return luigi.LocalTarget("/pipeline/"+self.sample_name+'.sam')
 
     def run(self):
         command = "bwa mem -t 1 -B 4 -O 6 -E 1 -M -R \"@RG\\tID:SRR\\tLB:LIB_1\\tSM:SAMPLE_1\\tPL:ILLUMINA\" %s %s %s > %s" % \
-        (reference_genome, self.file_name_1, self.file_name_2, "/pipeline/"+self.output_file_name+'.sam')
+        (reference_genome, self.file_name_1, self.file_name_2, "/pipeline/"+self.sample_name+'.sam')
 
         run_command(command)
 
 class ConvertToBam(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
-    output_file_name = luigi.Parameter()
+    sample_name = luigi.Parameter()
 
     def requires(self):
-        return AlignGenome(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)
+        return AlignGenome(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
 
     def output(self):
         return luigi.LocalTarget(get_path_no_ext(self.input().path)+".bam")
@@ -51,10 +51,10 @@ class ConvertToBam(luigi.Task):
 class SortBam(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
-    output_file_name = luigi.Parameter()
+    sample_name = luigi.Parameter()
 
     def requires(self):
-        return ConvertToBam(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)
+        return ConvertToBam(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
 
     def output(self):
         return luigi.LocalTarget(get_path_no_ext(self.input().path)+"_sorted.bam")
@@ -66,10 +66,10 @@ class SortBam(luigi.Task):
 class IndexBam(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
-    output_file_name = luigi.Parameter()
+    sample_name = luigi.Parameter()
 
     def requires(self):
-        return SortBam(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)
+        return SortBam(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
 
     def output(self):
         return luigi.LocalTarget(self.input().path+".bai")
@@ -80,12 +80,12 @@ class IndexBam(luigi.Task):
 class BaseRecalibrator(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
-    output_file_name = luigi.Parameter()
+    sample_name = luigi.Parameter()
 
     known_sites = "/tools/ALL_20141222.dbSNP142_human_GRCh38.snps.vcf.gz"
 
     def requires(self):
-        return IndexBam(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)
+        return IndexBam(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
 
     def output(self):
         return luigi.LocalTarget(get_path_no_ext(self.input().path, 2)+".recal_table")
@@ -99,10 +99,10 @@ class BaseRecalibrator(luigi.Task):
 class ApplyBQSR(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
-    output_file_name = luigi.Parameter()
+    sample_name = luigi.Parameter()
 
     def requires(self):
-        return BaseRecalibrator(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)
+        return BaseRecalibrator(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
 
     def output(self):
         return luigi.LocalTarget(get_path_no_ext(self.input().path)+"_final.bam")
@@ -117,10 +117,10 @@ class ApplyBQSR(luigi.Task):
 class SortFinal(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
-    output_file_name = luigi.Parameter()
+    sample_name = luigi.Parameter()
 
     def requires(self):
-        return ApplyBQSR(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)
+        return ApplyBQSR(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
 
     def output(self):
         return luigi.LocalTarget(get_path_no_ext(self.input().path)+"_sorted.bam")
@@ -134,10 +134,10 @@ class SortFinal(luigi.Task):
 class IndexFinal(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
-    output_file_name = luigi.Parameter()
+    sample_name = luigi.Parameter()
 
     def requires(self):
-        return SortFinal(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)
+        return SortFinal(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
 
     def output(self):
         return luigi.LocalTarget(get_path_no_ext(self.input().path)+".bam.bai")
@@ -148,24 +148,24 @@ class IndexFinal(luigi.Task):
 class PerformAlignment(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
-    output_file_name = luigi.Parameter()
+    sample_name = luigi.Parameter()
 
     def output(self):
-        return [luigi.LocalTarget("/pipeline/"+self.output_file_name+"_preprocessed.bam"), luigi.LocalTarget("/pipeline/"+self.output_file_name+"_preprocessed.bam.bai")]
+        return [luigi.LocalTarget("/pipeline/"+self.sample_name+"_preprocessed.bam"), luigi.LocalTarget("/pipeline/"+self.sample_name+"_preprocessed.bam.bai")]
 
     def run(self):
-        os.remove("/pipeline/"+self.output_file_name+".sam")
-        os.remove("/pipeline/"+self.output_file_name+".bam")
-        os.remove("/pipeline/"+self.output_file_name+"_sorted.bam")
-        os.remove("/pipeline/"+self.output_file_name+"_sorted.bam.bai")
-        os.remove("/pipeline/"+self.output_file_name+"_sorted.recal_table")
-        os.remove("/pipeline/"+self.output_file_name+"_sorted_final.bam")
-        os.remove("/pipeline/"+self.output_file_name+"_sorted_final.bai")
-        os.rename("/pipeline/"+self.output_file_name+"_sorted_final_sorted.bam", "/pipeline/"+self.output_file_name+"_preprocessed.bam")
-        os.rename("/pipeline/"+self.output_file_name+"_sorted_final_sorted.bam.bai", "/pipeline/"+self.output_file_name+"_preprocessed.bam.bai")
+        os.remove("/pipeline/"+self.sample_name+".sam")
+        os.remove("/pipeline/"+self.sample_name+".bam")
+        os.remove("/pipeline/"+self.sample_name+"_sorted.bam")
+        os.remove("/pipeline/"+self.sample_name+"_sorted.bam.bai")
+        os.remove("/pipeline/"+self.sample_name+"_sorted.recal_table")
+        os.remove("/pipeline/"+self.sample_name+"_sorted_final.bam")
+        os.remove("/pipeline/"+self.sample_name+"_sorted_final.bai")
+        os.rename("/pipeline/"+self.sample_name+"_sorted_final_sorted.bam", "/pipeline/"+self.sample_name+"_preprocessed.bam")
+        os.rename("/pipeline/"+self.sample_name+"_sorted_final_sorted.bam.bai", "/pipeline/"+self.sample_name+"_preprocessed.bam.bai")
 
     def requires(self):
-        return IndexFinal(file_name_1=self.file_name_1, file_name_2=self.file_name_2, output_file_name=self.output_file_name)
+        return IndexFinal(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
 
 
 
