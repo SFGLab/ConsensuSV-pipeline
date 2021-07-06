@@ -6,6 +6,9 @@ all_chromosomes = "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr1
 def get_path_no_ext(path, extension_no=1):
     return ".".join(path.split(".")[0:-extension_no])
 
+def get_path(path, extension_no=1):
+    return "/".join(path.split("/")[0:-extension_no])+"/"
+
 def run_command(command, conda_env=None, return_output=False):
         if(conda_env):
             command = "bash -c \"source activate %s; %s\"" % (conda_env, command)

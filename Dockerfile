@@ -7,7 +7,7 @@ FROM ubuntu:20.04
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get -y upgrade && \
-apt-get install -y wget tabix && \
+apt-get install -y wget tabix unzip && \
 cd / && mkdir -p tools && \
 mkdir -p pipeline
 
@@ -36,7 +36,7 @@ ENV LC_ALL=en_US.UTF-8
 
 RUN apt-get install -y build-essential gfortran xorg-dev libpcre3-dev \
         libncurses5-dev zlib1g-dev libbz2-dev liblzma-dev libcurl3-dev git fort77 libreadline-dev \
-        unzip cmake curl libboost-all-dev libgd-dev default-jre nano libncurses5 bc locales bsdmainutils gawk && \
+        cmake curl libboost-all-dev libgd-dev default-jre nano libncurses5 bc locales bsdmainutils gawk && \
         locale-gen en_US.UTF-8
 
 # necessary toolkits
@@ -246,9 +246,11 @@ git clone https://github.com/czc/nb_distribution.git
 # ConsensuSV
 
 RUN cd /tools && \
-    wget https://github.com/MateuszChilinski/ConsensuSV.git
+    wget https://github.com/SFGLab/ConsensuSV/archive/refs/tags/v1.0.zip && \
+    unzip v1.0.zip && \
+    rm v1.0.zip
 
 ENV PATH=$PATH:/tools/lumpy-sv/bin:/tools/manta-1.6.0.centos6_x86_64/bin:/tools/tardis:/tools/wham/bin:/tools/breakdancer-master/bin:/tools/breakdancer-master/perl:/tools/nb_distribution/:/tools/CNVnator-master:/tools:/tools/ConsensuSV
 
-RUN pip install luigi pysam
+RUN pip install luigi pysam wget
 

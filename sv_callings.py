@@ -1,5 +1,5 @@
 from align_genome import PerformAlignment
-from common import reference_genome, debug, run_command, get_path_no_ext, all_chromosomes
+from common import reference_genome, debug, run_command, get_path, all_chromosomes, get_path
 import luigi
 import os
 import shutil
@@ -8,18 +8,20 @@ class SNPCalling(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
+    already_done = luigi.Parameter(default=False)
+    train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
 
     def output(self):
-        return luigi.LocalTarget(get_path_no_ext(self.input()[0].path)+"_SNPs.vcf")
+        return luigi.LocalTarget(get_path(self.input()[0].path, 2)+"SNPs.vcf")
 
     def run(self):
-        input_file_no_ext = get_path_no_ext(self.input()[0].path)
+        input_file_path = get_path(self.input()[0].path)
         input_file = self.input()[0].path
-        inter_file = input_file_no_ext+"_SNPs.bcf"
-        output_file = input_file_no_ext+"_SNPs.vcf"
+        inter_file = input_file_path+"SNPs.bcf"
+        output_file = get_path(self.input()[0].path, 2)+"SNPs.vcf"
 
         run_command("bcftools mpileup -Ou -f %s %s | bcftools call -mv -Ob -o %s && bcftools view -i '%%QUAL>=20' %s > %s" % (reference_genome, input_file, inter_file, inter_file, output_file))
 
@@ -29,18 +31,20 @@ class SVDelly(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
+    already_done = luigi.Parameter(default=False)
+    train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
 
     def output(self):
-        return luigi.LocalTarget(get_path_no_ext(self.input()[0].path)+"_delly.vcf")
+        return luigi.LocalTarget(get_path(self.input()[0].path)+"delly.vcf")
 
     def run(self):
-        input_file_no_ext = get_path_no_ext(self.input()[0].path)
+        input_file_path = get_path(self.input()[0].path)
         input_file = self.input()[0].path
-        inter_file = input_file_no_ext+"_delly.bcf"
-        output_file = input_file_no_ext+"_delly.vcf"
+        inter_file = input_file_path+"delly.bcf"
+        output_file = input_file_path+"delly.vcf"
 
         run_command("delly_v0.8.7_linux_x86_64bit call -o %s -g %s %s && bcftools view %s > %s" % (inter_file, reference_genome, input_file, inter_file, output_file))
         os.remove(inter_file)
@@ -50,19 +54,21 @@ class SVBreakdancer(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
+    already_done = luigi.Parameter(default=False)
+    train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
 
     def output(self):
-        return luigi.LocalTarget(get_path_no_ext(self.input()[0].path)+"_breakdancer.vcf")
+        return luigi.LocalTarget(get_path(self.input()[0].path)+"breakdancer.vcf")
 
     def run(self):
-        input_file_no_ext = get_path_no_ext(self.input()[0].path)
+        input_file_path = get_path(self.input()[0].path)
         input_file = self.input()[0].path
-        config_file = input_file_no_ext+"_breakdancer.cfg"
-        inter_file = input_file_no_ext+"_breakdancer.calls"
-        output_file = input_file_no_ext+"_breakdancer.vcf"
+        config_file = input_file_path+"breakdancer.cfg"
+        inter_file = input_file_path+"breakdancer.calls"
+        output_file = input_file_path+"breakdancer.vcf"
 
         run_command("bam2cfg.pl %s > %s" % (input_file, config_file))
         run_command("breakdancer-max %s > %s" % (config_file, inter_file))
@@ -75,18 +81,20 @@ class SVTardis(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
+    already_done = luigi.Parameter(default=False)
+    train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
 
     def output(self):
-        return luigi.LocalTarget(get_path_no_ext(self.input()[0].path)+"_tardis.vcf")
+        return luigi.LocalTarget(get_path(self.input()[0].path)+"tardis.vcf")
 
     def run(self):
-        input_file_no_ext = get_path_no_ext(self.input()[0].path)
+        input_file_path = get_path(self.input()[0].path)
         input_file = self.input()[0].path
         sonic_file = "/tools/GRCh38_1kg.sonic"
-        output_file = input_file_no_ext+"_tardis"
+        output_file = input_file_path+"tardis"
         log_file = output_file+"-tardis.log"
 
         run_command("tardis -i %s --ref %s --sonic %s --out %s --first-chr 0 --last-chr 24" % (input_file, reference_genome, sonic_file, output_file))
@@ -96,24 +104,26 @@ class SVNovoBreak(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
+    already_done = luigi.Parameter(default=False)
+    train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
 
     def output(self):
-        return luigi.LocalTarget(get_path_no_ext(self.input()[0].path)+"_novoBreak.vcf")
+        return luigi.LocalTarget(get_path(self.input()[0].path)+"novoBreak.vcf")
 
     def run(self):
-        input_file_no_ext = get_path_no_ext(self.input()[0].path)
+        input_file_path = get_path(self.input()[0].path)
         input_file = self.input()[0].path
-        novoBreak_control = input_file_no_ext+"_novoBreakControl.bam"
-        output_file = input_file_no_ext+"_novoBreak.vcf"
-        working_dir = "/pipeline/%s_novoBreak" % self.sample_name
+        novoBreak_control = input_file_path+"novoBreakControl.bam"
+        output_file = input_file_path+"novoBreak.vcf"
+        working_dir = "/pipeline/%s/novoBreak" % self.sample_name
 
         run_command("samtools view -H %s | samtools view -bh > %s" % (input_file, novoBreak_control))
         run_command("samtools index %s" % novoBreak_control)
         run_command("run_novoBreak.sh /tools/nb_distribution/ %s %s %s 4 %s" % (reference_genome, input_file, novoBreak_control, working_dir))
-        run_command("vcftools --vcf /pipeline/%s_novoBreak/novoBreak.pass.flt.vcf --out %s --minQ 50 --recode --recode-INFO-all" % (self.sample_name, output_file), return_output=True)
+        run_command("vcftools --vcf /pipeline/%s/novoBreak/novoBreak.pass.flt.vcf --out %s --minQ 50 --recode --recode-INFO-all" % (self.sample_name, output_file), return_output=True)
 
         os.rename(output_file+".recode.vcf", output_file)
         os.remove(novoBreak_control)
@@ -124,26 +134,28 @@ class SVCNVNator(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
+    already_done = luigi.Parameter(default=False)
+    train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
 
     def output(self):
-        return luigi.LocalTarget(get_path_no_ext(self.input()[0].path)+"_cnvnator.vcf")
+        return luigi.LocalTarget(get_path(self.input()[0].path)+"cnvnator.vcf")
 
     def run(self):
-        input_file_no_ext = get_path_no_ext(self.input()[0].path)
+        input_file_path = get_path(self.input()[0].path)
         input_file = self.input()[0].path
-        root_file = input_file_no_ext+".root"
-        inter_file = get_path_no_ext(self.input()[0].path)+".cnvout"
-        output_file = input_file_no_ext+"_cnvnator.vcf"
+        root_file = input_file_path+"cnv.root"
+        inter_file = get_path(self.input()[0].path)+"cnv.cnvout"
+        output_file = input_file_path+"cnvnator.vcf"
 
         run_command("cnvnator -root %s -tree %s -chrom $(seq 1 22) X Y" % (root_file, input_file))
         run_command("cnvnator -root %s -his 1000 -fasta %s" % (root_file, reference_genome))
         run_command("cnvnator -root %s -stat 1000" % (root_file))
         run_command("cnvnator -root %s -partition 1000" % (root_file))
         run_command("cnvnator -root %s -call 1000 > %s" % (root_file, inter_file))
-        run_command("cnvnator2VCF.pl -prefix %s -reference GRCh38 %s /pipeline/ > %s" % (self.sample_name, inter_file, output_file))
+        run_command("cnvnator2VCF.pl -prefix %s -reference GRCh38 %s /pipeline/%s/ > %s" % (self.sample_name, inter_file, self.sample_name, output_file))
 
         os.remove(inter_file)
         os.remove(root_file)
@@ -152,18 +164,20 @@ class SVBreakSeq(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
+    already_done = luigi.Parameter(default=False)
+    train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
 
     def output(self):
-        return luigi.LocalTarget(get_path_no_ext(self.input()[0].path)+"_breakseq.vcf")
+        return luigi.LocalTarget(get_path(self.input()[0].path)+"breakseq.vcf")
 
     def run(self):
-        input_file_no_ext = get_path_no_ext(self.input()[0].path)
+        input_file_path = get_path(self.input()[0].path)
         input_file = self.input()[0].path
-        output_file = input_file_no_ext+"_breakseq.vcf"
-        working_dir = "/pipeline/"+self.sample_name+"_breakseq"
+        output_file = input_file_path+"breakseq.vcf"
+        working_dir = "/pipeline/"+self.sample_name+"/breakseq"
 
         run_command("run_breakseq2.py --reference %s --bams %s --work %s --bwa %s --samtools %s --bplib_gff %s --nthreads 4 --sample %s" % (reference_genome, input_file, \
         working_dir, "/tools/bwa-0.7.17/bwa", "/tools/samtools-0.1.19/samtools", "/tools/breakseq2_bplib_20150129_chr.gff", self.sample_name), "breakseq")
@@ -176,19 +190,20 @@ class SVManta(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
+    already_done = luigi.Parameter(default=False)
+    train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
 
     def output(self):
-        return luigi.LocalTarget(get_path_no_ext(self.input()[0].path)+"_manta.vcf")
+        return luigi.LocalTarget(get_path(self.input()[0].path)+"manta.vcf")
 
     def run(self):
-        input_file_no_ext = get_path_no_ext(self.input()[0].path)
-        run_command("gunzip %s/results/variants/diploidSV.vcf.gz" % working_dir)
+        input_file_path = get_path(self.input()[0].path)
         input_file = self.input()[0].path
-        output_file = input_file_no_ext+"_manta.vcf"
-        working_dir = "/pipeline/"+self.sample_name+"_Manta"
+        output_file = input_file_path+"manta.vcf"
+        working_dir = "/pipeline/"+self.sample_name+"/Manta"
 
         run_command("configManta.py --bam %s --referenceFasta %s --runDir %s" % (input_file, reference_genome, working_dir), "breakseq")
         run_command("%s/runWorkflow.py" % working_dir, "breakseq")
@@ -200,22 +215,24 @@ class SVLumpy(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
+    already_done = luigi.Parameter(default=False)
+    train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
 
     def output(self):
-        return luigi.LocalTarget(get_path_no_ext(self.input()[0].path)+"_lumpy.vcf")
+        return luigi.LocalTarget(get_path(self.input()[0].path)+"lumpy.vcf")
 
     def run(self):
-        input_file_no_ext = get_path_no_ext(self.input()[0].path)
+        input_file_path = get_path(self.input()[0].path)
         input_file = self.input()[0].path
-        discordants_file_unsorted = input_file_no_ext+".discordants.unsorted.bam"
-        discordants_file = input_file_no_ext+".discordants.bam"
-        splitters_file_unsorted = input_file_no_ext+".splitters.unsorted.bam"
-        splitters_file = input_file_no_ext+".splitters.bam"
-        output_file = input_file_no_ext+"_lumpy.vcf"
-        working_dir = "/pipeline/"+self.sample_name+"_lumpy"
+        discordants_file_unsorted = input_file_path+"lumpy.discordants.unsorted.bam"
+        discordants_file = input_file_path+"lumpy.discordants.bam"
+        splitters_file_unsorted = input_file_path+"lumpy.splitters.unsorted.bam"
+        splitters_file = input_file_path+"lumpy.splitters.bam"
+        output_file = input_file_path+"lumpy.vcf"
+        working_dir = "/pipeline/"+self.sample_name+"/lumpy"
 
         run_command("samtools view -b -F 1294 %s > %s" % (input_file, discordants_file_unsorted))
         run_command("samtools sort -o %s %s" % (discordants_file, discordants_file_unsorted))
@@ -232,18 +249,20 @@ class SVWhamg(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
+    already_done = luigi.Parameter(default=False)
+    train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
 
     def output(self):
-        return luigi.LocalTarget(get_path_no_ext(self.input()[0].path)+"_whamg.vcf")
+        return luigi.LocalTarget(get_path(self.input()[0].path)+"whamg.vcf")
 
     def run(self):
-        input_file_no_ext = get_path_no_ext(self.input()[0].path)
+        input_file_path = get_path(self.input()[0].path)
         input_file = self.input()[0].path
-        output_file = input_file_no_ext+"_whamg.vcf"
-        error_file = input_file_no_ext+"_whamg.err"
+        output_file = input_file_path+"whamg.vcf"
+        error_file = input_file_path+"whamg.err"
         filter_script = "/tools/wham/utils/filtWhamG.pl"
         run_command("whamg -c %s -a %s -f %s | perl %s > %s  2> %s" % (all_chromosomes, reference_genome, input_file, filter_script, output_file, error_file))
 
@@ -253,17 +272,19 @@ class SVSvelter(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
+    already_done = luigi.Parameter(default=False)
+    train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
 
     def output(self):
-        return luigi.LocalTarget(get_path_no_ext(self.input()[0].path)+"_svelter.vcf")
+        return luigi.LocalTarget(get_path(self.input()[0].path)+"_svelter.vcf")
 
     def run(self):
-        input_file_no_ext = get_path_no_ext(self.input()[0].path)
+        input_file_path = get_path(self.input()[0].path)
         input_file = self.input()[0].path
-        output_file = input_file_no_ext+"_svelter.vcf"
+        output_file = input_file_path+"svelter.vcf"
         support_dir = "/tools/svelter/Support/GRCh38/"
 
         run_command("svelter.py Setup --reference %s --workdir %s --support %s" % (reference_genome, work_dir, support_dir), "breakseq")
@@ -273,25 +294,27 @@ class CallVariants(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
+    already_done = luigi.Parameter(default=False)
+    train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return [SNPCalling(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name),
-        SVDelly(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name),
-        SVBreakdancer(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name),
-        SVTardis(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name),
-        SVNovoBreak(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name),
-        SVCNVNator(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name),
-        SVBreakSeq(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name),
-        SVManta(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name),
-        SVLumpy(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name),
-        SVWhamg(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+        return [SNPCalling(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
+        SVDelly(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
+        SVBreakdancer(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
+        SVTardis(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
+        SVNovoBreak(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
+        SVCNVNator(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
+        SVBreakSeq(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
+        SVManta(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
+        SVLumpy(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
+        SVWhamg(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
         ]
 
     def output(self):
-        return luigi.LocalTarget(get_path_no_ext(self.input()[0].path)+"_SNPs.vcf")
+        return luigi.LocalTarget(get_path(self.input()[0].path)+"_SNPs.vcf")
 
     def run(self):
-        pass
+        pass#run_command("python /tools/ConsensuSV-1.0/main.py -f %s -mod %s -o %s " % ("/pipeline/", "default.model", "test"))
 
 if __name__ == '__main__':
     luigi.run()
