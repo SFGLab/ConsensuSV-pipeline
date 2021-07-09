@@ -1,12 +1,12 @@
 from align_genome import PerformAlignment
-from common import reference_genome, debug, run_command, get_path, all_chromosomes, get_path
+from common import reference_genome, debug, run_command, get_path, all_chromosomes, get_path, threads_samtools
 import luigi
 import os
 import shutil
 
 class SNPCalling(luigi.Task):
-    file_name_1 = luigi.Parameter()
-    file_name_2 = luigi.Parameter()
+    file_name_1 = luigi.Parameter(default=None)
+    file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
     already_done = luigi.Parameter(default=False)
     train_1000g = luigi.Parameter(default=False)
@@ -15,7 +15,7 @@ class SNPCalling(luigi.Task):
         return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
 
     def output(self):
-        return luigi.LocalTarget(get_path(self.input()[0].path, 2)+"SNPs.vcf")
+        return luigi.LocalTarget(get_path(self.input()[0].path, 2)+self.sample_name+"_SNPs.vcf")
 
     def run(self):
         input_file_path = get_path(self.input()[0].path)
@@ -28,8 +28,8 @@ class SNPCalling(luigi.Task):
         os.remove(inter_file)
 
 class SVDelly(luigi.Task):
-    file_name_1 = luigi.Parameter()
-    file_name_2 = luigi.Parameter()
+    file_name_1 = luigi.Parameter(default=None)
+    file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
     already_done = luigi.Parameter(default=False)
     train_1000g = luigi.Parameter(default=False)
@@ -51,8 +51,8 @@ class SVDelly(luigi.Task):
         os.remove(inter_file+".csi")
 
 class SVBreakdancer(luigi.Task):
-    file_name_1 = luigi.Parameter()
-    file_name_2 = luigi.Parameter()
+    file_name_1 = luigi.Parameter(default=None)
+    file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
     already_done = luigi.Parameter(default=False)
     train_1000g = luigi.Parameter(default=False)
@@ -78,8 +78,8 @@ class SVBreakdancer(luigi.Task):
         os.remove(inter_file)
 
 class SVTardis(luigi.Task):
-    file_name_1 = luigi.Parameter()
-    file_name_2 = luigi.Parameter()
+    file_name_1 = luigi.Parameter(default=None)
+    file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
     already_done = luigi.Parameter(default=False)
     train_1000g = luigi.Parameter(default=False)
@@ -101,8 +101,8 @@ class SVTardis(luigi.Task):
         os.remove(log_file)
         
 class SVNovoBreak(luigi.Task):
-    file_name_1 = luigi.Parameter()
-    file_name_2 = luigi.Parameter()
+    file_name_1 = luigi.Parameter(default=None)
+    file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
     already_done = luigi.Parameter(default=False)
     train_1000g = luigi.Parameter(default=False)
@@ -123,7 +123,7 @@ class SVNovoBreak(luigi.Task):
         run_command("samtools view -H %s | samtools view -bh > %s" % (input_file, novoBreak_control))
         run_command("samtools index %s" % novoBreak_control)
         run_command("run_novoBreak.sh /tools/nb_distribution/ %s %s %s 4 %s" % (reference_genome, input_file, novoBreak_control, working_dir))
-        run_command("vcftools --vcf /pipeline/%s/novoBreak/novoBreak.pass.flt.vcf --out %s --minQ 50 --recode --recode-INFO-all" % (self.sample_name, output_file), return_output=True)
+        run_command("vcftools --vcf /pipeline/%s/novoBreak/novoBreak.pass.flt.vcf --out %s --minQ 50 --recode --recode-INFO-all" % (self.sample_name, output_file))
 
         os.rename(output_file+".recode.vcf", output_file)
         os.remove(novoBreak_control)
@@ -131,8 +131,8 @@ class SVNovoBreak(luigi.Task):
         shutil.rmtree(working_dir)
 
 class SVCNVNator(luigi.Task):
-    file_name_1 = luigi.Parameter()
-    file_name_2 = luigi.Parameter()
+    file_name_1 = luigi.Parameter(default=None)
+    file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
     already_done = luigi.Parameter(default=False)
     train_1000g = luigi.Parameter(default=False)
@@ -161,8 +161,8 @@ class SVCNVNator(luigi.Task):
         os.remove(root_file)
 
 class SVBreakSeq(luigi.Task):
-    file_name_1 = luigi.Parameter()
-    file_name_2 = luigi.Parameter()
+    file_name_1 = luigi.Parameter(default=None)
+    file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
     already_done = luigi.Parameter(default=False)
     train_1000g = luigi.Parameter(default=False)
@@ -187,8 +187,8 @@ class SVBreakSeq(luigi.Task):
         shutil.rmtree(working_dir)
 
 class SVManta(luigi.Task):
-    file_name_1 = luigi.Parameter()
-    file_name_2 = luigi.Parameter()
+    file_name_1 = luigi.Parameter(default=None)
+    file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
     already_done = luigi.Parameter(default=False)
     train_1000g = luigi.Parameter(default=False)
@@ -212,8 +212,8 @@ class SVManta(luigi.Task):
         shutil.rmtree(working_dir)
 
 class SVLumpy(luigi.Task):
-    file_name_1 = luigi.Parameter()
-    file_name_2 = luigi.Parameter()
+    file_name_1 = luigi.Parameter(default=None)
+    file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
     already_done = luigi.Parameter(default=False)
     train_1000g = luigi.Parameter(default=False)
@@ -234,10 +234,10 @@ class SVLumpy(luigi.Task):
         output_file = input_file_path+"lumpy.vcf"
         working_dir = "/pipeline/"+self.sample_name+"/lumpy"
 
-        run_command("samtools view -b -F 1294 %s > %s" % (input_file, discordants_file_unsorted))
-        run_command("samtools sort -o %s %s" % (discordants_file, discordants_file_unsorted))
+        run_command("samtools view -b -F 1294 -@ %s %s > %s" % (threads_samtools, input_file, discordants_file_unsorted))
+        run_command("samtools sort -o %s -@ %s %s" % (discordants_file, threads_samtools, discordants_file_unsorted))
         run_command("samtools view -h %s | /tools/lumpy-sv/scripts/extractSplitReads_BwaMem -i stdin | samtools view -Sb - > %s" % (input_file, splitters_file_unsorted))
-        run_command("samtools sort -o %s %s" % (splitters_file, splitters_file_unsorted))
+        run_command("samtools sort -o %s -@ %s %s" % (splitters_file, threads_samtools, splitters_file_unsorted))
         run_command("lumpyexpress -B %s -S %s -D %s -R %s -T %s -o %s" % (input_file, splitters_file, discordants_file, reference_genome, working_dir, output_file), "breakseq")
 
         os.remove(discordants_file_unsorted)
@@ -246,8 +246,8 @@ class SVLumpy(luigi.Task):
         os.remove(splitters_file)
 
 class SVWhamg(luigi.Task):
-    file_name_1 = luigi.Parameter()
-    file_name_2 = luigi.Parameter()
+    file_name_1 = luigi.Parameter(default=None)
+    file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
     already_done = luigi.Parameter(default=False)
     train_1000g = luigi.Parameter(default=False)
@@ -269,8 +269,8 @@ class SVWhamg(luigi.Task):
         os.remove(error_file)
 
 class SVSvelter(luigi.Task):
-    file_name_1 = luigi.Parameter()
-    file_name_2 = luigi.Parameter()
+    file_name_1 = luigi.Parameter(default=None)
+    file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
     already_done = luigi.Parameter(default=False)
     train_1000g = luigi.Parameter(default=False)
@@ -291,8 +291,8 @@ class SVSvelter(luigi.Task):
         run_command("svelter.py --sample %s --workdir %s --chromosome %s" % (input_file, work_dir, all_chromosomes), "breakseq")
 
 class CallVariants(luigi.Task):
-    file_name_1 = luigi.Parameter()
-    file_name_2 = luigi.Parameter()
+    file_name_1 = luigi.Parameter(default=None)
+    file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
     already_done = luigi.Parameter(default=False)
     train_1000g = luigi.Parameter(default=False)

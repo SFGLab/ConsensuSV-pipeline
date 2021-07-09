@@ -1,8 +1,9 @@
 import luigi
 import os
-import wget
-
-from common import reference_genome, debug, run_command, get_path_no_ext
+import urllib.request 
+import shutil
+from common import reference_genome, debug, run_command, get_path_no_ext, threads_samtools
+import socket
 
 class QCAnalysis(luigi.Task):
     file_name_1 = luigi.Parameter()
@@ -51,7 +52,7 @@ class ConvertToBam(luigi.Task):
 
     def run(self):
         full_path_output = get_path_no_ext(self.input().path)+".bam"
-        run_command("samtools view -S -b %s > %s" % (self.input().path, full_path_output))
+        run_command("samtools view -S -b -o %s -@ %s %s" % (full_path_output, threads_samtools, self.input().path,))
 
 class SortBam(luigi.Task):
     file_name_1 = luigi.Parameter()
@@ -66,7 +67,7 @@ class SortBam(luigi.Task):
 
     def run(self):
         full_path_output = get_path_no_ext(self.input().path)+"_sorted.bam"
-        run_command("samtools sort %s > %s" % (self.input().path, full_path_output))
+        run_command("samtools sort -o %s -@ %s %s" % (full_path_output, threads_samtools, self.input().path))
 
 class IndexBam(luigi.Task):
     file_name_1 = luigi.Parameter()
@@ -80,7 +81,7 @@ class IndexBam(luigi.Task):
         return luigi.LocalTarget(self.input().path+".bai")
 
     def run(self):
-        run_command("samtools index %s" % self.input().path)
+        run_command("samtools index -@ %s %s " % (threads_samtools, self.input().path))
 
 class BaseRecalibrator(luigi.Task):
     file_name_1 = luigi.Parameter()
@@ -141,7 +142,7 @@ class SortFinal(luigi.Task):
         input_file = get_path_no_ext(self.input().path)+"_sorted.bam"
         output_file = get_path_no_ext(self.input().path)+"_sorted.bam"
 
-        run_command("samtools sort %s > %s" % (self.input().path, output_file))
+        run_command("samtools sort -o %s -@ %s %s" % (output_file, threads_samtools, self.input().path))
 
 class IndexFinal(luigi.Task):
     file_name_1 = luigi.Parameter()
@@ -151,27 +152,27 @@ class IndexFinal(luigi.Task):
     train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return SortFinal(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+        return SortFinal(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
 
     def output(self):
         return luigi.LocalTarget(get_path_no_ext(self.input().path)+".bam.bai")
 
     def run(self):
         if(self.already_done):
-            run_command("samtools index %s" % "/pipeline/"+self.sample_name+"/"+self.sample_name+".bam")
+            run_command("samtools index -@ %s %s" % (threads_samtools, "/pipeline/"+self.sample_name+"/"+self.sample_name+".bam"))
         else:
-            run_command("samtools index %s" % self.input().path)
+            run_command("samtools index -@ %s %s" % (threads_samtools, self.input().path))
 
 class Get1000G(luigi.Task):
     sample_name = luigi.Parameter()
-    ftp_link = "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/hgsv_sv_discovery/data"
+    ftp_link = "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/hgsv_sv_discovery/data"
 
     samples_ftp = {"HG00512": ftp_link+"/CHS/HG00512/high_cov_alignment/HG00512.alt_bwamem_GRCh38DH.20150715.CHS.high_coverage.cram",
-    "HG00513": ftp_link+"/CHS/HG00512/high_cov_alignment/HG00513.alt_bwamem_GRCh38DH.20150715.CHS.high_coverage.cram",
-    "HG00514": ftp_link+"/CHS/HG00512/high_cov_alignment/HG00514.alt_bwamem_GRCh38DH.20150715.CHS.high_coverage.cram",
-    "HG00731": ftp_link+"/PUR/HG00512/high_cov_alignment/HG00731.alt_bwamem_GRCh38DH.20150715.PUR.high_coverage.cram",
-    "HG00732": ftp_link+"/PUR/HG00512/high_cov_alignment/HG00732.alt_bwamem_GRCh38DH.20150715.PUR.high_coverage.cram",
-    "HG00733": ftp_link+"/PUR/HG00512/high_cov_alignment/HG00733.alt_bwamem_GRCh38DH.20150715.PUR.high_coverage.cram",
+    "HG00513": ftp_link+"/CHS/HG00513/high_cov_alignment/HG00513.alt_bwamem_GRCh38DH.20150715.CHS.high_coverage.cram",
+    "HG00514": ftp_link+"/CHS/HG00514/high_cov_alignment/HG00514.alt_bwamem_GRCh38DH.20150715.CHS.high_coverage.cram",
+    "HG00731": ftp_link+"/PUR/HG00731/high_cov_alignment/HG00731.alt_bwamem_GRCh38DH.20150715.PUR.high_coverage.cram",
+    "HG00732": ftp_link+"/PUR/HG00732/high_cov_alignment/HG00732.alt_bwamem_GRCh38DH.20150715.PUR.high_coverage.cram",
+    "HG00733": ftp_link+"/PUR/HG00733/high_cov_alignment/HG00733.alt_bwamem_GRCh38DH.20150715.PUR.high_coverage.cram",
     "NA19238": ftp_link+"/YRI/NA19238/high_cov_alignment/NA19238.alt_bwamem_GRCh38DH.20150715.YRI.high_coverage.cram",
     "NA19239": ftp_link+"/YRI/NA19239/high_cov_alignment/NA19239.alt_bwamem_GRCh38DH.20150715.YRI.high_coverage.cram",
     "NA19240": ftp_link+"/YRI/NA19240/high_cov_alignment/NA19240.alt_bwamem_GRCh38DH.20150715.YRI.high_coverage.cram"
@@ -181,20 +182,22 @@ class Get1000G(luigi.Task):
         return []
 
     def output(self):
-        return luigi.LocalTarget("")
+        return luigi.LocalTarget("/pipeline/%s/%s.bam" % (self.sample_name, self.sample_name))
 
     def run(self):
+        dirpath = "/pipeline/%s/" % self.sample_name
+
         cram_ftp_link = self.samples_ftp[self.sample_name]
-        cram_file = cram_ftp_link.split("/")[-1]
+        cram_file = dirpath+self.sample_name+".cram"
         bam_file = self.sample_name+".bam"
 
-        dirpath = "/pipeline/%s/" % self.sample_name
         if os.path.exists(dirpath) and os.path.isdir(dirpath):
             shutil.rmtree(dirpath)
         os.makedirs(os.path.dirname(dirpath))
-        wget.download(cram_ftp_link)
+        socket.setdefaulttimeout(300)
+        urllib.request.urlretrieve(cram_ftp_link, cram_file)
 
-        run_command("samtools view -b  -T %s -o %s %s" % (reference_genome, dirpath+cram_file, dirpath+bam_file))
+        run_command("samtools view -b -T %s -o %s -@ 32 %s" % (reference_genome, dirpath+bam_file, cram_file))
 
 class PerformAlignment(luigi.Task):
     file_name_1 = luigi.Parameter(default=None)
@@ -225,4 +228,4 @@ class PerformAlignment(luigi.Task):
 
 
 if __name__ == '__main__':
-    luigi.run()
+    luigi.run(workers)
