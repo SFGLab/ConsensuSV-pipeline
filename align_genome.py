@@ -2,7 +2,7 @@ import luigi
 import os
 import urllib.request 
 import shutil
-from common import reference_genome, debug, run_command, get_path_no_ext, threads_samtools
+from common import reference_genome, debug, run_command, get_path_no_ext, no_threads
 import socket
 
 class QCAnalysis(luigi.Task):
@@ -52,7 +52,7 @@ class ConvertToBam(luigi.Task):
 
     def run(self):
         full_path_output = get_path_no_ext(self.input().path)+".bam"
-        run_command("samtools view -S -b -o %s -@ %s %s" % (full_path_output, threads_samtools, self.input().path,))
+        run_command("samtools view -S -b -o %s -@ %s %s" % (full_path_output, no_threads, self.input().path,))
 
 class SortBam(luigi.Task):
     file_name_1 = luigi.Parameter()
@@ -67,7 +67,7 @@ class SortBam(luigi.Task):
 
     def run(self):
         full_path_output = get_path_no_ext(self.input().path)+"_sorted.bam"
-        run_command("samtools sort -o %s -@ %s %s" % (full_path_output, threads_samtools, self.input().path))
+        run_command("samtools sort -o %s -@ %s %s" % (full_path_output, no_threads, self.input().path))
 
 class IndexBam(luigi.Task):
     file_name_1 = luigi.Parameter()
@@ -81,7 +81,7 @@ class IndexBam(luigi.Task):
         return luigi.LocalTarget(self.input().path+".bai")
 
     def run(self):
-        run_command("samtools index -@ %s %s " % (threads_samtools, self.input().path))
+        run_command("samtools index -@ %s %s " % (no_threads, self.input().path))
 
 class BaseRecalibrator(luigi.Task):
     file_name_1 = luigi.Parameter()
@@ -142,7 +142,7 @@ class SortFinal(luigi.Task):
         input_file = get_path_no_ext(self.input().path)+"_sorted.bam"
         output_file = get_path_no_ext(self.input().path)+"_sorted.bam"
 
-        run_command("samtools sort -o %s -@ %s %s" % (output_file, threads_samtools, self.input().path))
+        run_command("samtools sort -o %s -@ %s %s" % (output_file, no_threads, self.input().path))
 
 class IndexFinal(luigi.Task):
     file_name_1 = luigi.Parameter()
@@ -159,9 +159,9 @@ class IndexFinal(luigi.Task):
 
     def run(self):
         if(self.already_done):
-            run_command("samtools index -@ %s %s" % (threads_samtools, "/pipeline/"+self.sample_name+"/"+self.sample_name+".bam"))
+            run_command("samtools index -@ %s %s" % (no_threads, "/pipeline/"+self.sample_name+"/"+self.sample_name+".bam"))
         else:
-            run_command("samtools index -@ %s %s" % (threads_samtools, self.input().path))
+            run_command("samtools index -@ %s %s" % (no_threads, self.input().path))
 
 class Get1000G(luigi.Task):
     sample_name = luigi.Parameter()
@@ -197,7 +197,7 @@ class Get1000G(luigi.Task):
         socket.setdefaulttimeout(300)
         urllib.request.urlretrieve(cram_ftp_link, cram_file)
 
-        run_command("samtools view -b -T %s -o %s -@ 32 %s" % (reference_genome, dirpath+bam_file, cram_file))
+        run_command("samtools view -b -T %s -o %s -@ %s %s" % (reference_genome, dirpath+bam_file, no_threads, cram_file))
 
 class PerformAlignment(luigi.Task):
     file_name_1 = luigi.Parameter(default=None)

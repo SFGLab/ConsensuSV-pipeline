@@ -1,5 +1,5 @@
 from sv_callings import CallVariants
-from common import reference_genome, debug, run_command, get_path, all_chromosomes, get_path_no_ext, threads_samtools
+from common import reference_genome, debug, run_command, get_path, all_chromosomes, get_path_no_ext, no_threads
 import luigi
 import os
 import shutil
@@ -22,9 +22,9 @@ class Train1000G(luigi.Task):
 
     def run(self):
         if(self.already_done):
-            run_command("samtools index -@ %s %s" % (threads_samtools, "/pipeline/"+self.sample_name+"/"+self.sample_name+".bam"))
+            run_command("samtools index -@ %s %s" % (no_threads, "/pipeline/"+self.sample_name+"/"+self.sample_name+".bam"))
         else:
-            run_command("samtools index -@ %s %s" % (threads_samtools, self.input().path))
+            run_command("samtools index -@ %s %s" % (no_threads, self.input().path))
 
 if __name__ == '__main__':
     luigi.run()
