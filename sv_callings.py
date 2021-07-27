@@ -1,5 +1,5 @@
 from align_genome import PerformAlignment
-from common import reference_genome, debug, run_command, get_path, all_chromosomes, get_path, threads_samtools
+from common import reference_genome, debug, run_command, get_path, all_chromosomes, get_path, no_threads
 import luigi
 import os
 import shutil
@@ -234,10 +234,10 @@ class SVLumpy(luigi.Task):
         output_file = input_file_path+"lumpy.vcf"
         working_dir = "/pipeline/"+self.sample_name+"/lumpy"
 
-        run_command("samtools view -b -F 1294 -@ %s %s > %s" % (threads_samtools, input_file, discordants_file_unsorted))
-        run_command("samtools sort -o %s -@ %s %s" % (discordants_file, threads_samtools, discordants_file_unsorted))
+        run_command("samtools view -b -F 1294 -@ %s %s > %s" % (no_threads, input_file, discordants_file_unsorted))
+        run_command("samtools sort -o %s -@ %s %s" % (discordants_file, no_threads, discordants_file_unsorted))
         run_command("samtools view -h %s | /tools/lumpy-sv/scripts/extractSplitReads_BwaMem -i stdin | samtools view -Sb - > %s" % (input_file, splitters_file_unsorted))
-        run_command("samtools sort -o %s -@ %s %s" % (splitters_file, threads_samtools, splitters_file_unsorted))
+        run_command("samtools sort -o %s -@ %s %s" % (splitters_file, no_threads, splitters_file_unsorted))
         run_command("lumpyexpress -B %s -S %s -D %s -R %s -T %s -o %s" % (input_file, splitters_file, discordants_file, reference_genome, working_dir, output_file), "breakseq")
 
         os.remove(discordants_file_unsorted)
