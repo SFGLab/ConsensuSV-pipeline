@@ -1,1 +1,1 @@
-python run_consensusv.py Train1000G --local-scheduler --workers 4 --log-level INFO
+python run_consensusv.py Train1000G --local-scheduler --workers 4 --log-level INFO > train.log

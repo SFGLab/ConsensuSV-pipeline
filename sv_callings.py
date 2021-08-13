@@ -15,13 +15,13 @@ class SNPCalling(luigi.Task):
         return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
 
     def output(self):
-        return luigi.LocalTarget(get_path(self.input()[0].path, 2)+self.sample_name+"_SNPs.vcf")
+        return luigi.LocalTarget(get_path(self.input()[0].path)+self.sample_name+"_SNPs.vcf")
 
     def run(self):
         input_file_path = get_path(self.input()[0].path)
         input_file = self.input()[0].path
         inter_file = input_file_path+"SNPs.bcf"
-        output_file = get_path(self.input()[0].path, 2)+"SNPs.vcf"
+        output_file = input_file_path+"SNPs.vcf"
 
         run_command("bcftools mpileup -Ou -f %s %s | bcftools call -mv -Ob -o %s && bcftools view -i '%%QUAL>=20' %s > %s" % (reference_genome, input_file, inter_file, inter_file, output_file))
 
@@ -302,7 +302,7 @@ class CallVariants(luigi.Task):
         SVDelly(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
         SVBreakdancer(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
         SVTardis(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
-        SVNovoBreak(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
+        #SVNovoBreak(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g), too long
         SVCNVNator(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
         SVBreakSeq(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
         SVManta(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),

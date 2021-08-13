@@ -129,20 +129,27 @@ class SortFinal(luigi.Task):
 
     def requires(self):
         if(self.train_1000g):
-            return Get1000G(sample_name=self.sample_name)
+            return Get1000G()
         elif(self.already_done):
             return None
         else:        
             return ApplyBQSR(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
 
     def output(self):
-        return luigi.LocalTarget(get_path_no_ext(self.input().path)+"_sorted.bam")
+        if(self.train_1000g):
+            return luigi.LocalTarget(("/pipeline/%s/%s" % (self.sample_name, self.sample_name))+"_sorted.bam")
+        else:
+            return luigi.LocalTarget(get_path_no_ext(self.input().path)+"_sorted.bam")
 
     def run(self):
-        input_file = get_path_no_ext(self.input().path)+"_sorted.bam"
-        output_file = get_path_no_ext(self.input().path)+"_sorted.bam"
+        if(self.train_1000g):
+            input_file = "/pipeline/%s/%s" % (self.sample_name, self.sample_name)
+            output_file = get_path_no_ext(input_file)+"_sorted.bam"
+        else:
+            input_file = self.input().path
+            output_file = get_path_no_ext(self.input().path)+"_sorted.bam"
 
-        run_command("samtools sort -o %s -@ %s %s" % (output_file, no_threads, self.input().path))
+        run_command("samtools sort -o %s -@ %s %s" % (output_file, no_threads, input_file))
 
 class IndexFinal(luigi.Task):
     file_name_1 = luigi.Parameter()
@@ -164,7 +171,6 @@ class IndexFinal(luigi.Task):
             run_command("samtools index -@ %s %s" % (no_threads, self.input().path))
 
 class Get1000G(luigi.Task):
-    sample_name = luigi.Parameter()
     ftp_link = "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/hgsv_sv_discovery/data"
 
     samples_ftp = {"HG00512": ftp_link+"/CHS/HG00512/high_cov_alignment/HG00512.alt_bwamem_GRCh38DH.20150715.CHS.high_coverage.cram",
@@ -182,22 +188,22 @@ class Get1000G(luigi.Task):
         return []
 
     def output(self):
-        return luigi.LocalTarget("/pipeline/%s/%s.bam" % (self.sample_name, self.sample_name))
+        return [luigi.LocalTarget("/pipeline/%s/%s.bam" % (sample, sample)) for sample in self.samples_ftp]
 
     def run(self):
-        dirpath = "/pipeline/%s/" % self.sample_name
+        for sample, cram_ftp_link in self.samples_ftp.items():
+            dirpath = "/pipeline/%s/" % sample
 
-        cram_ftp_link = self.samples_ftp[self.sample_name]
-        cram_file = dirpath+self.sample_name+".cram"
-        bam_file = self.sample_name+".bam"
+            cram_file = dirpath+sample+".cram"
+            bam_file = sample+".bam"
 
-        if os.path.exists(dirpath) and os.path.isdir(dirpath):
-            shutil.rmtree(dirpath)
-        os.makedirs(os.path.dirname(dirpath))
-        socket.setdefaulttimeout(300)
-        urllib.request.urlretrieve(cram_ftp_link, cram_file)
+            if os.path.exists(dirpath) and os.path.isdir(dirpath):
+                shutil.rmtree(dirpath)
+            os.makedirs(os.path.dirname(dirpath))
+            socket.setdefaulttimeout(3600)
+            urllib.request.urlretrieve(cram_ftp_link, cram_file)
 
-        run_command("samtools view -b -T %s -o %s -@ %s %s" % (reference_genome, dirpath+bam_file, no_threads, cram_file))
+            run_command("samtools view -b -T %s -o %s -@ %s %s" % (reference_genome, dirpath+bam_file, no_threads, cram_file))
 
 class PerformAlignment(luigi.Task):
     file_name_1 = luigi.Parameter(default=None)
