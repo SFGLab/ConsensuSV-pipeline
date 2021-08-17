@@ -192,18 +192,18 @@ class Get1000G(luigi.Task):
 
     def run(self):
         for sample, cram_ftp_link in self.samples_ftp.items():
+            
             dirpath = "/pipeline/%s/" % sample
+            if not(os.path.exists(dirpath) and os.path.isdir(dirpath)):
+                os.makedirs(os.path.dirname(dirpath))
 
             cram_file = dirpath+sample+".cram"
-            bam_file = sample+".bam"
-
-            if os.path.exists(dirpath) and os.path.isdir(dirpath):
-                shutil.rmtree(dirpath)
-            os.makedirs(os.path.dirname(dirpath))
-            socket.setdefaulttimeout(3600)
-            urllib.request.urlretrieve(cram_ftp_link, cram_file)
-
-            run_command("samtools view -b -T %s -o %s -@ %s %s" % (reference_genome, dirpath+bam_file, no_threads, cram_file))
+            bam_file = dirpath+sample+".bam"
+            if not(os.path.isfile(cram_file)):                
+                socket.setdefaulttimeout(3600)
+                urllib.request.urlretrieve(cram_ftp_link, cram_file)
+            if not(os.path.isfile(bam_file)):
+                run_command("samtools view -b -T %s -o %s -@ %s %s" % (reference_genome, bam_file, no_threads, cram_file))
 
 class PerformAlignment(luigi.Task):
     file_name_1 = luigi.Parameter(default=None)
