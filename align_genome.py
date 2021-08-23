@@ -143,8 +143,8 @@ class SortFinal(luigi.Task):
 
     def run(self):
         if(self.train_1000g):
-            input_file = "/pipeline/%s/%s" % (self.sample_name, self.sample_name)
-            output_file = get_path_no_ext(input_file)+"_sorted.bam"
+            input_file = "/pipeline/%s/%s.bam" % (self.sample_name, self.sample_name)
+            output_file = self.sample_name+"_sorted.bam"
         else:
             input_file = self.input().path
             output_file = get_path_no_ext(self.input().path)+"_sorted.bam"
