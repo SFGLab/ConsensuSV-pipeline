@@ -12,7 +12,7 @@ class SNPCalling(luigi.Task):
     train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
 
     def output(self):
         return luigi.LocalTarget(get_path(self.input()[0].path)+self.sample_name+"_SNPs.vcf")
@@ -35,7 +35,7 @@ class SVDelly(luigi.Task):
     train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
 
     def output(self):
         return luigi.LocalTarget(get_path(self.input()[0].path)+"delly.vcf")
@@ -58,7 +58,7 @@ class SVBreakdancer(luigi.Task):
     train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
 
     def output(self):
         return luigi.LocalTarget(get_path(self.input()[0].path)+"breakdancer.vcf")
@@ -85,7 +85,7 @@ class SVTardis(luigi.Task):
     train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
 
     def output(self):
         return luigi.LocalTarget(get_path(self.input()[0].path)+"tardis.vcf")
@@ -108,7 +108,7 @@ class SVNovoBreak(luigi.Task):
     train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
 
     def output(self):
         return luigi.LocalTarget(get_path(self.input()[0].path)+"novoBreak.vcf")
@@ -138,7 +138,7 @@ class SVCNVNator(luigi.Task):
     train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
 
     def output(self):
         return luigi.LocalTarget(get_path(self.input()[0].path)+"cnvnator.vcf")
@@ -168,7 +168,7 @@ class SVBreakSeq(luigi.Task):
     train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
 
     def output(self):
         return luigi.LocalTarget(get_path(self.input()[0].path)+"breakseq.vcf")
@@ -194,7 +194,7 @@ class SVManta(luigi.Task):
     train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
 
     def output(self):
         return luigi.LocalTarget(get_path(self.input()[0].path)+"manta.vcf")
@@ -219,7 +219,7 @@ class SVLumpy(luigi.Task):
     train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
 
     def output(self):
         return luigi.LocalTarget(get_path(self.input()[0].path)+"lumpy.vcf")
@@ -253,7 +253,7 @@ class SVWhamg(luigi.Task):
     train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
 
     def output(self):
         return luigi.LocalTarget(get_path(self.input()[0].path)+"whamg.vcf")
@@ -276,7 +276,7 @@ class SVSvelter(luigi.Task):
     train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
+        return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
 
     def output(self):
         return luigi.LocalTarget(get_path(self.input()[0].path)+"_svelter.vcf")
@@ -298,16 +298,16 @@ class CallVariants(luigi.Task):
     train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return [SNPCalling(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
-        SVDelly(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
-        SVBreakdancer(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
-        SVTardis(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
-        #SVNovoBreak(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g), too long
-        SVCNVNator(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
-        SVBreakSeq(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
-        SVManta(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
-        SVLumpy(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g),
-        SVWhamg(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
+        return [SNPCalling(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),
+        SVDelly(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),
+        SVBreakdancer(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),
+        SVTardis(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),
+        #SVNovoBreak(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g), too long
+        SVCNVNator(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),
+        SVBreakSeq(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),
+        SVManta(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),
+        SVLumpy(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),
+        SVWhamg(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
         ]
 
     def output(self):

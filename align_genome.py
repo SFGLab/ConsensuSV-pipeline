@@ -2,7 +2,7 @@ import luigi
 import os
 import urllib.request 
 import shutil
-from common import reference_genome, debug, run_command, get_path_no_ext, no_threads
+from common import reference_genome, debug, run_command, get_path, get_path_no_ext, no_threads
 import socket
 
 class QCAnalysis(luigi.Task):
@@ -67,7 +67,7 @@ class SortBam(luigi.Task):
 
     def run(self):
         full_path_output = get_path_no_ext(self.input().path)+"_sorted.bam"
-        run_command("samtools sort -o %s -@ %s %s" % (full_path_output, no_threads, self.input().path))
+        run_command("samtools sort -o %s -T %s -@ %s %s" % (full_path_output, self.input().path, no_threads, self.input().path))
 
 class IndexBam(luigi.Task):
     file_name_1 = luigi.Parameter()
@@ -124,14 +124,11 @@ class SortFinal(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
-    already_done = luigi.Parameter(default=False)
     train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
         if(self.train_1000g):
             return Get1000G()
-        elif(self.already_done):
-            return None
         else:        
             return ApplyBQSR(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
 
@@ -144,31 +141,31 @@ class SortFinal(luigi.Task):
     def run(self):
         if(self.train_1000g):
             input_file = "/pipeline/%s/%s.bam" % (self.sample_name, self.sample_name)
-            output_file = self.sample_name+"_sorted.bam"
+            output_file = "/pipeline/%s/%s_sorted.bam" % (self.sample_name, self.sample_name)
         else:
             input_file = self.input().path
             output_file = get_path_no_ext(self.input().path)+"_sorted.bam"
 
-        run_command("samtools sort -o %s -@ %s %s" % (output_file, no_threads, input_file))
+        run_command("samtools sort -o %s -T %s -@ %s %s" % (output_file, get_path(input_file), no_threads, input_file))
 
 class IndexFinal(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
-    already_done = luigi.Parameter(default=False)
     train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return SortFinal(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
+        return SortFinal(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
 
     def output(self):
         return luigi.LocalTarget(get_path_no_ext(self.input().path)+".bam.bai")
 
     def run(self):
-        if(self.already_done):
-            run_command("samtools index -@ %s %s" % (no_threads, "/pipeline/"+self.sample_name+"/"+self.sample_name+".bam"))
+        if(self.train_1000g):
+            input_file = "/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam"
         else:
-            run_command("samtools index -@ %s %s" % (no_threads, self.input().path))
+            input_file = self.input().path
+        run_command("samtools index -@ %s %s" % (no_threads, input_file))
 
 class Get1000G(luigi.Task):
     ftp_link = "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/hgsv_sv_discovery/data"
@@ -209,27 +206,28 @@ class PerformAlignment(luigi.Task):
     file_name_1 = luigi.Parameter(default=None)
     file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
-    already_done = luigi.Parameter(default=False)
     train_1000g = luigi.Parameter(default=False)
 
     def output(self):
-        if(self.already_done):
-            return luigi.LocalTarget("/pipeline/"+self.sample_name+"/"+self.sample_name+".bam"), luigi.LocalTarget("/pipeline/"+self.sample_name+"/"+self.sample_name+".bam.bai")
         return [luigi.LocalTarget("/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam"), luigi.LocalTarget("/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam.bai")]
 
     def run(self):
-        os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+".sam")
-        os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+".bam")
-        os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam")
-        os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam.bai")
-        os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.recal_table")
-        os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_final.bam")
-        os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_final.bai")
-        os.rename("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_final_sorted.bam", "/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam")
-        os.rename("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_final_sorted.bam.bai", "/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam.bai")
+        if(self.train_1000g):
+            os.rename("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam", "/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam")
+            os.rename("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam.bai", "/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam.bai")
+        else:
+            os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+".sam")
+            os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+".bam")
+            os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam")
+            os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam.bai")
+            os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.recal_table")
+            os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_final.bam")
+            os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_final.bai")
+            os.rename("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_final_sorted.bam", "/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam")
+            os.rename("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_final_sorted.bam.bai", "/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam.bai")
 
     def requires(self):
-        return IndexFinal(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, already_done=self.already_done, train_1000g=self.train_1000g)
+        return IndexFinal(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
 
 
 
