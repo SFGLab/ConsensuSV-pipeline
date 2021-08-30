@@ -311,7 +311,7 @@ class CallVariants(luigi.Task):
         ]
 
     def output(self):
-        return luigi.LocalTarget(get_path(self.input()[0].path)+"_SNPs.vcf")
+        return luigi.LocalTarget(get_path(self.input()[0].path)+"SNPs.vcf")
 
     def run(self):
         pass#run_command("python /tools/ConsensuSV-1.0/main.py -f %s -mod %s -o %s " % ("/pipeline/", "default.model", "test"))

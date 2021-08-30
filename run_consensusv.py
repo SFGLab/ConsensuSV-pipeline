@@ -21,6 +21,12 @@ class Train1000G(luigi.Task):
         return luigi.LocalTarget("1000g_illumina.model")
 
     def run(self):
+        shutil.copyfile("truth_samples/HG00512.vcf", "/pipeline/HG00512/truth.vcf")
+        shutil.copyfile("truth_samples/HG00513.vcf", "/pipeline/HG00513/truth.vcf")
+        shutil.copyfile("truth_samples/HG00514.vcf", "/pipeline/HG00514/truth.vcf")
+        shutil.copyfile("truth_samples/HG00731.vcf", "/pipeline/HG00731/truth.vcf")
+        shutil.copyfile("truth_samples/HG00732.vcf", "/pipeline/HG00732/truth.vcf")
+        shutil.copyfile("truth_samples/HG00733.vcf", "/pipeline/HG00733/truth.vcf")
         run_command("python /tools/ConsensuSV-1.0/main.py -f /pipeline/ -t")
 
 if __name__ == '__main__':
