@@ -15,7 +15,7 @@ class SNPCalling(luigi.Task):
         return PerformAlignment(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
 
     def output(self):
-        return luigi.LocalTarget(get_path(self.input()[0].path)+self.sample_name+"_SNPs.vcf")
+        return luigi.LocalTarget(get_path(self.input()[0].path)+"SNPs.vcf")
 
     def run(self):
         input_file_path = get_path(self.input()[0].path)

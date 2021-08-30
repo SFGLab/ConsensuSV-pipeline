@@ -21,10 +21,7 @@ class Train1000G(luigi.Task):
         return luigi.LocalTarget("1000g_illumina.model")
 
     def run(self):
-        if(self.already_done):
-            run_command("samtools index -@ %s %s" % (no_threads, "/pipeline/"+self.sample_name+"/"+self.sample_name+".bam"))
-        else:
-            run_command("samtools index -@ %s %s" % (no_threads, self.input().path))
+        run_command("python /tools/ConsensuSV-1.0/main.py -f /pipeline/ -t")
 
 if __name__ == '__main__':
     luigi.run()
