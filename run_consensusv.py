@@ -38,7 +38,7 @@ class Benchmark1000G(luigi.Task):
         return luigi.LocalTarget("benchmark.txt")
 
     def run(self):
-        run_command("python -u /tools/ConsensuSV-1.0/main.py -f /pipeline/ -s HG00512,HG00513,HG00514,HG00731,HG00732,HG00733,NA19238,NA19239,NA19240 -mod 1000g_illumina.model")
+        run_command("python -u /tools/ConsensuSV-1.0/main.py -f /pipeline/ -s HG00512,HG00513,HG00514,HG00731,HG00732,HG00733,NA19238,NA19239,NA19240 -c breakdancer,breakseq,cnvnator,delly,lumpy,manta,tardis,whamg -mod 1000g_illumina.model")
         run_command("python -u /tools/ConsensuSV-1.0/charles_filter_n.py -s HG00512,HG00513,HG00514,HG00731,HG00732,HG00733,NA19238,NA19239,NA19240 -o /tools/ConsensuSV-1.0/output/consensuSV__HG00512.vcf,/tools/ConsensuSV-1.0/output/consensuSV__HG00513.vcf,/tools/ConsensuSV-1.0/output/consensuSV__HG00514.vcf,/tools/ConsensuSV-1.0/output/consensuSV__HG00731.vcf,/tools/ConsensuSV-1.0/output/consensuSV__HG00732.vcf,/tools/ConsensuSV-1.0/output/consensuSV__HG00733.vcf,/tools/ConsensuSV-1.0/output/consensuSV__NA19238.vcf,/tools/ConsensuSV-1.0/output/consensuSV__NA19239.vcf,/tools/ConsensuSV-1.0/output/consensuSV__NA19240.vcf > benchmark.txt")
 
 class RunConsensuSV(luigi.Task):
