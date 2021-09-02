@@ -150,12 +150,23 @@ unzip fastqc_v0.11.9.zip && \
 rm fastqc_v0.11.9.zip && \
 chmod +x FastQC/fastqc
 
+# vcftools
+
 RUN cd tools && \
 wget https://downloads.sourceforge.net/project/vcftools/vcftools_0.1.13.tar.gz && \
 tar -xzf vcftools_0.1.13.tar.gz && \ 
 rm vcftools_0.1.13.tar.gz
 
-ENV PATH=${PATH}:/tools/samtools-1.12:/tools/bcftools-1.12:/tools/bwa-0.7.17:/tools/anaconda/bin:/tools/biobambam2/2.0.87-release-20180301132713/x86_64-etch-linux-gnu/bin:/tools/gatk-4.2.0.0:/tools/FastQC:/tools/vcftools_0.1.13/cpp
+# bedtools2
+
+RUN cd tools && \
+wget https://github.com/arq5x/bedtools2/releases/download/v2.30.0/bedtools-2.30.0.tar.gz && \
+tar -xzf bedtools-2.30.0.tar.gz && \ 
+rm bedtools-2.30.0.tar.gz && \
+cd bedtools2 && \
+make
+
+ENV PATH=${PATH}:/tools/samtools-1.12:/tools/bcftools-1.12:/tools/bwa-0.7.17:/tools/anaconda/bin:/tools/biobambam2/2.0.87-release-20180301132713/x86_64-etch-linux-gnu/bin:/tools/gatk-4.2.0.0:/tools/FastQC:/tools/vcftools_0.1.13/cpp:/tools/bedtools2/bin
 
 RUN conda init bash
 
@@ -248,7 +259,10 @@ git clone https://github.com/czc/nb_distribution.git
 RUN cd /tools && \
     wget https://github.com/SFGLab/ConsensuSV/archive/refs/tags/v1.0.zip && \
     unzip v1.0.zip && \
-    rm v1.0.zip
+    rm v1.0.zip && \
+    cd ConsensuSV-1.0 && \
+    unzip 
+
 
 ENV PATH=$PATH:/tools/lumpy-sv/bin:/tools/manta-1.6.0.centos6_x86_64/bin:/tools/tardis:/tools/wham/bin:/tools/breakdancer-master/bin:/tools/breakdancer-master/perl:/tools/nb_distribution/:/tools/CNVnator-master:/tools:/tools/ConsensuSV
 

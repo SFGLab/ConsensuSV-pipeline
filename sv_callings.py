@@ -302,7 +302,6 @@ class CallVariants(luigi.Task):
         SVDelly(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),
         SVBreakdancer(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),
         SVTardis(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),
-        #SVNovoBreak(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g), too long
         SVCNVNator(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),
         SVBreakSeq(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),
         SVManta(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),
@@ -314,9 +313,7 @@ class CallVariants(luigi.Task):
         return luigi.LocalTarget(get_path(self.input()[0].path)+"SNPs.vcf")
 
     def run(self):
-        pass#run_command("python /tools/ConsensuSV-1.0/main.py -f %s -mod %s -o %s " % ("/pipeline/", "default.model", "test"))
+        pass
 
 if __name__ == '__main__':
     luigi.run()
-
-# INSTALLED: SNPs, BreakDancer, delly, tardis, novoBreak, CNVnator, breakseq, Manta, lumpy, svelter
