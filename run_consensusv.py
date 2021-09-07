@@ -56,5 +56,27 @@ class RunConsensuSV(luigi.Task):
     def run(self):
         run_command("python -u /tools/ConsensuSV-1.0/main.py -f /pipeline/ -s %s -c breakdancer,breakseq,cnvnator,delly,lumpy,manta,tardis,whamg -mod 1000g_illumina.model" % self.sample_name)
 
+class RunCSVFile(luigi.Task):
+    csv_file = luigi.Parameter(default=None)
+    list_of_tasks = []
+    def requires(self):
+        with open(self.csv_file) as f:
+            for line in f:
+                csv_line = line.split(",")
+                list_of_tasks.append(RunConsensuSV(file_name_1=csv_line[1], file_name_2=csv_line[2], sample_name=csv_line[0], train_1000g=False))
+        return list_of_tasks
+
+    def output(self):
+        csv_file = luigi.Parameter(default=None)
+        list_of_outputs = []
+        with open(self.csv_file) as f:
+            for line in f:
+                csv_line = line.split(",")
+                list_of_outputs.append(luigi.LocalTarget("/tools/ConsensuSV-1.0/output/consensuSV__%s.vcf" % csv_line[0]))
+        return list_of_outputs
+
+    def run(self):
+        pass
+
 if __name__ == '__main__':
     luigi.run()
