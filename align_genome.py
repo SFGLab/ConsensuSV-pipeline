@@ -6,46 +6,56 @@ from common import reference_genome, debug, run_command, get_path, get_path_no_e
 import socket
 
 class QCAnalysis(luigi.Task):
+    working_dir = luigi.Parameter()
+
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
 
     def output(self):
-        return [luigi.LocalTarget("/pipeline/"+self.sample_name+"/"+get_path_no_ext(self.file_name_1).split("/")[-1]+'_fastqc.html'), 
-        luigi.LocalTarget("/pipeline/"+self.sample_name+"/"+get_path_no_ext(self.file_name_2).split("/")[-1]+'_fastqc.html')]
+        return [luigi.LocalTarget(self.working_dir+"/pipeline/"+self.sample_name+"/"+get_path_no_ext(self.file_name_1).split("/")[-1]+'_fastqc.html'), 
+        luigi.LocalTarget(self.working_dir+"/pipeline/"+self.sample_name+"/"+get_path_no_ext(self.file_name_2).split("/")[-1]+'_fastqc.html')]
 
     def run(self):
-        dirpath = "/pipeline/%s/" % self.sample_name
+        dirpath_main = self.working_dir+"/pipeline/"
+        if os.path.exists(dirpath_main) and os.path.isdir(dirpath_main):
+            shutil.rmtree(dirpath_main)
+
+        dirpath = self.working_dir+"/pipeline/%s/" % self.sample_name
         if os.path.exists(dirpath) and os.path.isdir(dirpath):
             shutil.rmtree(dirpath)
         os.makedirs(os.path.dirname(dirpath))
-        run_command("fastqc -f fastq -o %s %s" % ("/pipeline/"+self.sample_name+"/", self.file_name_1))
-        run_command("fastqc -f fastq -o %s %s" % ("/pipeline/"+self.sample_name+"/", self.file_name_2))
+        run_command("fastqc -f fastq -o %s %s" % (self.working_dir+"/pipeline/"+self.sample_name+"/", self.file_name_1))
+        run_command("fastqc -f fastq -o %s %s" % (self.working_dir+"/pipeline/"+self.sample_name+"/", self.file_name_2))
 
 class AlignGenome(luigi.Task):
+    working_dir = luigi.Parameter()
+
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
 
     def requires(self):
-        return QCAnalysis(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+        return QCAnalysis(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
 
     def output(self):
-        return luigi.LocalTarget("/pipeline/"+self.sample_name+'/'+self.sample_name+'.sam')
+        return luigi.LocalTarget(self.working_dir+"/pipeline/"+self.sample_name+'/'+self.sample_name+'.sam')
 
     def run(self):
         command = "bwa mem -t 1 -B 4 -O 6 -E 1 -M -R \"@RG\\tID:SRR\\tLB:LIB_1\\tSM:SAMPLE_1\\tPL:ILLUMINA\" %s %s %s > %s" % \
-        (reference_genome, self.file_name_1, self.file_name_2, "/pipeline/"+self.sample_name+'/'+self.sample_name+'.sam')
+        (reference_genome, self.file_name_1, self.file_name_2, self.working_dir+"/pipeline/"+self.sample_name+'/'+self.sample_name+'.sam')
 
         run_command(command)
 
 class ConvertToBam(luigi.Task):
+    working_dir = luigi.Parameter()
+
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
 
     def requires(self):
-        return AlignGenome(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+        return AlignGenome(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
 
     def output(self):
         return luigi.LocalTarget(get_path_no_ext(self.input().path)+".bam")
@@ -55,12 +65,14 @@ class ConvertToBam(luigi.Task):
         run_command("samtools view -S -b -o %s -@ %s %s" % (full_path_output, no_threads, self.input().path,))
 
 class SortBam(luigi.Task):
+    working_dir = luigi.Parameter()
+
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
 
     def requires(self):
-        return ConvertToBam(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+        return ConvertToBam(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
 
     def output(self):
         return luigi.LocalTarget(get_path_no_ext(self.input().path)+"_sorted.bam")
@@ -70,12 +82,14 @@ class SortBam(luigi.Task):
         run_command("samtools sort -o %s -T %s -@ %s %s" % (full_path_output, self.input().path, no_threads, self.input().path))
 
 class IndexBam(luigi.Task):
+    working_dir = luigi.Parameter()
+
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
 
     def requires(self):
-        return SortBam(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+        return SortBam(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
 
     def output(self):
         return luigi.LocalTarget(self.input().path+".bai")
@@ -84,6 +98,8 @@ class IndexBam(luigi.Task):
         run_command("samtools index -@ %s %s " % (no_threads, self.input().path))
 
 class BaseRecalibrator(luigi.Task):
+    working_dir = luigi.Parameter()
+
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
@@ -91,7 +107,7 @@ class BaseRecalibrator(luigi.Task):
     known_sites = "/tools/ALL_20141222.dbSNP142_human_GRCh38.snps.vcf.gz"
 
     def requires(self):
-        return IndexBam(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+        return IndexBam(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
 
     def output(self):
         return luigi.LocalTarget(get_path_no_ext(self.input().path, 2)+".recal_table")
@@ -103,12 +119,14 @@ class BaseRecalibrator(luigi.Task):
         run_command("gatk BaseRecalibrator -R %s -O %s -I %s -known-sites %s" % (reference_genome, recal_table, input_file, self.known_sites))
 
 class ApplyBQSR(luigi.Task):
+    working_dir = luigi.Parameter()
+
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
 
     def requires(self):
-        return BaseRecalibrator(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+        return BaseRecalibrator(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
 
     def output(self):
         return luigi.LocalTarget(get_path_no_ext(self.input().path)+"_final.bam")
@@ -121,6 +139,8 @@ class ApplyBQSR(luigi.Task):
         run_command("gatk ApplyBQSR -R %s -O %s -I %s -bqsr-recal-file %s" % (reference_genome, output_file, input_file, recal_table))
 
 class SortFinal(luigi.Task):
+    working_dir = luigi.Parameter()
+
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
@@ -130,18 +150,18 @@ class SortFinal(luigi.Task):
         if(self.train_1000g):
             return Get1000G()
         else:        
-            return ApplyBQSR(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+            return ApplyBQSR(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
 
     def output(self):
         if(self.train_1000g):
-            return luigi.LocalTarget(("/pipeline/%s/%s" % (self.sample_name, self.sample_name))+"_sorted.bam")
+            return luigi.LocalTarget((self.working_dir+"/pipeline/%s/%s" % (self.sample_name, self.sample_name))+"_sorted.bam")
         else:
             return luigi.LocalTarget(get_path_no_ext(self.input().path)+"_sorted.bam")
 
     def run(self):
         if(self.train_1000g):
-            input_file = "/pipeline/%s/%s.bam" % (self.sample_name, self.sample_name)
-            output_file = "/pipeline/%s/%s_sorted.bam" % (self.sample_name, self.sample_name)
+            input_file = self.working_dir+"/pipeline/%s/%s.bam" % (self.sample_name, self.sample_name)
+            output_file = self.working_dir+"/pipeline/%s/%s_sorted.bam" % (self.sample_name, self.sample_name)
         else:
             input_file = self.input().path
             output_file = get_path_no_ext(self.input().path)+"_sorted.bam"
@@ -149,25 +169,29 @@ class SortFinal(luigi.Task):
         run_command("samtools sort -o %s -T %s -@ %s %s" % (output_file, get_path(input_file), no_threads, input_file))
 
 class IndexFinal(luigi.Task):
+    working_dir = luigi.Parameter()
+
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
     train_1000g = luigi.Parameter(default=False)
 
     def requires(self):
-        return SortFinal(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
+        return SortFinal(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
 
     def output(self):
         return luigi.LocalTarget(get_path_no_ext(self.input().path)+".bam.bai")
 
     def run(self):
         if(self.train_1000g):
-            input_file = "/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam"
+            input_file = self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam"
         else:
             input_file = self.input().path
         run_command("samtools index -@ %s %s" % (no_threads, input_file))
 
 class Get1000G(luigi.Task):
+    working_dir = luigi.Parameter()
+
     ftp_link = "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/hgsv_sv_discovery/data"
 
     samples_ftp = {"HG00512": ftp_link+"/CHS/HG00512/high_cov_alignment/HG00512.alt_bwamem_GRCh38DH.20150715.CHS.high_coverage.cram",
@@ -185,12 +209,12 @@ class Get1000G(luigi.Task):
         return []
 
     def output(self):
-        return [luigi.LocalTarget("/pipeline/%s/%s.bam" % (sample, sample)) for sample in self.samples_ftp]
+        return [luigi.LocalTarget(self.working_dir+"/pipeline/%s/%s.bam" % (sample, sample)) for sample in self.samples_ftp]
 
     def run(self):
         for sample, cram_ftp_link in self.samples_ftp.items():
             
-            dirpath = "/pipeline/%s/" % sample
+            dirpath = self.working_dir+"/pipeline/%s/" % sample
             if not(os.path.exists(dirpath) and os.path.isdir(dirpath)):
                 os.makedirs(os.path.dirname(dirpath))
 
@@ -203,31 +227,33 @@ class Get1000G(luigi.Task):
                 run_command("samtools view -b -T %s -o %s -@ %s %s" % (reference_genome, bam_file, no_threads, cram_file))
 
 class PerformAlignment(luigi.Task):
+    working_dir = luigi.Parameter()
+
     file_name_1 = luigi.Parameter(default=None)
     file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
     train_1000g = luigi.Parameter(default=False)
 
     def output(self):
-        return [luigi.LocalTarget("/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam"), luigi.LocalTarget("/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam.bai")]
+        return [luigi.LocalTarget(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam"), luigi.LocalTarget(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam.bai")]
 
     def run(self):
         if(self.train_1000g):
-            os.rename("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam", "/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam")
-            os.rename("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam.bai", "/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam.bai")
+            os.rename(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam", "/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam")
+            os.rename(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam.bai", "/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam.bai")
         else:
-            os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+".sam")
-            os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+".bam")
-            os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam")
-            os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam.bai")
-            os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.recal_table")
-            os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_final.bam")
-            os.remove("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_final.bai")
-            os.rename("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_final_sorted.bam", "/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam")
-            os.rename("/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_final_sorted.bam.bai", "/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam.bai")
+            os.remove(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+".sam")
+            os.remove(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+".bam")
+            os.remove(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam")
+            os.remove(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam.bai")
+            os.remove(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.recal_table")
+            os.remove(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_final.bam")
+            os.remove(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_final.bai")
+            os.rename(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_final_sorted.bam", self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam")
+            os.rename(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_final_sorted.bam.bai", self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam.bai")
 
     def requires(self):
-        return IndexFinal(file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
+        return IndexFinal(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
 
 
 

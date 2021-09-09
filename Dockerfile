@@ -9,7 +9,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get -y upgrade && \
 apt-get install -y wget tabix unzip && \
 cd / && mkdir -p tools && \
-mkdir -p pipeline
+mkdir -p test_working_dir && \
+mkdir -p 1000g_train_working_dir
 
 # static files
 
@@ -157,6 +158,10 @@ wget https://downloads.sourceforge.net/project/vcftools/vcftools_0.1.13.tar.gz &
 tar -xzf vcftools_0.1.13.tar.gz && \ 
 rm vcftools_0.1.13.tar.gz
 
+ENV PATH=${PATH}:/tools/samtools-1.12:/tools/bcftools-1.12:/tools/bwa-0.7.17:/tools/anaconda/bin:/tools/biobambam2/2.0.87-release-20180301132713/x86_64-etch-linux-gnu/bin:/tools/gatk-4.2.0.0:/tools/FastQC:/tools/vcftools_0.1.13/cpp:/tools/bedtools2/bin
+
+RUN conda init bash
+
 # bedtools2
 
 RUN cd tools && \
@@ -165,10 +170,6 @@ tar -xzf bedtools-2.30.0.tar.gz && \
 rm bedtools-2.30.0.tar.gz && \
 cd bedtools2 && \
 make
-
-ENV PATH=${PATH}:/tools/samtools-1.12:/tools/bcftools-1.12:/tools/bwa-0.7.17:/tools/anaconda/bin:/tools/biobambam2/2.0.87-release-20180301132713/x86_64-etch-linux-gnu/bin:/tools/gatk-4.2.0.0:/tools/FastQC:/tools/vcftools_0.1.13/cpp:/tools/bedtools2/bin
-
-RUN conda init bash
 
 # SV callers
 
@@ -268,3 +269,6 @@ ENV PATH=$PATH:/tools/lumpy-sv/bin:/tools/manta-1.6.0.centos6_x86_64/bin:/tools/
 
 RUN pip install luigi pysam wget
 
+RUN mkdir /workspace/ && \
+cd /workspace/ && \
+git clone https://github.com/SFGLab/ConsensuSV-pipeline.git .

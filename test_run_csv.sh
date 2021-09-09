@@ -1,1 +1,1 @@
-python run_consensusv.py RunCSVFile --csv-file samples.csv --workers 4 --local-scheduler > csv_test.log
+python run_consensusv.py RunCSVFile --csv-file samples.csv --workers 4 --local-scheduler --working-dir /test_working_dir/
