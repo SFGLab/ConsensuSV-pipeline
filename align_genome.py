@@ -148,7 +148,7 @@ class SortFinal(luigi.Task):
 
     def requires(self):
         if(self.train_1000g):
-            return Get1000G()
+            return Get1000G(working_dir=self.working_dir)
         else:        
             return ApplyBQSR(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
 

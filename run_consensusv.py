@@ -35,7 +35,7 @@ class Benchmark1000G(luigi.Task):
         return [Train1000G(working_dir=self.working_dir)]
 
     def output(self):
-        return luigi.LocalTarget("benchmark.txt")
+        return luigi.LocalTarget("%s/benchmark.txt" % self.working_dir)
 
     def run(self):
         run_command("python -u /tools/ConsensuSV-1.0/main.py -f %s/pipeline/ -s HG00512,HG00513,HG00514,HG00731,HG00732,HG00733,NA19238,NA19239,NA19240 -c breakdancer,breakseq,cnvnator,delly,lumpy,manta,tardis,whamg -mod %s/1000g_illumina.model" % (self.working_dir, self.working_dir))
