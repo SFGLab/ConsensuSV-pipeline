@@ -5,6 +5,40 @@ import shutil
 from common import reference_genome, debug, run_command, get_path, get_path_no_ext, no_threads
 import socket
 
+class MergeFastq(luigi.Task):
+    working_dir = luigi.Parameter()
+
+    file_name_1 = luigi.Parameter()
+    file_name_2 = luigi.Parameter()
+
+    sample_name = luigi.Parameter()
+        
+    def output(self):
+        return [luigi.LocalTarget(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R1.fastq"), 
+        luigi.LocalTarget(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R2.fastq")]
+
+    def run(self):
+        dirpath_main = self.working_dir+"/pipeline/"
+        if os.path.exists(dirpath_main) and os.path.isdir(dirpath_main):
+            shutil.rmtree(dirpath_main)
+        os.makedirs(os.path.dirname(dirpath_main))
+
+        dirpath = self.working_dir+"/pipeline/%s/" % self.sample_name
+        if os.path.exists(dirpath) and os.path.isdir(dirpath):
+            shutil.rmtree(dirpath)
+        os.makedirs(os.path.dirname(dirpath))
+
+        if(";" in self.file_name_1):
+            files = " ".join(self.file_name_1.split(";"))
+            run_command("cat %s > %s" % (files, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R1.fastq"))
+        else:
+            shutil.copyfile(self.file_name_1, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R1.fastq")
+        if(";" in self.file_name_2):
+            files = " ".join(self.file_name_2.split(";"))
+            run_command("cat %s > %s" % (files, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R2.fastq"))
+        else:
+            shutil.copyfile(self.file_name_2, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R2.fastq")
+
 class QCAnalysis(luigi.Task):
     working_dir = luigi.Parameter()
 
@@ -12,19 +46,17 @@ class QCAnalysis(luigi.Task):
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
 
+    def requires(self):
+        return MergeFastq(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+
     def output(self):
-        return [luigi.LocalTarget(self.working_dir+"/pipeline/"+self.sample_name+"/"+get_path_no_ext(self.file_name_1).split("/")[-1]+'_fastqc.html'), 
-        luigi.LocalTarget(self.working_dir+"/pipeline/"+self.sample_name+"/"+get_path_no_ext(self.file_name_2).split("/")[-1]+'_fastqc.html')]
+        return [luigi.LocalTarget(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+'_R1_fastqc.html'), 
+        luigi.LocalTarget(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+'_R1_fastqc.html')]
 
     def run(self):
-        dirpath_main = self.working_dir+"/pipeline/"
-        if os.path.exists(dirpath_main) and os.path.isdir(dirpath_main):
-            shutil.rmtree(dirpath_main)
+        self.file_name_1 = self.input()[0].path
+        self.file_name_2 = self.input()[1].path
 
-        dirpath = self.working_dir+"/pipeline/%s/" % self.sample_name
-        if os.path.exists(dirpath) and os.path.isdir(dirpath):
-            shutil.rmtree(dirpath)
-        os.makedirs(os.path.dirname(dirpath))
         run_command("fastqc -f fastq -o %s %s" % (self.working_dir+"/pipeline/"+self.sample_name+"/", self.file_name_1))
         run_command("fastqc -f fastq -o %s %s" % (self.working_dir+"/pipeline/"+self.sample_name+"/", self.file_name_2))
 
@@ -43,7 +75,7 @@ class AlignGenome(luigi.Task):
 
     def run(self):
         command = "bwa mem -t 1 -B 4 -O 6 -E 1 -M -R \"@RG\\tID:SRR\\tLB:LIB_1\\tSM:SAMPLE_1\\tPL:ILLUMINA\" %s %s %s > %s" % \
-        (reference_genome, self.file_name_1, self.file_name_2, self.working_dir+"/pipeline/"+self.sample_name+'/'+self.sample_name+'.sam')
+        (reference_genome, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R1.fastq", self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R2.fastq", self.working_dir+"/pipeline/"+self.sample_name+'/'+self.sample_name+'.sam')
 
         run_command(command)
 
@@ -239,8 +271,8 @@ class PerformAlignment(luigi.Task):
 
     def run(self):
         if(self.train_1000g):
-            os.rename(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam", "/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam")
-            os.rename(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam.bai", "/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam.bai")
+            os.rename(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam", self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam")
+            os.rename(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam.bai", self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam.bai")
         else:
             os.remove(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+".sam")
             os.remove(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+".bam")

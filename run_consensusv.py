@@ -43,6 +43,7 @@ class Benchmark1000G(luigi.Task):
 
 class RunConsensuSV(luigi.Task):
     working_dir = luigi.Parameter()
+    model = luigi.Parameter()
     file_name_1 = luigi.Parameter(default=None)
     file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
@@ -52,21 +53,27 @@ class RunConsensuSV(luigi.Task):
         return [CallVariants(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=False)]
 
     def output(self):
-        return luigi.LocalTarget("/tools/ConsensuSV-1.0/output/consensuSV__%s.vcf" % self.sample_name)
+        return luigi.LocalTarget("%s/consensuSV__%s.vcf" % (self.working_dir+"/output/", self.sample_name))
 
     def run(self):
-        run_command("python -u /tools/ConsensuSV-1.0/main.py -f %s/pipeline/ -s %s -c breakdancer,breakseq,cnvnator,delly,lumpy,manta,tardis,whamg -mod 1000g_illumina.model" % (self.working_dir, self.sample_name))
+        output_folder = self.working_dir+"/output/"
+        if os.path.exists(output_folder) and os.path.isdir(output_folder):
+            shutil.rmtree(output_folder)
+        os.makedirs(os.path.dirname(output_folder))
+
+        run_command("python -u /tools/ConsensuSV-1.0/main.py -of %s/output/ -f %s/pipeline/ -s %s -c breakdancer,breakseq,cnvnator,delly,lumpy,manta,tardis,whamg -mod %s" % (self.working_dir, self.working_dir, self.sample_name, self.model))
 
 class RunCSVFile(luigi.Task):
     csv_file = luigi.Parameter(default=None)
     working_dir = luigi.Parameter()
-
+    model = luigi.Parameter(default="/tools/ConsensuSV-1.0/pretrained_1000g_illumina.model")
+    
     def requires(self):
         list_of_tasks = []
         with open(self.csv_file) as f:
             for line in f:
                 csv_line = line.split(",")
-                list_of_tasks.append(RunConsensuSV(working_dir=self.working_dir, file_name_1=csv_line[1], file_name_2=csv_line[2], sample_name=csv_line[0]))
+                list_of_tasks.append(RunConsensuSV(working_dir=self.working_dir, model=self.model, file_name_1=csv_line[1], file_name_2=csv_line[2], sample_name=csv_line[0]))
         return list_of_tasks
 
     def output(self):

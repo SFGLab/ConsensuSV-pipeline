@@ -22,6 +22,10 @@ wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00331/sequence_read/
 gunzip ERR018471_1.filt.fastq.gz && \
 wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00331/sequence_read/ERR018471_2.filt.fastq.gz && \
 gunzip ERR018471_2.filt.fastq.gz && \
+wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00331/sequence_read/ERR031898_1.filt.fastq.gz && \
+gunzip ERR031898_1.filt.fastq.gz && \
+wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00331/sequence_read/ERR031898_2.filt.fastq.gz && \
+gunzip ERR031898_2.filt.fastq.gz && \
 wget https://github.com/BilkentCompGen/sonic-prebuilt/raw/master/GRCh38_1kg.sonic && \
 wget http://sv.gersteinlab.org/phase1bkpts/breakseq2_bplib_20150129.zip && \
 unzip breakseq2_bplib_20150129.zip && \
@@ -258,11 +262,12 @@ git clone https://github.com/czc/nb_distribution.git
 # ConsensuSV
 
 RUN cd /tools && \
-    wget https://github.com/SFGLab/ConsensuSV/archive/refs/tags/v1.0.zip && \
-    unzip v1.0.zip && \
-    rm v1.0.zip && \
+    wget https://github.com/SFGLab/ConsensuSV/archive/refs/heads/main.zip&& \
+    unzip main.zip && \
+    rm main.zip && \
+    mv ConsensuSV-main ConsensuSV-1.0 && \
     cd ConsensuSV-1.0 && \
-    unzip 
+    unzip ALL_Illumina_Integrate_20170206.zip
 
 
 ENV PATH=$PATH:/tools/lumpy-sv/bin:/tools/manta-1.6.0.centos6_x86_64/bin:/tools/tardis:/tools/wham/bin:/tools/breakdancer-master/bin:/tools/breakdancer-master/perl:/tools/nb_distribution/:/tools/CNVnator-master:/tools:/tools/ConsensuSV
