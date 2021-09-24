@@ -129,6 +129,24 @@ class IndexBam(luigi.Task):
     def run(self):
         run_command("samtools index -@ %s %s " % (no_threads, self.input().path))
 
+class MarkDuplicates(luigi.Task):
+    working_dir = luigi.Parameter()
+
+    file_name_1 = luigi.Parameter()
+    file_name_2 = luigi.Parameter()
+    sample_name = luigi.Parameter()
+
+    def requires(self):
+        return IndexBam(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+
+    def output(self):
+        return luigi.LocalTarget(get_path_no_ext(self.input().path, 2)+"_dp.bam")
+
+    def run(self):
+        input_file = get_path_no_ext(self.input().path, 2)+".bam"
+        output_file = get_path_no_ext(self.input().path, 2)+"_dp.bam"
+        run_command("bammarkduplicates I=%s O=%s index=1 rmdup=1" % (input_file, output_file))
+
 class BaseRecalibrator(luigi.Task):
     working_dir = luigi.Parameter()
 
@@ -139,7 +157,7 @@ class BaseRecalibrator(luigi.Task):
     known_sites = "/tools/ALL_20141222.dbSNP142_human_GRCh38.snps.vcf.gz"
 
     def requires(self):
-        return IndexBam(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
+        return MarkDuplicates(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
 
     def output(self):
         return luigi.LocalTarget(get_path_no_ext(self.input().path, 2)+".recal_table")

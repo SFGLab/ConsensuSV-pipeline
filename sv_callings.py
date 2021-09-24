@@ -25,7 +25,32 @@ class SNPCalling(luigi.Task):
         inter_file = input_file_path+"SNPs.bcf"
         output_file = input_file_path+"SNPs.vcf"
 
-        run_command("bcftools mpileup -Ou -f %s %s | bcftools call -mv -Ob -o %s && bcftools view -i '%%QUAL>=20' %s > %s" % (reference_genome, input_file, inter_file, inter_file, output_file))
+        run_command("bcftools mpileup -Ou -f %s %s | bcftools call --skip-variants indels -mv -Ob -o %s && bcftools view -i '%%QUAL>=20' %s > %s" % (reference_genome, input_file, inter_file, inter_file, output_file))
+
+        os.remove(inter_file)
+
+class IndelCalling(luigi.Task):
+    working_dir = luigi.Parameter()
+
+    file_name_1 = luigi.Parameter(default=None)
+    file_name_2 = luigi.Parameter(default=None)
+    sample_name = luigi.Parameter()
+    already_done = luigi.Parameter(default=False)
+    train_1000g = luigi.Parameter(default=False)
+
+    def requires(self):
+        return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
+
+    def output(self):
+        return luigi.LocalTarget(get_path(self.input()[0].path)+"Indels.vcf")
+
+    def run(self):
+        input_file_path = get_path(self.input()[0].path)
+        input_file = self.input()[0].path
+        inter_file = input_file_path+"Indels.bcf"
+        output_file = input_file_path+"Indels.vcf"
+
+        run_command("bcftools mpileup -Ou -f %s %s | bcftools call --skip-variants snps -mv -Ob -o %s && bcftools view -i '%%QUAL>=20' %s > %s" % (reference_genome, input_file, inter_file, inter_file, output_file))
 
         os.remove(inter_file)
 
@@ -323,6 +348,7 @@ class CallVariants(luigi.Task):
 
     def requires(self):
         return [SNPCalling(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),
+        IndelCalling(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),
         SVDelly(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),
         SVBreakdancer(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),
         SVTardis(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),

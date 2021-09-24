@@ -39,6 +39,9 @@ ENV LANGUAGE=en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
+# long downloads are up, worth updating again
+RUN apt-get update 
+
 RUN apt-get install -y build-essential gfortran xorg-dev libpcre3-dev \
         libncurses5-dev zlib1g-dev libbz2-dev liblzma-dev libcurl3-dev git fort77 libreadline-dev \
         cmake curl libboost-all-dev libgd-dev default-jre nano libncurses5 bc locales bsdmainutils gawk && \
@@ -262,7 +265,7 @@ git clone https://github.com/czc/nb_distribution.git
 # ConsensuSV
 
 RUN cd /tools && \
-    wget https://github.com/SFGLab/ConsensuSV/archive/refs/heads/main.zip&& \
+    wget https://github.com/SFGLab/ConsensuSV/archive/refs/heads/main.zip && \
     unzip main.zip && \
     rm main.zip && \
     mv ConsensuSV-main ConsensuSV-1.0 && \
