@@ -146,6 +146,7 @@ class MarkDuplicates(luigi.Task):
         input_file = get_path_no_ext(self.input().path, 2)+".bam"
         output_file = get_path_no_ext(self.input().path, 2)+"_dp.bam"
         run_command("bammarkduplicates I=%s O=%s index=1 rmdup=1" % (input_file, output_file))
+        run_command("samtools index -@ %s %s " % (no_threads, output_file))
 
 class BaseRecalibrator(luigi.Task):
     working_dir = luigi.Parameter()
@@ -296,11 +297,13 @@ class PerformAlignment(luigi.Task):
             os.remove(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+".bam")
             os.remove(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam")
             os.remove(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.bam.bai")
-            os.remove(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted.recal_table")
-            os.remove(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_final.bam")
-            os.remove(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_final.bai")
-            os.rename(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_final_sorted.bam", self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam")
-            os.rename(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_final_sorted.bam.bai", self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam.bai")
+            os.remove(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_dp.bam")
+            os.remove(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_dp.bam.bai")
+            os.remove(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_dp.recal_table")
+            os.remove(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_dp_final.bam")
+            os.remove(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_dp_final.bai")
+            os.rename(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_dp_final_sorted.bam", self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam")
+            os.rename(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_sorted_dp_final_sorted.bam.bai", self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam.bai")
 
     def requires(self):
         return IndexFinal(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)

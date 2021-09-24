@@ -43,7 +43,7 @@ class Benchmark1000G(luigi.Task):
 
 class RunConsensuSV(luigi.Task):
     working_dir = luigi.Parameter()
-    model = luigi.Parameter()
+    model = luigi.Parameter(default="/tools/ConsensuSV-1.0/pretrained_1000g_illumina.model")
     file_name_1 = luigi.Parameter(default=None)
     file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
