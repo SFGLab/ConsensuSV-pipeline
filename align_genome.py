@@ -164,7 +164,7 @@ class BaseRecalibrator(luigi.Task):
         return luigi.LocalTarget(get_path_no_ext(self.input().path, 2)+".recal_table")
 
     def run(self):
-        input_file = get_path_no_ext(self.input().path, 2)+".bam"
+        input_file = get_path_no_ext(self.input().path, 1)+".bam"
         recal_table = get_path_no_ext(input_file)+".recal_table"
 
         run_command("gatk BaseRecalibrator -R %s -O %s -I %s -known-sites %s" % (reference_genome, recal_table, input_file, self.known_sites))
