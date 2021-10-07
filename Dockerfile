@@ -265,13 +265,12 @@ git clone https://github.com/czc/nb_distribution.git
 # ConsensuSV
 
 RUN cd /tools && \
-    wget https://github.com/SFGLab/ConsensuSV/archive/refs/heads/main.zip && \
-    unzip main.zip && \
-    rm main.zip && \
-    mv ConsensuSV-main ConsensuSV-1.0 && \
-    cd ConsensuSV-1.0 && \
+    wget https://github.com/SFGLab/ConsensuSV-core/archive/refs/tags/1.1.zip && \
+    unzip ConsensuSV-core-1.1.zip && \
+    rm ConsensuSV-core-1.1.zip && \
+    mv ConsensuSV-core-1.1 ConsensuSV-core && \
+    cd ConsensuSV-core && \
     unzip ALL_Illumina_Integrate_20170206.zip
-
 
 ENV PATH=$PATH:/tools/lumpy-sv/bin:/tools/manta-1.6.0.centos6_x86_64/bin:/tools/tardis:/tools/wham/bin:/tools/breakdancer-master/bin:/tools/breakdancer-master/perl:/tools/nb_distribution/:/tools/CNVnator-master:/tools:/tools/ConsensuSV
 
