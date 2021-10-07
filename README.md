@@ -1,5 +1,14 @@
 # ConsensuSV-pipeline
 
+Table of Contents
+=================
+
+* [What is ConsensuSV?](#what-is-consensusv)
+* [Citation](#citation)
+* [Testing scenarios](#testing-scenarios)
+* [Preparation of your samples](#preparation-of-your-samples)
+* [Pipeline details](#pipeline-details)
+* [Setup on NVIDIA DGX A100 systems](#setup-on-nvidia-dgx-a100-systems)
 ## What is ConsensuSV?
 
 Automatised pipeline of ConsensuSV workflow, going from raw sequencing Illumina data (fastq), to output vcf files (structural variants, indels and SNPs). Easy to run, scalable solution for variant discovery.
@@ -81,7 +90,7 @@ Bear in mind that the column headers are provided only for the ease of the examp
 
 For the details on ConsensuSV algorithm for the consensus establishment, please refer to ConsensuSV-core (https://github.com/SFGLab/ConsensuSV-core).
 
-## HPC-ready version for NVIDIA DGX A100 systems with SLURM
+## Setup on NVIDIA DGX A100 systems
 
 The ConsensuSV-pipeline can be run using HPC software. The parallelism nature of luigi framework lets multiple samples to be processed at once. We have tested the pipeline on NVIDIA DGX A100 cluster, and the following requirements need to be met:
 * slurm
