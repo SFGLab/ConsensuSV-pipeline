@@ -46,12 +46,6 @@ In all the testing scenarios, you need to get into the docker container having d
 docker run -p 8082:8082 -it mateuszchilinski/consensusv-pipeline:latest
 ```
 
-Then direct into the workspace containing all the pipeline data:
-
-```shell
-cd /workspace/
-```
-
 First testing scenario uses only two fastq files of HG00331:
 
 ```shell
