@@ -7,6 +7,8 @@ Table of Contents
 * [Citation](#citation)
 * [Testing scenarios](#testing-scenarios)
 * [Preparation of your samples](#preparation-of-your-samples)
+* [Running the pipeline](#running-the-pipeline)
+* [Pipeline control webservice](#pipeline-control-webservice)
 * [Pipeline details](#pipeline-details)
 * [Setup on NVIDIA DGX A100 systems](#setup-on-nvidia-dgx-a100-systems)
 ## What is ConsensuSV?
@@ -110,6 +112,28 @@ Parameter | Description
 --csv-file | File location of the csv file that described all the samples according to the [guidelines](#preparation-of-your-samples).
 --working-dir | Working directory of the pipeline. It should have some free space left, as alignment steps can consume quite a lot of it.
 --model | Optional parameter showing the pretrained model used by ConsensuSV. The model provided with the software is sufficient, and changing of it should be done if you know what you are doing (e.g. for changing the SV callers used in the pipeline).
+
+## Pipeline control webservice
+
+The pipeline used luigi framework for the execution of the tasks in specific order and parallelisation. That is why once can control the pipeline execution information using the webservice provided by luigi.
+
+The webinterface is by default provided at:
+
+```
+http://localhost:8082/static/visualiser/index.html
+```
+
+For example, if we execute the testing scenario that trains the model from scratch, we can see the current phase of the pipeline, the previous ones and the next ones in form of an execution tree (click to enlarge):
+
+<p align="center">
+<img src="https://github.com/SFGLab/ConsensuSV-pipeline/blob/main/luigi_1000g_get.png" />
+</p>
+
+Of course one can also see the execution tree of CSV (in this example, 2 samples are being proceeded; click to enlarge):
+
+<p align="center">
+<img src="https://github.com/SFGLab/ConsensuSV-pipeline/blob/main/luigi_pipeline_2_samples.png" />
+</p>
 
 ## Pipeline details
 
