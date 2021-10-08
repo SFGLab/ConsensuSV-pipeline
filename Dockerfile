@@ -274,7 +274,7 @@ RUN cd /tools && \
 
 ENV PATH=$PATH:/tools/lumpy-sv/bin:/tools/manta-1.6.0.centos6_x86_64/bin:/tools/tardis:/tools/wham/bin:/tools/breakdancer-master/bin:/tools/breakdancer-master/perl:/tools/nb_distribution/:/tools/CNVnator-master:/tools:/tools/ConsensuSV
 
-RUN pip install luigi pysam wget
+RUN pip install pysam wget luigi
 
 RUN mkdir /workspace/ && \
 cd /workspace/ && \
