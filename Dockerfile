@@ -282,4 +282,6 @@ git clone https://github.com/SFGLab/ConsensuSV-pipeline.git .
 
 EXPOSE 8082
 
+WORKDIR /workspace
+
 ENTRYPOINT luigid --background & /bin/bash
