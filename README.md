@@ -41,7 +41,7 @@ For the ease of the verification of the algorithm, we created a few testing scen
 In all the testing scenarios, you need to get into the docker container having downloaded it using:
 
 ```shell
-docker run -it mateuszchilinski/consensusv-pipeline:latest /bin/bash
+docker run -p 8082:8082 -it mateuszchilinski/consensusv-pipeline:latest
 ```
 
 Then direct into the workspace containing all the pipeline data:
