@@ -86,6 +86,31 @@ HG00331 | /tools/ERR018471_1.filt.fastq;/tools/ERR031898_1.filt.fastq | /tools/E
 
 Bear in mind that the column headers are provided only for the ease of the example, and should not be present in the csv file.
 
+## Running the pipeline
+
+To get into the docker image for working with your data, it's best to mount local directories to the container:
+
+```bash
+docker run --mount type=bind,source=/mnt/,target=/mnt/ -p 8082:8082 -it mateuszchilinski/consensusv-pipeline:latest
+```
+
+In that example, we bind folder /mnt/, where working directory and samples will be stored to in-container folder /mnt/. Once in the container, we can run the pipeline using the following command:
+
+```bash
+python run_consensusv.py RunCSVFile --csv-file /mnt/data/samples.csv --workers 4 --working-dir /mnt/working_dir/
+```
+Remember to put your samples in the file samples.csv according to the [guidelines](#preparation-of-your-samples). In this case, we run the whole pipeline using 4 workers, that is maximum of 4 tasks will be run at once. 
+
+Important notice: for the alignment and samtools operations (sorting, indexing etc.) we use 4 threads, the other SV callers and steps use mostly one. Bear that in mind when calculating how many workers you can run at once at your system! (e.g. when you have computer with 18 cores, it might be a good idea to stick with 4 workers, as in the alignment phase all 16 cores will be utilised).
+
+All the parameters that can be used with the script are shown in the following table:
+
+Parameter | Description
+-------------- | ---------------
+--csv-file | File location of the csv file that described all the samples according to the [guidelines](#preparation-of-your-samples).
+--working-dir | Working directory of the pipeline. It should have some free space left, as alignment steps can consume quite a lot of it.
+--model | Optional parameter showing the pretrained model used by ConsensuSV. The model provided with the software is sufficient, and changing of it should be done if you know what you are doing (e.g. for changing the SV callers used in the pipeline).
+
 ## Pipeline details
 
 For the details on ConsensuSV algorithm for the consensus establishment, please refer to ConsensuSV-core (https://github.com/SFGLab/ConsensuSV-core).
