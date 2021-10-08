@@ -279,3 +279,7 @@ RUN pip install luigi pysam wget
 RUN mkdir /workspace/ && \
 cd /workspace/ && \
 git clone https://github.com/SFGLab/ConsensuSV-pipeline.git .
+
+EXPOSE 8082
+
+ENTRYPOINT luigid --background & /bin/bash
