@@ -109,7 +109,7 @@ Parameter | Description
 
 ## Pipeline control webservice
 
-The pipeline used luigi framework for the execution of the tasks in specific order and parallelisation. That is why once can control the pipeline execution information using the webservice provided by luigi.
+The pipeline uses luigi framework for the execution of the tasks in specific order and parallelisation. That is why once can control the pipeline execution information using the webservice provided by luigi.
 
 The webinterface is by default provided at:
 
