@@ -97,7 +97,7 @@ python run_consensusv.py RunCSVFile --csv-file /mnt/data/samples.csv --workers 4
 ```
 Remember to put your samples in the file samples.csv according to the [guidelines](#preparation-of-your-samples). In this case, we run the whole pipeline using 4 workers, that is maximum of 4 tasks will be run at once. 
 
-Important notice: for the alignment and samtools operations (sorting, indexing etc.) we use 4 threads, the other SV callers and steps use mostly one. Bear that in mind when calculating how many workers you can run at once at your system! (e.g. when you have computer with 18 cores, it might be a good idea to stick with 4 workers, as in the alignment phase all 16 cores will be utilised).
+Important notice: for the alignment and samtools operations (sorting, indexing etc.) we use 4 threads, the other SV callers and steps use mostly one. Bear that in mind when calculating how many workers you can run at once at your system (e.g. when you have computer with 18 cores, it might be a good idea to stick with 4 workers, as in the alignment phase all 16 cores will be utilised)! This behaviour (the number of threads) can be changed in the common.py file, however we do not recommend it, unless you are an advanced user and know what you are doing.
 
 All the parameters that can be used with the script are shown in the following table:
 
