@@ -131,7 +131,21 @@ Of course one can also see the execution tree of CSV (in this example, 2 samples
 
 ## Pipeline details
 
-For the details on ConsensuSV algorithm for the consensus establishment, please refer to ConsensuSV-core (https://github.com/SFGLab/ConsensuSV-core).
+The overall schema of the pipeline is shown on the following picture:
+
+<p align="center">
+<img src="https://github.com/SFGLab/ConsensuSV-pipeline/blob/main/pipeline.png" />
+</p>
+
+First, the fastq files are merged - an option available for the experiments run e.g. in replicates or using multiple lanes. Secondly, QC analysis is performed (using FastQC) and the output of the analysis is available as one of the final files after the whole run. 
+
+After the QC analysis, the 1000 Genomes best practices are used for the alignment and futher processing of the sample. First, the alignment is done using bwa-mem. Each of the alignment commends uses 4 cores for the alignment purposes. After that, the SAM file produced by bwa-mem is converted to BAM file using samtools - also using 4 threads. The alignment file is then sorted and indexed using samtools. After those steps, duplicates are marked and removed with usage of biobambam2 - a step followed by indexing the file once again.
+
+Next steps use Genome Analysis ToolKit - the BaseRecalibrator and ApplyBQSR are used for the recalibration of the bases near known SNPs sites. Both steps are also derived from the 1000 Genomes guidelines. The final steps are sorting, indexing and cleaning up intermediate files, leaving the final sorted and indexed bam file.
+
+After the final bam file is prepared, multiple tools are run in parallel to obtain the Structural Variants, Indels and SNPs. We are using bcftools for the Indels and SNPs callings. The SV-callers used in this pipeline are: Delly, BreakDancer, Tardis, CNVNator, BreakSeq, Manta, Lumpy, and Whamg.
+
+The final step is merging the Structural Variant calls into one unified file using our ConsensuSV-core algorithm. For the details on it, please refer to ConsensuSV-core github repository (https://github.com/SFGLab/ConsensuSV-core).
 
 ## Setup on NVIDIA DGX A100 systems
 
