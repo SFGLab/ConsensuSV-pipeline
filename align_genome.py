@@ -74,8 +74,8 @@ class AlignGenome(luigi.Task):
         return luigi.LocalTarget(self.working_dir+"/pipeline/"+self.sample_name+'/'+self.sample_name+'.sam')
 
     def run(self):
-        command = "bwa mem -t 1 -B 4 -O 6 -E 1 -M -R \"@RG\\tID:SRR\\tLB:LIB_1\\tSM:SAMPLE_1\\tPL:ILLUMINA\" %s %s %s > %s" % \
-        (reference_genome, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R1.fastq", self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R2.fastq", self.working_dir+"/pipeline/"+self.sample_name+'/'+self.sample_name+'.sam')
+        command = "bwa mem -t %s -B 4 -O 6 -E 1 -M -R \"@RG\\tID:SRR\\tLB:LIB_1\\tSM:SAMPLE_1\\tPL:ILLUMINA\" %s %s %s > %s" % \
+        (no_threads, reference_genome, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R1.fastq", self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R2.fastq", self.working_dir+"/pipeline/"+self.sample_name+'/'+self.sample_name+'.sam')
 
         run_command(command)
 
