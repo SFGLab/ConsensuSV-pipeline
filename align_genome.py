@@ -30,12 +30,20 @@ class MergeFastq(luigi.Task):
 
         if(";" in self.file_name_1):
             files = " ".join(self.file_name_1.split(";"))
-            run_command("cat %s > %s" % (files, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R1.fastq"))
+            if(".gz" in self.file_name_1):
+                command_to_use = "zcat"
+            else:
+                command_to_use = "cat"
+            run_command("%s %s > %s" % (command_to_use, files, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R1.fastq"))
         else:
             shutil.copyfile(self.file_name_1, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R1.fastq")
         if(";" in self.file_name_2):
             files = " ".join(self.file_name_2.split(";"))
-            run_command("cat %s > %s" % (files, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R2.fastq"))
+            if(".gz" in self.file_name_2):
+                command_to_use = "zcat"
+            else:
+                command_to_use = "cat"
+            run_command("%s %s > %s" % (command_to_use, files, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R2.fastq"))
         else:
             shutil.copyfile(self.file_name_2, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R2.fastq")
 
