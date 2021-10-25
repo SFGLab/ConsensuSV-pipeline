@@ -15,16 +15,16 @@ mkdir -p 1000g_train_working_dir
 # static files
 
 RUN cd /tools && \
-wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/GRCh38_reference_genome/other_mapping_resources/ALL_20141222.dbSNP142_human_GRCh38.snps.vcf.gz && \
+wget ftp://ftp.ebi.ac.uk/1000g/ftp/technical/reference/GRCh38_reference_genome/other_mapping_resources/ALL_20141222.dbSNP142_human_GRCh38.snps.vcf.gz && \
 tabix ALL_20141222.dbSNP142_human_GRCh38.snps.vcf.gz && \
-wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.* && \
-wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00331/sequence_read/ERR018471_1.filt.fastq.gz && \
+wget ftp://ftp.ebi.ac.uk/1000g/ftp/technical/reference/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.* && \
+wget ftp://ftp.ebi.ac.uk/1000g/ftp/phase3/data/HG00331/sequence_read/ERR018471_1.filt.fastq.gz && \
 gunzip ERR018471_1.filt.fastq.gz && \
-wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00331/sequence_read/ERR018471_2.filt.fastq.gz && \
+wget ftp://ftp.ebi.ac.uk/1000g/ftp/phase3/data/HG00331/sequence_read/ERR018471_2.filt.fastq.gz && \
 gunzip ERR018471_2.filt.fastq.gz && \
-wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00331/sequence_read/ERR031898_1.filt.fastq.gz && \
+wget ftp://ftp.ebi.ac.uk/1000g/ftp/phase3/data/HG00331/sequence_read/ERR031898_1.filt.fastq.gz && \
 gunzip ERR031898_1.filt.fastq.gz && \
-wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00331/sequence_read/ERR031898_2.filt.fastq.gz && \
+wget ftp://ftp.ebi.ac.uk/1000g/ftp/phase3/data/HG00331/sequence_read/ERR031898_2.filt.fastq.gz && \
 gunzip ERR031898_2.filt.fastq.gz && \
 wget https://github.com/BilkentCompGen/sonic-prebuilt/raw/master/GRCh38_1kg.sonic && \
 wget http://sv.gersteinlab.org/phase1bkpts/breakseq2_bplib_20150129.zip && \
