@@ -168,11 +168,29 @@ export TMPDIR=/home/dir_to_your_temp_folder/
 After having created enroot image, you need to upload it (mateuszchilinski+consensusv-pipeline.sqsh) to your DGX A100 system (using e.g. scp). After the upload is complete, you can run the container using the following command:
 
 ```bash
-srun --container-image ~/mateuszchilinski+consensusv-pipeline.sqsh /bin/bash
+srun --pty --container-image ~/mateuszchilinski+consensusv-pipeline.sqsh --container-writable /bin/bash
+```
+
+Sometimes, before running this commend you need to set the environmental variable:
+
+```bash
+XDG_RUNTIME_DIR=~
 ```
 
 However, since the sample should be out-of-the-container, it is recommended to mount the folder containing samples to the container (in the following example, we mount /dir/to/data location on the cluster to /data folder in the container). You can also mount more folders to the container, depending on what you want to do:
 
 ```bash
-srun --container-mounts /dir/to/data:/data:rw --container-image ~/mateuszchilinski+consensusv-pipeline.sqsh /bin/bash
+srun --pty --container-mounts /dir/to/data:/data:rw --container-image ~/mateuszchilinski+consensusv-pipeline.sqsh --container-writable /bin/bash
+```
+
+After running the container (which needs to be done using srun - limitation of the pysix), you need to run central schelduler by yourself (again - entrypoints are not supported in pysix):
+
+```bash
+luigid --background
+```
+
+After that, you can start using the software, e.g. run:
+
+```
+./test_run_csv.sh
 ```
