@@ -14,8 +14,8 @@ def get_path(path, extension_no=1):
 def run_command(command, conda_env=None):
         if(conda_env):
             command = "bash -c \"source activate %s; %s\"" % (conda_env, command)
-        if(debug):
+        if(debug >= 1):
             print("___COMMAND: " + command)
-        if(debug):
+        if(debug >= 2):
             print("___OUTPUT:")
         process = subprocess.run(command, capture_output=(not debug), shell=True)
