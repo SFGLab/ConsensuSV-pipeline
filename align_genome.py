@@ -51,9 +51,9 @@ class MergeFastq(luigi.Task):
             run_command("%s %s > %s" % (command_to_use, files, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R2.fastq"))
         else:
             if(".gz" in self.file_name_2):
-                run_command("gunzip -k %s %s" % (self.file_name_2, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R1.fastq"))
+                run_command("gunzip -k %s %s" % (self.file_name_2, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R2.fastq"))
             else:
-                run_command("cp %s %s" % (self.file_name_2, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R1.fastq"))
+                run_command("cp %s %s" % (self.file_name_2, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R2.fastq"))
 
 class QCAnalysis(luigi.Task):
     working_dir = luigi.Parameter()
