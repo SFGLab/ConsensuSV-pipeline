@@ -20,8 +20,9 @@ class MergeFastq(luigi.Task):
     def run(self):
         dirpath_main = self.working_dir+"/pipeline/"
         if os.path.exists(dirpath_main) and os.path.isdir(dirpath_main):
-            shutil.rmtree(dirpath_main)
-        os.makedirs(os.path.dirname(dirpath_main))
+            pass
+        else:
+            os.makedirs(os.path.dirname(dirpath_main))
 
         dirpath = self.working_dir+"/pipeline/%s/" % self.sample_name
         if os.path.exists(dirpath) and os.path.isdir(dirpath):
