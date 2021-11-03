@@ -82,7 +82,7 @@ class RunCSVFile(luigi.Task):
         list_of_outputs = []
         with open(self.csv_file) as f:
             for line in f:
-                csv_line = line.split(",")
+                csv_line = line.strip().split(",")
                 list_of_outputs.append(luigi.LocalTarget("%s/output/consensuSV__%s.vcf" % (self.working_dir, csv_line[0])))
         return list_of_outputs
 
