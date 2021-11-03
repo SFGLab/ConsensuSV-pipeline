@@ -73,7 +73,7 @@ class RunCSVFile(luigi.Task):
         list_of_tasks = []
         with open(self.csv_file) as f:
             for line in f:
-                csv_line = line.split(",")
+                csv_line = line.strip().split(",")
                 list_of_tasks.append(RunConsensuSV(working_dir=self.working_dir, model=self.model, file_name_1=csv_line[1], file_name_2=csv_line[2], sample_name=csv_line[0]))
         return list_of_tasks
 
