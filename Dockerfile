@@ -213,7 +213,7 @@ chmod a+x delly_v0.8.7_linux_x86_64bit
 RUN conda create --name breakseq python=2.7 numpy && \
 conda run -n breakseq pip install https://github.com/bioinform/breakseq2/archive/2.2.tar.gz
 
-# breakseq
+# lumpy
 
 RUN apt-get install libssl-dev && \
 cd /tools/ && \
@@ -279,6 +279,13 @@ EXPOSE 8082
 ENTRYPOINT luigid --background & /bin/bash
 
 RUN pip install pysam wget luigi
+
+RUN mkdir /etc/luigi/ && \ 
+touch luigi.cfg && \
+printf "[resources]\n \
+io=16\n \
+cores=128\n \
+" > /etc/luigi/luigi.cfg
 
 WORKDIR /workspace
 

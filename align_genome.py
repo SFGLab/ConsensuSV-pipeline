@@ -6,6 +6,8 @@ from common import reference_genome, debug, run_command, get_path, get_path_no_e
 import socket
 
 class MergeFastq(luigi.Task):
+    resources = {"io": 1, "cores": 1}
+
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter()
@@ -56,6 +58,8 @@ class MergeFastq(luigi.Task):
                 run_command("cp %s %s" % (self.file_name_2, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R2.fastq"))
 
 class QCAnalysis(luigi.Task):
+    resources = {"cores": 1}
+
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter()
@@ -77,6 +81,8 @@ class QCAnalysis(luigi.Task):
         run_command("fastqc -f fastq -o %s %s" % (self.working_dir+"/pipeline/"+self.sample_name+"/", self.file_name_2))
 
 class AlignGenome(luigi.Task):
+    resources = {"cores": no_threads}
+
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter()
@@ -96,6 +102,8 @@ class AlignGenome(luigi.Task):
         run_command(command)
 
 class ConvertToBam(luigi.Task):
+    resources = {"cores": no_threads}
+
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter()
@@ -113,6 +121,8 @@ class ConvertToBam(luigi.Task):
         run_command("samtools view -S -b -o %s -@ %s %s" % (full_path_output, no_threads, self.input().path,))
 
 class SortBam(luigi.Task):
+    resources = {"cores": no_threads}
+
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter()
@@ -130,6 +140,8 @@ class SortBam(luigi.Task):
         run_command("samtools sort -o %s -T %s -@ %s %s" % (full_path_output, self.input().path, no_threads, self.input().path))
 
 class IndexBam(luigi.Task):
+    resources = {"cores": no_threads}
+    
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter()
@@ -146,6 +158,8 @@ class IndexBam(luigi.Task):
         run_command("samtools index -@ %s %s " % (no_threads, self.input().path))
 
 class MarkDuplicates(luigi.Task):
+    resources = {"cores": no_threads}
+
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter()
@@ -165,6 +179,8 @@ class MarkDuplicates(luigi.Task):
         run_command("samtools index -@ %s %s " % (no_threads, output_file))
 
 class BaseRecalibrator(luigi.Task):
+    resources = {"cores": 1}
+
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter()
@@ -186,6 +202,8 @@ class BaseRecalibrator(luigi.Task):
         run_command("gatk BaseRecalibrator -R %s -O %s -I %s -known-sites %s" % (reference_genome, recal_table, input_file, self.known_sites))
 
 class ApplyBQSR(luigi.Task):
+    resources = {"cores": 1}
+
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter()
@@ -206,6 +224,8 @@ class ApplyBQSR(luigi.Task):
         run_command("gatk ApplyBQSR -R %s -O %s -I %s -bqsr-recal-file %s" % (reference_genome, output_file, input_file, recal_table))
 
 class SortFinal(luigi.Task):
+    resources = {"cores": no_threads}
+
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter()
@@ -236,6 +256,8 @@ class SortFinal(luigi.Task):
         run_command("samtools sort -o %s -T %s -@ %s %s" % (output_file, get_path(input_file), no_threads, input_file))
 
 class IndexFinal(luigi.Task):
+    resources = {"cores": no_threads}
+
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter()
@@ -257,6 +279,8 @@ class IndexFinal(luigi.Task):
         run_command("samtools index -@ %s %s" % (no_threads, input_file))
 
 class Get1000G(luigi.Task):
+    resources = {"cores": no_threads}
+
     working_dir = luigi.Parameter()
 
     ftp_link = "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/hgsv_sv_discovery/data"
@@ -294,6 +318,8 @@ class Get1000G(luigi.Task):
                 run_command("samtools view -b -T %s -o %s -@ %s %s" % (reference_genome, bam_file, no_threads, cram_file))
 
 class PerformAlignment(luigi.Task):
+    resources = {"io": 1, "cores": 1}
+
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter(default=None)
