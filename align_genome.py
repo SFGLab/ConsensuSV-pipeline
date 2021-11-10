@@ -140,7 +140,7 @@ class SortBam(luigi.Task):
         run_command("samtools sort -o %s -T %s -@ %s %s" % (full_path_output, self.input().path, no_threads, self.input().path))
 
 class IndexBam(luigi.Task):
-    resources = {"cores": no_threads}
+    resources = {"cores": 1}
     
     working_dir = luigi.Parameter()
 
@@ -158,7 +158,7 @@ class IndexBam(luigi.Task):
         run_command("samtools index -@ %s %s " % (no_threads, self.input().path))
 
 class MarkDuplicates(luigi.Task):
-    resources = {"cores": no_threads}
+    resources = {"cores": 1}
 
     working_dir = luigi.Parameter()
 
