@@ -1,5 +1,5 @@
 from sv_callings import CallVariants
-from common import reference_genome, debug, run_command, get_path, all_chromosomes, get_path_no_ext, no_threads
+from common import run_command
 import luigi
 import os
 import shutil

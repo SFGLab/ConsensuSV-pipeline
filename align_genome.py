@@ -2,7 +2,8 @@ import luigi
 import os
 import urllib.request 
 import shutil
-from common import reference_genome, debug, run_command, get_path, get_path_no_ext, no_threads, mem_per_thread
+from common import run_command, get_path, get_path_no_ext
+from config import reference_genome, no_threads, mem_per_thread
 import socket
 
 class MergeFastq(luigi.Task):
@@ -224,7 +225,7 @@ class ApplyBQSR(luigi.Task):
         run_command("gatk ApplyBQSR -R %s -O %s -I %s -bqsr-recal-file %s" % (reference_genome, output_file, input_file, recal_table))
 
 class SortFinal(luigi.Task):
-    resources = {"io": 2, "cores": no_threads}
+    resources = {"io": 1, "cores": no_threads}
 
     working_dir = luigi.Parameter()
 

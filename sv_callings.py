@@ -1,10 +1,13 @@
 from align_genome import PerformAlignment
-from common import reference_genome, debug, run_command, get_path, all_chromosomes, get_path, no_threads
+from common import run_command, get_path, get_path
+from config import reference_genome, no_threads, all_chromosomes, mem_per_thread
 import luigi
 import os
 import shutil
 
 class SNPCalling(luigi.Task):
+    resources = {"io": 1}
+
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter(default=None)
@@ -30,6 +33,8 @@ class SNPCalling(luigi.Task):
         os.remove(inter_file)
 
 class IndelCalling(luigi.Task):
+    resources = {"io": 1}
+
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter(default=None)
@@ -198,6 +203,8 @@ class SVCNVNator(luigi.Task):
         os.remove(root_file)
 
 class SVBreakSeq(luigi.Task):
+    resources = {"io": 1, "cores": no_threads}
+
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter(default=None)
@@ -218,14 +225,16 @@ class SVBreakSeq(luigi.Task):
         output_file = input_file_path+"breakseq.vcf"
         working_dir = self.working_dir+"/pipeline/"+self.sample_name+"/breakseq"
 
-        run_command("run_breakseq2.py --reference %s --bams %s --work %s --bwa %s --samtools %s --bplib_gff %s --nthreads 4 --sample %s" % (reference_genome, input_file, \
-        working_dir, "/tools/bwa-0.7.17/bwa", "/tools/samtools-0.1.19/samtools", "/tools/breakseq2_bplib_20150129_chr.gff", self.sample_name), "breakseq")
+        run_command("run_breakseq2.py --reference %s --bams %s --work %s --bwa %s --samtools %s --bplib_gff %s --nthreads %s --sample %s" % (reference_genome, input_file, \
+        working_dir, "/tools/bwa-0.7.17/bwa", "/tools/samtools-0.1.19/samtools", "/tools/breakseq2_bplib_20150129_chr.gff", no_threads, self.sample_name), "breakseq")
 
         run_command("gunzip %s/breakseq.vcf.gz" % working_dir)
         os.rename("%s/breakseq.vcf" % working_dir, output_file)
         shutil.rmtree(working_dir)
 
 class SVManta(luigi.Task):
+    resources = {"io": 1, "cores": no_threads*2}
+
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter(default=None)
@@ -247,12 +256,14 @@ class SVManta(luigi.Task):
         working_dir = self.working_dir+"/pipeline/"+self.sample_name+"/Manta"
 
         run_command("configManta.py --bam %s --referenceFasta %s --runDir %s" % (input_file, reference_genome, working_dir), "breakseq")
-        run_command("%s/runWorkflow.py" % working_dir, "breakseq")
+        run_command("%s/runWorkflow.py -j %s -g %s" % (working_dir, no_threads*2, mem_per_thread*4), "breakseq")
         run_command("gunzip %s/results/variants/diploidSV.vcf.gz" % working_dir)
         os.rename("%s/results/variants/diploidSV.vcf" % working_dir, output_file)
         shutil.rmtree(working_dir)
 
 class SVLumpy(luigi.Task):
+    resources = {"io": 1, "cores": no_threads}
+
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter(default=None)
@@ -278,9 +289,9 @@ class SVLumpy(luigi.Task):
         working_dir = self.working_dir+"/pipeline/"+self.sample_name+"/lumpy"
 
         run_command("samtools view -b -F 1294 -@ %s %s > %s" % (no_threads, input_file, discordants_file_unsorted))
-        run_command("samtools sort -o %s -@ %s %s" % (discordants_file, no_threads, discordants_file_unsorted))
+        run_command("samtools sort -o %s -@ %s -m %s %s" % (discordants_file, no_threads, mem_per_thread, discordants_file_unsorted))
         run_command("samtools view -h %s | /tools/lumpy-sv/scripts/extractSplitReads_BwaMem -i stdin | samtools view -Sb - > %s" % (input_file, splitters_file_unsorted))
-        run_command("samtools sort -o %s -@ %s %s" % (splitters_file, no_threads, splitters_file_unsorted))
+        run_command("samtools sort -o %s -@ %s -m %s %s" % (splitters_file, no_threads, mem_per_thread, splitters_file_unsorted))
         run_command("lumpyexpress -B %s -S %s -D %s -R %s -T %s -o %s" % (input_file, splitters_file, discordants_file, reference_genome, working_dir, output_file), "breakseq")
 
         os.remove(discordants_file_unsorted)
