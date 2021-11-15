@@ -13,8 +13,7 @@ class SNPCalling(luigi.Task):
     file_name_1 = luigi.Parameter(default=None)
     file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
-    already_done = luigi.Parameter(default=False)
-    train_1000g = luigi.Parameter(default=False)
+    train_1000g = luigi.BoolParameter(default=False)
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -40,8 +39,7 @@ class IndelCalling(luigi.Task):
     file_name_1 = luigi.Parameter(default=None)
     file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
-    already_done = luigi.Parameter(default=False)
-    train_1000g = luigi.Parameter(default=False)
+    train_1000g = luigi.BoolParameter(default=False)
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -65,8 +63,7 @@ class SVDelly(luigi.Task):
     file_name_1 = luigi.Parameter(default=None)
     file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
-    already_done = luigi.Parameter(default=False)
-    train_1000g = luigi.Parameter(default=False)
+    train_1000g = luigi.BoolParameter(default=False)
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -90,8 +87,7 @@ class SVBreakdancer(luigi.Task):
     file_name_1 = luigi.Parameter(default=None)
     file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
-    already_done = luigi.Parameter(default=False)
-    train_1000g = luigi.Parameter(default=False)
+    train_1000g = luigi.BoolParameter(default=False)
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -119,8 +115,7 @@ class SVTardis(luigi.Task):
     file_name_1 = luigi.Parameter(default=None)
     file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
-    already_done = luigi.Parameter(default=False)
-    train_1000g = luigi.Parameter(default=False)
+    train_1000g = luigi.BoolParameter(default=False)
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -144,8 +139,7 @@ class SVNovoBreak(luigi.Task):
     file_name_1 = luigi.Parameter(default=None)
     file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
-    already_done = luigi.Parameter(default=False)
-    train_1000g = luigi.Parameter(default=False)
+    train_1000g = luigi.BoolParameter(default=False)
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -176,8 +170,7 @@ class SVCNVNator(luigi.Task):
     file_name_1 = luigi.Parameter(default=None)
     file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
-    already_done = luigi.Parameter(default=False)
-    train_1000g = luigi.Parameter(default=False)
+    train_1000g = luigi.BoolParameter(default=False)
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -210,8 +203,7 @@ class SVBreakSeq(luigi.Task):
     file_name_1 = luigi.Parameter(default=None)
     file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
-    already_done = luigi.Parameter(default=False)
-    train_1000g = luigi.Parameter(default=False)
+    train_1000g = luigi.BoolParameter(default=False)
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -225,8 +217,8 @@ class SVBreakSeq(luigi.Task):
         output_file = input_file_path+"breakseq.vcf"
         working_dir = self.working_dir+"/pipeline/"+self.sample_name+"/breakseq"
 
-        run_command("run_breakseq2.py --reference %s --bams %s --work %s --bwa %s --samtools %s --bplib_gff %s --nthreads %s --sample %s" % (reference_genome, input_file, \
-        working_dir, "/tools/bwa-0.7.17/bwa", "/tools/samtools-0.1.19/samtools", "/tools/breakseq2_bplib_20150129_chr.gff", no_threads, self.sample_name), "breakseq")
+        run_command("run_breakseq2.py --reference %s --bams %s --work %s --bwa %s --samtools %s --bplib_gff %s --nthreads %s --sample %s --chromosomes %s" % (reference_genome, input_file, \
+        working_dir, "/tools/bwa-0.7.17/bwa", "/tools/samtools-0.1.19/samtools", "/tools/breakseq2_bplib_20150129_chr.gff", no_threads, self.sample_name, " ".join(all_chromosomes.split(","))), "breakseq")
 
         run_command("gunzip %s/breakseq.vcf.gz" % working_dir)
         os.rename("%s/breakseq.vcf" % working_dir, output_file)
@@ -240,8 +232,7 @@ class SVManta(luigi.Task):
     file_name_1 = luigi.Parameter(default=None)
     file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
-    already_done = luigi.Parameter(default=False)
-    train_1000g = luigi.Parameter(default=False)
+    train_1000g = luigi.BoolParameter(default=False)
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -256,7 +247,7 @@ class SVManta(luigi.Task):
         working_dir = self.working_dir+"/pipeline/"+self.sample_name+"/Manta"
 
         run_command("configManta.py --bam %s --referenceFasta %s --runDir %s" % (input_file, reference_genome, working_dir), "breakseq")
-        run_command("%s/runWorkflow.py -j %s -g %s" % (working_dir, no_threads*2, mem_per_thread*4), "breakseq")
+        run_command("%s/runWorkflow.py -j %s -g %s" % (working_dir, no_threads*2, str(int(mem_per_thread.split("G")[0])*4)), "breakseq")
         run_command("gunzip %s/results/variants/diploidSV.vcf.gz" % working_dir)
         os.rename("%s/results/variants/diploidSV.vcf" % working_dir, output_file)
         shutil.rmtree(working_dir)
@@ -269,8 +260,7 @@ class SVLumpy(luigi.Task):
     file_name_1 = luigi.Parameter(default=None)
     file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
-    already_done = luigi.Parameter(default=False)
-    train_1000g = luigi.Parameter(default=False)
+    train_1000g = luigi.BoolParameter(default=False)
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -305,8 +295,7 @@ class SVWhamg(luigi.Task):
     file_name_1 = luigi.Parameter(default=None)
     file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
-    already_done = luigi.Parameter(default=False)
-    train_1000g = luigi.Parameter(default=False)
+    train_1000g = luigi.BoolParameter(default=False)
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -330,8 +319,7 @@ class SVSvelter(luigi.Task):
     file_name_1 = luigi.Parameter(default=None)
     file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
-    already_done = luigi.Parameter(default=False)
-    train_1000g = luigi.Parameter(default=False)
+    train_1000g = luigi.BoolParameter(default=False)
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -354,8 +342,7 @@ class CallVariants(luigi.Task):
     file_name_1 = luigi.Parameter(default=None)
     file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
-    already_done = luigi.Parameter(default=False)
-    train_1000g = luigi.Parameter(default=False)
+    train_1000g = luigi.BoolParameter(default=False)
 
     def requires(self):
         return [SNPCalling(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),

@@ -1,4 +1,5 @@
 import subprocess
+from config import debug
 
 def get_path_no_ext(path, extension_no=1):
     return ".".join(path.split(".")[0:-extension_no])

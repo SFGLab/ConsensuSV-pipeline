@@ -232,7 +232,7 @@ class SortFinal(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
-    train_1000g = luigi.Parameter(default=False)
+    train_1000g = luigi.BoolParameter(default=False)
 
     def requires(self):
         if(self.train_1000g):
@@ -264,7 +264,7 @@ class IndexFinal(luigi.Task):
     file_name_1 = luigi.Parameter()
     file_name_2 = luigi.Parameter()
     sample_name = luigi.Parameter()
-    train_1000g = luigi.Parameter(default=False)
+    train_1000g = luigi.BoolParameter(default=False)
 
     def requires(self):
         return SortFinal(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -326,7 +326,7 @@ class PerformAlignment(luigi.Task):
     file_name_1 = luigi.Parameter(default=None)
     file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
-    train_1000g = luigi.Parameter(default=False)
+    train_1000g = luigi.BoolParameter(default=False)
 
     def output(self):
         return [luigi.LocalTarget(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam"), luigi.LocalTarget(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam.bai")]

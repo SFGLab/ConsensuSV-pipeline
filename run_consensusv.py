@@ -48,7 +48,6 @@ class RunConsensuSV(luigi.Task):
     file_name_1 = luigi.Parameter(default=None)
     file_name_2 = luigi.Parameter(default=None)
     sample_name = luigi.Parameter()
-    already_done = luigi.Parameter(default=False)
 
     def requires(self):
         return [CallVariants(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=False)]
