@@ -276,6 +276,11 @@ ENV PATH=$PATH:/tools/lumpy-sv/bin:/tools/manta-1.6.0.centos6_x86_64/bin:/tools/
 
 RUN pip install pysam wget luigi
 
+WORKDIR /workspace
+
+RUN cd /workspace/ && \
+git clone https://github.com/SFGLab/ConsensuSV-pipeline.git .
+
 RUN mkdir /etc/luigi/ && \ 
 touch luigi.cfg && \
 printf "[core]\n\
@@ -285,11 +290,6 @@ io=16\n\
 cores=128\n\
 [worker]\n\
 keep_alive=true" > /etc/luigi/luigi.cfg
-
-WORKDIR /workspace
-
-RUN cd /workspace/ && \
-git clone https://github.com/SFGLab/ConsensuSV-pipeline.git .
 
 EXPOSE 8082
 
