@@ -58,9 +58,9 @@ class RunConsensuSV(luigi.Task):
 
     def run(self):
         output_folder = self.working_dir+"/output/"
-        if os.path.exists(output_folder) and os.path.isdir(output_folder):
-            shutil.rmtree(output_folder)
-        os.makedirs(os.path.dirname(output_folder))
+        
+        if not(os.path.exists(output_folder) and os.path.isdir(output_folder)):
+            os.makedirs(os.path.dirname(output_folder))
 
         run_command("python -u /tools/ConsensuSV-core/main.py -of %s/output/ -f %s/pipeline/ -s %s -c breakdancer,breakseq,cnvnator,delly,lumpy,manta,tardis,whamg -mod %s" % (self.working_dir, self.working_dir, self.sample_name, self.model))
 

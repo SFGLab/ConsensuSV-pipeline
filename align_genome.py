@@ -2,7 +2,7 @@ import luigi
 import os
 import urllib.request 
 import shutil
-from common import reference_genome, debug, run_command, get_path, get_path_no_ext, no_threads
+from common import reference_genome, debug, run_command, get_path, get_path_no_ext, no_threads, mem_per_thread
 import socket
 
 class MergeFastq(luigi.Task):
@@ -96,7 +96,7 @@ class AlignGenome(luigi.Task):
         return luigi.LocalTarget(self.working_dir+"/pipeline/"+self.sample_name+'/'+self.sample_name+'.sam')
 
     def run(self):
-        command = "bwa mem -t %s -B 4 -O 6 -E 1 -M -R \"@RG\\tID:SRR\\tLB:LIB_1\\tSM:SAMPLE_1\\tPL:ILLUMINA\" %s %s %s > %s" % \
+        command = "bwa mem -v 1 -t %s -B 4 -O 6 -E 1 -M -R \"@RG\\tID:SRR\\tLB:LIB_1\\tSM:SAMPLE_1\\tPL:ILLUMINA\" %s %s %s > %s" % \
         (no_threads, reference_genome, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R1.fastq", self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R2.fastq", self.working_dir+"/pipeline/"+self.sample_name+'/'+self.sample_name+'.sam')
 
         run_command(command)
@@ -121,7 +121,7 @@ class ConvertToBam(luigi.Task):
         run_command("samtools view -S -b -o %s -@ %s %s" % (full_path_output, no_threads, self.input().path,))
 
 class SortBam(luigi.Task):
-    resources = {"cores": no_threads}
+    resources = {"io": 1, "cores": no_threads}
 
     working_dir = luigi.Parameter()
 
@@ -137,7 +137,7 @@ class SortBam(luigi.Task):
 
     def run(self):
         full_path_output = get_path_no_ext(self.input().path)+"_sorted.bam"
-        run_command("samtools sort -o %s -T %s -@ %s %s" % (full_path_output, self.input().path, no_threads, self.input().path))
+        run_command("samtools sort -o %s -T %s -@ %s -m %s %s" % (full_path_output, self.input().path, no_threads, mem_per_thread, self.input().path))
 
 class IndexBam(luigi.Task):
     resources = {"cores": no_threads}
@@ -224,7 +224,7 @@ class ApplyBQSR(luigi.Task):
         run_command("gatk ApplyBQSR -R %s -O %s -I %s -bqsr-recal-file %s" % (reference_genome, output_file, input_file, recal_table))
 
 class SortFinal(luigi.Task):
-    resources = {"cores": no_threads}
+    resources = {"io": 2, "cores": no_threads}
 
     working_dir = luigi.Parameter()
 
@@ -253,7 +253,7 @@ class SortFinal(luigi.Task):
             input_file = self.input().path
             output_file = get_path_no_ext(self.input().path)+"_sorted.bam"
 
-        run_command("samtools sort -o %s -T %s -@ %s %s" % (output_file, get_path(input_file), no_threads, input_file))
+        run_command("samtools sort -o %s -T %s -@ %s -m %s %s" % (output_file, get_path(input_file), no_threads, mem_per_thread, input_file))
 
 class IndexFinal(luigi.Task):
     resources = {"cores": no_threads}

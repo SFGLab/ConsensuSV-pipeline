@@ -274,20 +274,23 @@ RUN cd /tools && \
 
 ENV PATH=$PATH:/tools/lumpy-sv/bin:/tools/manta-1.6.0.centos6_x86_64/bin:/tools/tardis:/tools/wham/bin:/tools/breakdancer-master/bin:/tools/breakdancer-master/perl:/tools/nb_distribution/:/tools/CNVnator-master:/tools:/tools/ConsensuSV
 
-EXPOSE 8082
-
-ENTRYPOINT luigid --background & /bin/bash
-
 RUN pip install pysam wget luigi
 
 RUN mkdir /etc/luigi/ && \ 
 touch luigi.cfg && \
-printf "[resources]\n \
-io=16\n \
-cores=128\n \
-" > /etc/luigi/luigi.cfg
+printf "[core]\n\
+log_level=ERROR\n\
+[resources]\n\
+io=16\n\
+cores=128\n\
+[worker]\n\
+keep_alive=true" > /etc/luigi/luigi.cfg
 
 WORKDIR /workspace
 
 RUN cd /workspace/ && \
 git clone https://github.com/SFGLab/ConsensuSV-pipeline.git .
+
+EXPOSE 8082
+
+ENTRYPOINT luigid --background & /bin/bash
