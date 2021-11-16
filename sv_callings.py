@@ -6,7 +6,7 @@ import os
 import shutil
 
 class SNPCalling(luigi.Task):
-    resources = {"io": 1}
+    resources = {"cores": 1}
 
     working_dir = luigi.Parameter()
 
@@ -32,7 +32,7 @@ class SNPCalling(luigi.Task):
         os.remove(inter_file)
 
 class IndelCalling(luigi.Task):
-    resources = {"io": 1}
+    resources = {"cores": 1}
 
     working_dir = luigi.Parameter()
 
@@ -58,6 +58,8 @@ class IndelCalling(luigi.Task):
         os.remove(inter_file)
 
 class SVDelly(luigi.Task):
+    resources = {"cores": 1}
+
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter(default=None)
@@ -82,6 +84,8 @@ class SVDelly(luigi.Task):
         os.remove(inter_file+".csi")
 
 class SVBreakdancer(luigi.Task):
+    resources = {"cores": 1}
+
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter(default=None)
@@ -110,6 +114,8 @@ class SVBreakdancer(luigi.Task):
         os.remove(inter_file)
 
 class SVTardis(luigi.Task):
+    resources = {"cores": 1}
+    
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter(default=None)
@@ -165,6 +171,8 @@ class SVNovoBreak(luigi.Task):
         shutil.rmtree(working_dir)
 
 class SVCNVNator(luigi.Task):
+    resources = {"cores": 1} # might take more, but for short time
+
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter(default=None)
@@ -290,6 +298,8 @@ class SVLumpy(luigi.Task):
         os.remove(splitters_file)
 
 class SVWhamg(luigi.Task):
+    resources = {"cores": 1}
+
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter(default=None)
@@ -314,6 +324,8 @@ class SVWhamg(luigi.Task):
         os.remove(error_file)
 
 class SVSvelter(luigi.Task):
+    resources = {"cores": 1}
+    
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter(default=None)
