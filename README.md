@@ -183,7 +183,24 @@ However, since the sample should be out-of-the-container, it is recommended to m
 srun --pty --container-mounts /dir/to/data:/data:rw --container-image ~/mateuszchilinski+consensusv-pipeline.sqsh --container-writable /bin/bash
 ```
 
-After running the container (which needs to be done using srun - limitation of the pysix), you need to run central schelduler by yourself (again - entrypoints are not supported in pysix):
+After running the container (which needs to be done using srun - limitation of the pysix), it is best to reconfigure the system depending on your HPC capibilities. Modify file:
+
+```/etc/luigi/luigi.cfg```
+
+e.g. using:
+
+```bash
+nano /etc/luigi/luigi.cfg
+```
+
+In the configuration file, you can edit the following lines (other ones are for advanced luigi users only and should be otherwise not modified):
+```
+io=16
+cores=128
+```
+Where cores are the maximum cores that your server is capable of using (some of the scripts/programs in the pipeline use multiple cores, so it's a limit on total usage of CPU power on your HPC), and io is the maximum number of IO-heavy operations (e.g. sorting using samtools) that are allowed to run in parallel. If the pipeline has trouble with the central scheduler accessibility, it's probably because the IO operations are using all the power of your storage device, and the central scheduler becomes inaccesible. In that case, the best solution is to descrease allowed io-heavy operations by changing the config to smaller number.
+
+After setting up the configuration you need to run central schelduler by yourself (again - entrypoints are not supported in pysix):
 
 ```bash
 luigid --background
