@@ -282,7 +282,7 @@ printf "[core]\n\
 log_level=ERROR\n\
 rpc_connect_timeout=60\n\
 rpc_retry_wait=120\n\
-rpc_retry_attempts=100\n'
+rpc_retry_attempts=100\n\
 [resources]\n\
 io=16\n\
 cores=128\n\
