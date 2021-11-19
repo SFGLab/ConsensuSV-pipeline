@@ -59,7 +59,7 @@ class MergeFastq(luigi.Task):
                 run_command("cp %s %s" % (self.file_name_2, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R2.fastq"))
 
 class QCAnalysis(luigi.Task):
-    resources = {"cores": 1}
+    resources = {"io": 1, "cores": 1}
 
     working_dir = luigi.Parameter()
 
