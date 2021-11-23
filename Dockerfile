@@ -287,7 +287,9 @@ rpc_retry_attempts=100\n\
 io=16\n\
 cores=128\n\
 [worker]\n\
-keep_alive=true" > /etc/luigi/luigi.cfg
+keep_alive=true\n\
+[scheduler]\n\
+worker_disconnect_delay=7200" > /etc/luigi/luigi.cfg
 
 WORKDIR /workspace
 
