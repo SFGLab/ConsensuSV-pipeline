@@ -370,7 +370,16 @@ class CallVariants(luigi.Task):
         ]
 
     def output(self):
-        return luigi.LocalTarget(get_path(self.input()[0].path)+"SNPs.vcf")
+        return [luigi.LocalTarget(get_path(self.input()[0].path)+"SNPs.vcf"),
+        luigi.LocalTarget(get_path(self.input()[0].path)+"Indels.vcf"),
+        luigi.LocalTarget(get_path(self.input()[0].path)+"delly.vcf"),
+        luigi.LocalTarget(get_path(self.input()[0].path)+"breakdancer.vcf"),
+        luigi.LocalTarget(get_path(self.input()[0].path)+"tardis.vcf"),
+        luigi.LocalTarget(get_path(self.input()[0].path)+"cnvnator.vcf"),
+        luigi.LocalTarget(get_path(self.input()[0].path)+"breakseq.vcf"),
+        luigi.LocalTarget(get_path(self.input()[0].path)+"manta.vcf"),
+        luigi.LocalTarget(get_path(self.input()[0].path)+"lumpy.vcf"),
+        luigi.LocalTarget(get_path(self.input()[0].path)+"whamg.vcf")]
 
     def run(self):
         pass
