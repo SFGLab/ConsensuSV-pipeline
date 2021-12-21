@@ -265,10 +265,10 @@ git clone https://github.com/czc/nb_distribution.git
 # ConsensuSV
 
 RUN cd /tools && \
-    wget https://github.com/SFGLab/ConsensuSV-core/archive/refs/tags/1.4.zip && \
-    unzip 1.4.zip && \
-    rm 1.4.zip && \
-    mv ConsensuSV-core-1.4 ConsensuSV-core && \
+    wget https://github.com/SFGLab/ConsensuSV-core/archive/refs/tags/1.6.zip && \
+    unzip 1.6.zip && \
+    rm 1.6.zip && \
+    mv ConsensuSV-core-1.6 ConsensuSV-core && \
     cd ConsensuSV-core && \
     unzip ALL_Illumina_Integrate_20170206.zip
 
