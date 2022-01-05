@@ -8,6 +8,7 @@ Table of Contents
 * [Testing scenarios](#testing-scenarios)
 * [Preparation of your samples](#preparation-of-your-samples)
 * [Running the pipeline](#running-the-pipeline)
+* [Output location](#output-location)
 * [Pipeline control webservice](#pipeline-control-webservice)
 * [Pipeline details](#pipeline-details)
 * [Setup on NVIDIA DGX A100 systems](#setup-on-nvidia-dgx-a100-systems)
@@ -106,6 +107,12 @@ Parameter | Description
 --csv-file | File location of the csv file that described all the samples according to the [guidelines](#preparation-of-your-samples).
 --working-dir | Working directory of the pipeline. It should have some free space left, as alignment steps can consume quite a lot of it.
 --model | Optional parameter showing the pretrained model used by ConsensuSV. The model provided with the software is sufficient, and changing of it should be done if you know what you are doing (e.g. for changing the SV callers used in the pipeline).
+
+## Output location
+
+The location of the output depends on your working directory, provided as the parameter. In that directory, two folder will be created:
+* output - a folder where ConsensuSV calls of Structural Variants are stored
+* pipeline - where you will find folders for each of the sample, containing fully preprocessed .bam files, all VCF files from the individual SV calling tools, along with file with SNPs and Indels (separately, SNPs.vcf and Indels.vcf)
 
 ## Pipeline control webservice
 
