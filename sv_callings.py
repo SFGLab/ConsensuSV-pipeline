@@ -8,13 +8,19 @@ import shutil
 class SNPCalling(luigi.Task):
     """Class responsible for SNP calling using bcftools."""
     resources = {"cores": 1}
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter(default=None)
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter(default=None)
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
     train_1000g = luigi.BoolParameter(default=False)
+    """Information whether the current task is part of 1000G benchmarking pipeline."""
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -35,13 +41,19 @@ class SNPCalling(luigi.Task):
 class IndelCalling(luigi.Task):
     """Class responsible for Indel calling using bcftools."""
     resources = {"cores": 1}
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter(default=None)
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter(default=None)
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
     train_1000g = luigi.BoolParameter(default=False)
+    """Information whether the current task is part of 1000G benchmarking pipeline."""
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -62,13 +74,19 @@ class IndelCalling(luigi.Task):
 class SVDelly(luigi.Task):
     """Class responsible for SV calling using Delly."""
     resources = {"cores": 1}
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter(default=None)
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter(default=None)
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
     train_1000g = luigi.BoolParameter(default=False)
+    """Information whether the current task is part of 1000G benchmarking pipeline."""
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -89,13 +107,19 @@ class SVDelly(luigi.Task):
 class SVBreakdancer(luigi.Task):
     """Class responsible for SV calling using Breakdancer."""
     resources = {"cores": 1}
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter(default=None)
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter(default=None)
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
     train_1000g = luigi.BoolParameter(default=False)
+    """Information whether the current task is part of 1000G benchmarking pipeline."""
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -120,13 +144,19 @@ class SVBreakdancer(luigi.Task):
 class SVTardis(luigi.Task):
     """Class responsible for SV calling using Tardis."""
     resources = {"cores": 1}
+    """Resources used by the task."""
     
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter(default=None)
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter(default=None)
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
     train_1000g = luigi.BoolParameter(default=False)
+    """Information whether the current task is part of 1000G benchmarking pipeline."""
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -147,11 +177,16 @@ class SVTardis(luigi.Task):
 class SVNovoBreak(luigi.Task):
     """Class responsible for SV calling using novoBreak. It is disabled in default run because of its computational time."""
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter(default=None)
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter(default=None)
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
     train_1000g = luigi.BoolParameter(default=False)
+    """Information whether the current task is part of 1000G benchmarking pipeline."""
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -179,13 +214,19 @@ class SVNovoBreak(luigi.Task):
 class SVCNVNator(luigi.Task):
     """Class responsible for SV calling using CNVNator."""
     resources = {"cores": 1} # might take more, but for short time
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter(default=None)
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter(default=None)
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
     train_1000g = luigi.BoolParameter(default=False)
+    """Information whether the current task is part of 1000G benchmarking pipeline."""
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -213,13 +254,19 @@ class SVCNVNator(luigi.Task):
 class SVBreakSeq(luigi.Task):
     """Class responsible for SV calling using BreakSeq."""
     resources = {"io": 1, "cores": no_threads}
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter(default=None)
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter(default=None)
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
     train_1000g = luigi.BoolParameter(default=False)
+    """Information whether the current task is part of 1000G benchmarking pipeline."""
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -243,13 +290,19 @@ class SVBreakSeq(luigi.Task):
 class SVManta(luigi.Task):
     """Class responsible for SV calling using Manta."""
     resources = {"io": 1, "cores": no_threads*2}
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter(default=None)
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter(default=None)
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
     train_1000g = luigi.BoolParameter(default=False)
+    """Information whether the current task is part of 1000G benchmarking pipeline."""
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -272,13 +325,19 @@ class SVManta(luigi.Task):
 class SVLumpy(luigi.Task):
     """Class responsible for SV calling using Lumpy."""
     resources = {"io": 1, "cores": no_threads}
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter(default=None)
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter(default=None)
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
     train_1000g = luigi.BoolParameter(default=False)
+    """Information whether the current task is part of 1000G benchmarking pipeline."""
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -310,13 +369,19 @@ class SVLumpy(luigi.Task):
 class SVWhamg(luigi.Task):
     """Class responsible for SV calling using Whamg."""
     resources = {"cores": 1}
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter(default=None)
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter(default=None)
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
     train_1000g = luigi.BoolParameter(default=False)
+    """Information whether the current task is part of 1000G benchmarking pipeline."""
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -337,13 +402,19 @@ class SVWhamg(luigi.Task):
 class SVSvelter(luigi.Task):
     """Class responsible for SV calling using Svelter."""
     resources = {"cores": 1}
+    """Resources used by the task."""
     
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter(default=None)
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter(default=None)
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
     train_1000g = luigi.BoolParameter(default=False)
+    """Information whether the current task is part of 1000G benchmarking pipeline."""
 
     def requires(self):
         return PerformAlignment(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -363,11 +434,16 @@ class SVSvelter(luigi.Task):
 class CallVariants(luigi.Task):
     """Class responsible for calling variants using various methods."""
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter(default=None)
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter(default=None)
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
     train_1000g = luigi.BoolParameter(default=False)
+    """Information whether the current task is part of 1000G benchmarking pipeline."""
 
     def requires(self):
         return [SNPCalling(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g),

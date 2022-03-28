@@ -37,7 +37,8 @@ Attributes
    .. py:attribute:: working_dir
       
 
-      
+      Working directory of the task.
+
 
    .. py:method:: requires(self)
 
@@ -86,7 +87,8 @@ Attributes
    .. py:attribute:: working_dir
       
 
-      
+      Working directory of the task.
+
 
    .. py:method:: requires(self)
 
@@ -135,27 +137,32 @@ Attributes
    .. py:attribute:: working_dir
       
 
-      
+      Working directory of the task.
+
 
    .. py:attribute:: model
       
 
-      
+      Model used for ML.
+
 
    .. py:attribute:: file_name_1
       
 
-      
+      Name of the file containing R1 reads.
+
 
    .. py:attribute:: file_name_2
       
 
-      
+      Name of the file containing R2 reads.
+
 
    .. py:attribute:: sample_name
       
 
-      
+      Name of the sample.
+
 
    .. py:method:: requires(self)
 
@@ -204,17 +211,20 @@ Attributes
    .. py:attribute:: csv_file
       
 
-      
+      CSV file that is being processed.
+
 
    .. py:attribute:: working_dir
       
 
-      
+      Working directory of the task.
+
 
    .. py:attribute:: model
       
 
-      
+      Model used for ML.
+
 
    .. py:method:: requires(self)
 

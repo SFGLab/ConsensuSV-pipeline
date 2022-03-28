@@ -9,6 +9,7 @@ class Train1000G(luigi.Task):
     """Class for running ConsensuSV training on 6 high-quality samples from NYGC."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
     def requires(self):
         return [CallVariants(working_dir=self.working_dir, sample_name="HG00512", train_1000g=True),
         CallVariants(working_dir=self.working_dir, sample_name="HG00513", train_1000g=True),
@@ -35,6 +36,7 @@ class Train1000G(luigi.Task):
 class Benchmark1000G(luigi.Task):
     """Class for running ConsensuSV and 1000G benchmark on 9 high-quality samples from NYGC."""
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
     def requires(self):
         return [Train1000G(working_dir=self.working_dir)]
 
@@ -48,10 +50,15 @@ class Benchmark1000G(luigi.Task):
 class RunConsensuSV(luigi.Task):
     """Class for running ConsensuSV on one sample."""
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
     model = luigi.Parameter(default="/tools/ConsensuSV-core/pretrained_1000g_illumina.model")
+    """Model used for ML."""
     file_name_1 = luigi.Parameter(default=None)
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter(default=None)
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
 
     def requires(self):
         return [CallVariants(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=False)]
@@ -71,9 +78,12 @@ class RunCSVFile(luigi.Task):
     """Class for running CSV file into ConsensuSV-pipeline."""
 
     csv_file = luigi.Parameter(default=None)
+    """CSV file that is being processed."""
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
     model = luigi.Parameter(default="/tools/ConsensuSV-core/pretrained_1000g_illumina.model")
-    
+    """Model used for ML."""
+
     def requires(self):
         list_of_tasks = []
         with open(self.csv_file) as f:

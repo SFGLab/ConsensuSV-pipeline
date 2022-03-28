@@ -38,27 +38,32 @@ Classes
    .. py:attribute:: resources
       
 
-      
+      Resources used by the task.
+
 
    .. py:attribute:: working_dir
       
 
-      
+      Working directory of the task.
+
 
    .. py:attribute:: file_name_1
       
 
-      
+      Name of the file containing R1 reads.
+
 
    .. py:attribute:: file_name_2
       
 
-      
+      Name of the file containing R2 reads.
+
 
    .. py:attribute:: sample_name
       
 
-      
+      Name of the sample.
+
 
    .. py:method:: output(self)
 
@@ -94,27 +99,32 @@ Classes
    .. py:attribute:: resources
       
 
-      
+      Resources used by the task.
+
 
    .. py:attribute:: working_dir
       
 
-      
+      Working directory of the task.
+
 
    .. py:attribute:: file_name_1
       
 
-      
+      Name of the file containing R1 reads.
+
 
    .. py:attribute:: file_name_2
       
 
-      
+      Name of the file containing R2 reads.
+
 
    .. py:attribute:: sample_name
       
 
-      
+      Name of the sample.
+
 
    .. py:method:: requires(self)
 
@@ -163,27 +173,32 @@ Classes
    .. py:attribute:: resources
       
 
-      
+      Resources used by the task.
+
 
    .. py:attribute:: working_dir
       
 
-      
+      Working directory of the task.
+
 
    .. py:attribute:: file_name_1
       
 
-      
+      Name of the file containing R1 reads.
+
 
    .. py:attribute:: file_name_2
       
 
-      
+      Name of the file containing R2 reads.
+
 
    .. py:attribute:: sample_name
       
 
-      
+      Name of the sample.
+
 
    .. py:method:: requires(self)
 
@@ -232,27 +247,32 @@ Classes
    .. py:attribute:: resources
       
 
-      
+      Resources used by the task.
+
 
    .. py:attribute:: working_dir
       
 
-      
+      Working directory of the task.
+
 
    .. py:attribute:: file_name_1
       
 
-      
+      Name of the file containing R1 reads.
+
 
    .. py:attribute:: file_name_2
       
 
-      
+      Name of the file containing R2 reads.
+
 
    .. py:attribute:: sample_name
       
 
-      
+      Name of the sample.
+
 
    .. py:method:: requires(self)
 
@@ -301,27 +321,32 @@ Classes
    .. py:attribute:: resources
       
 
-      
+      Resources used by the task.
+
 
    .. py:attribute:: working_dir
       
 
-      
+      Working directory of the task.
+
 
    .. py:attribute:: file_name_1
       
 
-      
+      Name of the file containing R1 reads.
+
 
    .. py:attribute:: file_name_2
       
 
-      
+      Name of the file containing R2 reads.
+
 
    .. py:attribute:: sample_name
       
 
-      
+      Name of the sample.
+
 
    .. py:method:: requires(self)
 
@@ -370,27 +395,32 @@ Classes
    .. py:attribute:: resources
       
 
-      
+      Resources used by the task.
+
 
    .. py:attribute:: working_dir
       
 
-      
+      Working directory of the task.
+
 
    .. py:attribute:: file_name_1
       
 
-      
+      Name of the file containing R1 reads.
+
 
    .. py:attribute:: file_name_2
       
 
-      
+      Name of the file containing R2 reads.
+
 
    .. py:attribute:: sample_name
       
 
-      
+      Name of the sample.
+
 
    .. py:method:: requires(self)
 
@@ -439,27 +469,32 @@ Classes
    .. py:attribute:: resources
       
 
-      
+      Resources used by the task.
+
 
    .. py:attribute:: working_dir
       
 
-      
+      Working directory of the task.
+
 
    .. py:attribute:: file_name_1
       
 
-      
+      Name of the file containing R1 reads.
+
 
    .. py:attribute:: file_name_2
       
 
-      
+      Name of the file containing R2 reads.
+
 
    .. py:attribute:: sample_name
       
 
-      
+      Name of the sample.
+
 
    .. py:method:: requires(self)
 
@@ -508,27 +543,32 @@ Classes
    .. py:attribute:: resources
       
 
-      
+      Resources used by the task.
+
 
    .. py:attribute:: working_dir
       
 
-      
+      Working directory of the task.
+
 
    .. py:attribute:: file_name_1
       
 
-      
+      Name of the file containing R1 reads.
+
 
    .. py:attribute:: file_name_2
       
 
-      
+      Name of the file containing R2 reads.
+
 
    .. py:attribute:: sample_name
       
 
-      
+      Name of the sample.
+
 
    .. py:attribute:: known_sites
       :annotation: = /tools/ALL_20141222.dbSNP142_human_GRCh38.snps.vcf.gz
@@ -582,27 +622,32 @@ Classes
    .. py:attribute:: resources
       
 
-      
+      Resources used by the task.
+
 
    .. py:attribute:: working_dir
       
 
-      
+      Working directory of the task.
+
 
    .. py:attribute:: file_name_1
       
 
-      
+      Name of the file containing R1 reads.
+
 
    .. py:attribute:: file_name_2
       
 
-      
+      Name of the file containing R2 reads.
+
 
    .. py:attribute:: sample_name
       
 
-      
+      Name of the sample.
+
 
    .. py:method:: requires(self)
 
@@ -651,32 +696,38 @@ Classes
    .. py:attribute:: resources
       
 
-      
+      Resources used by the task.
+
 
    .. py:attribute:: working_dir
       
 
-      
+      Working directory of the task.
+
 
    .. py:attribute:: file_name_1
       
 
-      
+      Name of the file containing R1 reads.
+
 
    .. py:attribute:: file_name_2
       
 
-      
+      Name of the file containing R2 reads.
+
 
    .. py:attribute:: sample_name
       
 
-      
+      Name of the sample.
+
 
    .. py:attribute:: train_1000g
       
 
-      
+      Information whether the current task is part of 1000G benchmarking pipeline.
+
 
    .. py:method:: requires(self)
 
@@ -725,32 +776,38 @@ Classes
    .. py:attribute:: resources
       
 
-      
+      Resources used by the task.
+
 
    .. py:attribute:: working_dir
       
 
-      
+      Working directory of the task.
+
 
    .. py:attribute:: file_name_1
       
 
-      
+      Name of the file containing R1 reads.
+
 
    .. py:attribute:: file_name_2
       
 
-      
+      Name of the file containing R2 reads.
+
 
    .. py:attribute:: sample_name
       
 
-      
+      Name of the sample.
+
 
    .. py:attribute:: train_1000g
       
 
-      
+      Information whether the current task is part of 1000G benchmarking pipeline.
+
 
    .. py:method:: requires(self)
 
@@ -799,12 +856,14 @@ Classes
    .. py:attribute:: resources
       
 
-      
+      Resources used by the task.
+
 
    .. py:attribute:: working_dir
       
 
-      
+      Working directory of the task.
+
 
    .. py:attribute:: ftp_link
       :annotation: = ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/hgsv_sv_discovery/data
@@ -863,32 +922,38 @@ Classes
    .. py:attribute:: resources
       
 
-      
+      Resources used by the task.
+
 
    .. py:attribute:: working_dir
       
 
-      
+      Working directory of the task.
+
 
    .. py:attribute:: file_name_1
       
 
-      
+      Name of the file containing R1 reads.
+
 
    .. py:attribute:: file_name_2
       
 
-      
+      Name of the file containing R2 reads.
+
 
    .. py:attribute:: sample_name
       
 
-      
+      Name of the sample.
+
 
    .. py:attribute:: train_1000g
       
 
-      
+      Information whether the current task is part of 1000G benchmarking pipeline.
+
 
    .. py:method:: output(self)
 

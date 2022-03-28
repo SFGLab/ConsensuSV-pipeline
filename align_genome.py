@@ -9,13 +9,18 @@ import socket
 class MergeFastq(luigi.Task):
     """Class responsible for merging the files in case the sequencing output contains of multiple R1 and R2 files."""
     resources = {"io": 1, "cores": 1}
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter()
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter()
+    """Name of the file containing R2 reads."""
 
     sample_name = luigi.Parameter()
+    """Name of the sample."""
         
     def output(self):
         return [luigi.LocalTarget(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R1.fastq"), 
@@ -62,12 +67,17 @@ class MergeFastq(luigi.Task):
 class QCAnalysis(luigi.Task):
     """Class responsible for doing quality control on the merged files."""
     resources = {"io": 1, "cores": 1}
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter()
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter()
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
 
     def requires(self):
         return MergeFastq(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
@@ -86,12 +96,17 @@ class QCAnalysis(luigi.Task):
 class AlignGenome(luigi.Task):
     """Class responsible for aligning the sample to reference genome."""
     resources = {"cores": no_threads}
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter()
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter()
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
 
     def requires(self):
         return QCAnalysis(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
@@ -108,12 +123,17 @@ class AlignGenome(luigi.Task):
 class ConvertToBam(luigi.Task):
     """Class responsible for converting the aligned sample to bam file format."""
     resources = {"cores": no_threads}
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter()
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter()
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
 
     def requires(self):
         return AlignGenome(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
@@ -128,12 +148,17 @@ class ConvertToBam(luigi.Task):
 class SortBam(luigi.Task):
     """Class responsible for sorting the bam file."""
     resources = {"io": 1, "cores": no_threads}
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter()
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter()
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
 
     def requires(self):
         return ConvertToBam(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
@@ -148,12 +173,17 @@ class SortBam(luigi.Task):
 class IndexBam(luigi.Task):
     """Class responsible for indexing the sorted bam file."""
     resources = {"cores": 1}
+    """Resources used by the task."""
     
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter()
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter()
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
 
     def requires(self):
         return SortBam(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
@@ -167,12 +197,17 @@ class IndexBam(luigi.Task):
 class MarkDuplicates(luigi.Task):
     """Class responsible for marking duplicates using bammarkduplicates. Indexes the output as well."""
     resources = {"cores": 1}
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter()
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter()
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
 
     def requires(self):
         return IndexBam(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
@@ -189,12 +224,17 @@ class MarkDuplicates(luigi.Task):
 class BaseRecalibrator(luigi.Task):
     """Class responsible for base recalibration using gatk."""
     resources = {"cores": 1}
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter()
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter()
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
 
     known_sites = "/tools/ALL_20141222.dbSNP142_human_GRCh38.snps.vcf.gz"
 
@@ -213,12 +253,17 @@ class BaseRecalibrator(luigi.Task):
 class ApplyBQSR(luigi.Task):
     """Class responsible for applying BQSR (Base Quality Score recalibration) using gatk."""
     resources = {"cores": 1}
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter()
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter()
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
 
     def requires(self):
         return BaseRecalibrator(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name)
@@ -236,13 +281,19 @@ class ApplyBQSR(luigi.Task):
 class SortFinal(luigi.Task):
     """Class responsible for final sorting."""
     resources = {"io": 1, "cores": no_threads}
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter()
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter()
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
     train_1000g = luigi.BoolParameter(default=False)
+    """Information whether the current task is part of 1000G benchmarking pipeline."""
 
     def requires(self):
         if(self.train_1000g):
@@ -269,13 +320,19 @@ class SortFinal(luigi.Task):
 class IndexFinal(luigi.Task):
     """Class responsible for final indexing."""
     resources = {"cores": no_threads}
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter()
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter()
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
     train_1000g = luigi.BoolParameter(default=False)
+    """Information whether the current task is part of 1000G benchmarking pipeline."""
 
     def requires(self):
         return SortFinal(working_dir=self.working_dir, file_name_1=self.file_name_1, file_name_2=self.file_name_2, sample_name=self.sample_name, train_1000g=self.train_1000g)
@@ -293,8 +350,10 @@ class IndexFinal(luigi.Task):
 class Get1000G(luigi.Task):
     """Class responsible for getting 9 high-quality NYGC from the ftp servers. Because of the FTP server connection issues, it is done sequentially."""
     resources = {"cores": no_threads}
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     ftp_link = "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/hgsv_sv_discovery/data"
 
@@ -333,13 +392,19 @@ class Get1000G(luigi.Task):
 class PerformAlignment(luigi.Task):
     """Class ending the alignment step, cleaning up the intermediate files, leaving only final, sorted and indexed alignemnt file."""
     resources = {"io": 1, "cores": 1}
+    """Resources used by the task."""
 
     working_dir = luigi.Parameter()
+    """Working directory of the task."""
 
     file_name_1 = luigi.Parameter(default=None)
+    """Name of the file containing R1 reads."""
     file_name_2 = luigi.Parameter(default=None)
+    """Name of the file containing R2 reads."""
     sample_name = luigi.Parameter()
+    """Name of the sample."""
     train_1000g = luigi.BoolParameter(default=False)
+    """Information whether the current task is part of 1000G benchmarking pipeline."""
 
     def output(self):
         return [luigi.LocalTarget(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam"), luigi.LocalTarget(self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_preprocessed.bam.bai")]

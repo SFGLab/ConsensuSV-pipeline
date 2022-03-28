@@ -91,10 +91,10 @@
 <code class="sig-prename descclassname">common.</code><code class="sig-name descname">get_path_no_ext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">extension_no</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.get_path_no_ext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function for getting the path without extension.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p>path (string): Path to the file.
+<dt>Args:</dt><dd><p>path (str): Path to the file.
 extension_no (int, optional): Which extension should it stop on. E.g. for file sample.bam.bai, can return either “sample” (for extension_no=2) or “sample.bam” (for extension_no=1), depending on this parameter. Defaults to 1.</p>
 </dd>
-<dt>Returns:</dt><dd><p>string: Modified path.</p>
+<dt>Returns:</dt><dd><p>str: Modified path.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -104,10 +104,10 @@ extension_no (int, optional): Which extension should it stop on. E.g. for file s
 <code class="sig-prename descclassname">common.</code><code class="sig-name descname">get_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">extension_no</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.get_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns directory the file is in.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p>path (string): Full path to the file.
+<dt>Args:</dt><dd><p>path (str): Full path to the file.
 extension_no (int, optional): The directory to return - if 1, it returns file directory, if larget it returns the next scoped directory. Defaults to 1.</p>
 </dd>
-<dt>Returns:</dt><dd><p>string: Modified path.</p>
+<dt>Returns:</dt><dd><p>str: Modified path.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -117,8 +117,8 @@ extension_no (int, optional): The directory to return - if 1, it returns file di
 <code class="sig-prename descclassname">common.</code><code class="sig-name descname">run_command</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">command</span></em>, <em class="sig-param"><span class="n">conda_env</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.run_command" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function for running CLI commands.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p>command (string): Command to run.
-conda_env (string, optional): Name of the conda environment to use. If None, runs default one. Defaults to None.</p>
+<dt>Args:</dt><dd><p>command (str): Command to run.
+conda_env (str, optional): Name of the conda environment to use. If None, runs default one. Defaults to None.</p>
 </dd>
 </dl>
 </dd></dl>
