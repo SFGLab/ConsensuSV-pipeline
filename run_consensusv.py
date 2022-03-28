@@ -108,6 +108,7 @@ if __name__ == '__main__':
     """Default entrance to the program - prints information about pipeline execution."""
 
     start_dt = datetime.now()
+    """Begining of the execution of the pipeline."""
     print("Execution of the pipeline started at: ", start_dt.strftime("%d/%m/%Y %H:%M:%S"))
     luigi.run()
     end_dt = datetime.now()
