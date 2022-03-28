@@ -7,6 +7,7 @@ from config import reference_genome, no_threads, mem_per_thread
 import socket
 
 class MergeFastq(luigi.Task):
+    """Class responsible for merging the files in case the sequencing output contains of multiple R1 and R2 files."""
     resources = {"io": 1, "cores": 1}
 
     working_dir = luigi.Parameter()
@@ -59,6 +60,7 @@ class MergeFastq(luigi.Task):
                 run_command("cp %s %s" % (self.file_name_2, self.working_dir+"/pipeline/"+self.sample_name+"/"+self.sample_name+"_R2.fastq"))
 
 class QCAnalysis(luigi.Task):
+    """Class responsible for doing quality control on the merged files."""
     resources = {"io": 1, "cores": 1}
 
     working_dir = luigi.Parameter()
@@ -82,6 +84,7 @@ class QCAnalysis(luigi.Task):
         run_command("fastqc -f fastq -o %s %s" % (self.working_dir+"/pipeline/"+self.sample_name+"/", self.file_name_2))
 
 class AlignGenome(luigi.Task):
+    """Class responsible for aligning the sample to reference genome."""
     resources = {"cores": no_threads}
 
     working_dir = luigi.Parameter()
@@ -103,6 +106,7 @@ class AlignGenome(luigi.Task):
         run_command(command)
 
 class ConvertToBam(luigi.Task):
+    """Class responsible for converting the aligned sample to bam file format."""
     resources = {"cores": no_threads}
 
     working_dir = luigi.Parameter()
@@ -122,6 +126,7 @@ class ConvertToBam(luigi.Task):
         run_command("samtools view -S -b -o %s -@ %s %s" % (full_path_output, no_threads, self.input().path,))
 
 class SortBam(luigi.Task):
+    """Class responsible for sorting the bam file."""
     resources = {"io": 1, "cores": no_threads}
 
     working_dir = luigi.Parameter()
@@ -141,6 +146,7 @@ class SortBam(luigi.Task):
         run_command("samtools sort -o %s -T %s -@ %s -m %s %s" % (full_path_output, self.input().path, no_threads, mem_per_thread, self.input().path))
 
 class IndexBam(luigi.Task):
+    """Class responsible for indexing the sorted bam file."""
     resources = {"cores": 1}
     
     working_dir = luigi.Parameter()
@@ -159,6 +165,7 @@ class IndexBam(luigi.Task):
         run_command("samtools index -@ %s %s " % (no_threads, self.input().path))
 
 class MarkDuplicates(luigi.Task):
+    """Class responsible for marking duplicates using bammarkduplicates. Indexes the output as well."""
     resources = {"cores": 1}
 
     working_dir = luigi.Parameter()
@@ -180,6 +187,7 @@ class MarkDuplicates(luigi.Task):
         run_command("samtools index -@ %s %s " % (no_threads, output_file))
 
 class BaseRecalibrator(luigi.Task):
+    """Class responsible for base recalibration using gatk."""
     resources = {"cores": 1}
 
     working_dir = luigi.Parameter()
@@ -203,6 +211,7 @@ class BaseRecalibrator(luigi.Task):
         run_command("gatk BaseRecalibrator -R %s -O %s -I %s -known-sites %s" % (reference_genome, recal_table, input_file, self.known_sites))
 
 class ApplyBQSR(luigi.Task):
+    """Class responsible for applying BQSR (Base Quality Score recalibration) using gatk."""
     resources = {"cores": 1}
 
     working_dir = luigi.Parameter()
@@ -225,6 +234,7 @@ class ApplyBQSR(luigi.Task):
         run_command("gatk ApplyBQSR -R %s -O %s -I %s -bqsr-recal-file %s" % (reference_genome, output_file, input_file, recal_table))
 
 class SortFinal(luigi.Task):
+    """Class responsible for final sorting."""
     resources = {"io": 1, "cores": no_threads}
 
     working_dir = luigi.Parameter()
@@ -257,6 +267,7 @@ class SortFinal(luigi.Task):
         run_command("samtools sort -o %s -T %s -@ %s -m %s %s" % (output_file, get_path(input_file), no_threads, mem_per_thread, input_file))
 
 class IndexFinal(luigi.Task):
+    """Class responsible for final indexing."""
     resources = {"cores": no_threads}
 
     working_dir = luigi.Parameter()
@@ -280,6 +291,7 @@ class IndexFinal(luigi.Task):
         run_command("samtools index -@ %s %s" % (no_threads, input_file))
 
 class Get1000G(luigi.Task):
+    """Class responsible for getting 9 high-quality NYGC from the ftp servers. Because of the FTP server connection issues, it is done sequentially."""
     resources = {"cores": no_threads}
 
     working_dir = luigi.Parameter()
@@ -319,6 +331,7 @@ class Get1000G(luigi.Task):
                 run_command("samtools view -b -T %s -o %s -@ %s %s" % (reference_genome, bam_file, no_threads, cram_file))
 
 class PerformAlignment(luigi.Task):
+    """Class ending the alignment step, cleaning up the intermediate files, leaving only final, sorted and indexed alignemnt file."""
     resources = {"io": 1, "cores": 1}
 
     working_dir = luigi.Parameter()

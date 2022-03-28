@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>align_genome &mdash; ConsensuSV-pipeline 1.0 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ConsensuSV-pipeline
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ConsensuSV-pipeline</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">align_genome</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/autoapi/align_genome/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-align_genome">
+<span id="align-genome"></span><h1><a class="reference internal" href="#module-align_genome" title="align_genome"><code class="xref py py-mod docutils literal notranslate"><span class="pre">align_genome</span></code></a><a class="headerlink" href="#module-align_genome" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#align_genome.MergeFastq" title="align_genome.MergeFastq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MergeFastq</span></code></a></p></td>
+<td><p>Class responsible for merging the files in case the sequencing output contains of multiple R1 and R2 files.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#align_genome.QCAnalysis" title="align_genome.QCAnalysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QCAnalysis</span></code></a></p></td>
+<td><p>Class responsible for doing quality control on the merged files.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#align_genome.AlignGenome" title="align_genome.AlignGenome"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AlignGenome</span></code></a></p></td>
+<td><p>Class responsible for aligning the sample to reference genome.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#align_genome.ConvertToBam" title="align_genome.ConvertToBam"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConvertToBam</span></code></a></p></td>
+<td><p>Class responsible for converting the aligned sample to bam file format.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#align_genome.SortBam" title="align_genome.SortBam"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SortBam</span></code></a></p></td>
+<td><p>Class responsible for sorting the bam file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#align_genome.IndexBam" title="align_genome.IndexBam"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IndexBam</span></code></a></p></td>
+<td><p>Class responsible for indexing the sorted bam file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#align_genome.MarkDuplicates" title="align_genome.MarkDuplicates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MarkDuplicates</span></code></a></p></td>
+<td><p>Class responsible for marking duplicates using bammarkduplicates. Indexes the output as well.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#align_genome.BaseRecalibrator" title="align_genome.BaseRecalibrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseRecalibrator</span></code></a></p></td>
+<td><p>Class responsible for base recalibration using gatk.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#align_genome.ApplyBQSR" title="align_genome.ApplyBQSR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ApplyBQSR</span></code></a></p></td>
+<td><p>Class responsible for applying BQSR (Base Quality Score recalibration) using gatk.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#align_genome.SortFinal" title="align_genome.SortFinal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SortFinal</span></code></a></p></td>
+<td><p>Class responsible for final sorting.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#align_genome.IndexFinal" title="align_genome.IndexFinal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IndexFinal</span></code></a></p></td>
+<td><p>Class responsible for final indexing.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#align_genome.Get1000G" title="align_genome.Get1000G"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Get1000G</span></code></a></p></td>
+<td><p>Class responsible for getting 9 high-quality NYGC from the ftp servers. Because of the FTP server connection issues, it is done sequentially.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#align_genome.PerformAlignment" title="align_genome.PerformAlignment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PerformAlignment</span></code></a></p></td>
+<td><p>Class ending the alignment step, cleaning up the intermediate files, leaving only final, sorted and indexed alignemnt file.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt id="align_genome.MergeFastq">
+<em class="property">class </em><code class="sig-prename descclassname">align_genome.</code><code class="sig-name descname">MergeFastq</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.MergeFastq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">luigi.Task</span></code></p>
+<p>Class responsible for merging the files in case the sequencing output contains of multiple R1 and R2 files.</p>
+<dl class="py attribute">
+<dt id="align_genome.MergeFastq.resources">
+<code class="sig-name descname">resources</code><a class="headerlink" href="#align_genome.MergeFastq.resources" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.MergeFastq.working_dir">
+<code class="sig-name descname">working_dir</code><a class="headerlink" href="#align_genome.MergeFastq.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.MergeFastq.file_name_1">
+<code class="sig-name descname">file_name_1</code><a class="headerlink" href="#align_genome.MergeFastq.file_name_1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.MergeFastq.file_name_2">
+<code class="sig-name descname">file_name_2</code><a class="headerlink" href="#align_genome.MergeFastq.file_name_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.MergeFastq.sample_name">
+<code class="sig-name descname">sample_name</code><a class="headerlink" href="#align_genome.MergeFastq.sample_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.MergeFastq.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.MergeFastq.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output that this Task produces.</p>
+<p>The output of the Task determines if the Task needs to be run–the task
+is considered finished iff the outputs all exist. Subclasses should
+override this method to return a single <code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> or a list of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> instances.</p>
+<dl class="simple">
+<dt>Implementation note</dt><dd><p>If running multiple workers, the output must be a resource that is accessible
+by all workers, such as a DFS or database. Otherwise, workers might compute
+the same output since they don’t see the work done by other workers.</p>
+</dd>
+</dl>
+<p>See <span class="xref std std-ref">Task.output</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.MergeFastq.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.MergeFastq.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>The task run method, to be overridden in a subclass.</p>
+<p>See <span class="xref std std-ref">Task.run</span></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="align_genome.QCAnalysis">
+<em class="property">class </em><code class="sig-prename descclassname">align_genome.</code><code class="sig-name descname">QCAnalysis</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.QCAnalysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">luigi.Task</span></code></p>
+<p>Class responsible for doing quality control on the merged files.</p>
+<dl class="py attribute">
+<dt id="align_genome.QCAnalysis.resources">
+<code class="sig-name descname">resources</code><a class="headerlink" href="#align_genome.QCAnalysis.resources" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.QCAnalysis.working_dir">
+<code class="sig-name descname">working_dir</code><a class="headerlink" href="#align_genome.QCAnalysis.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.QCAnalysis.file_name_1">
+<code class="sig-name descname">file_name_1</code><a class="headerlink" href="#align_genome.QCAnalysis.file_name_1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.QCAnalysis.file_name_2">
+<code class="sig-name descname">file_name_2</code><a class="headerlink" href="#align_genome.QCAnalysis.file_name_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.QCAnalysis.sample_name">
+<code class="sig-name descname">sample_name</code><a class="headerlink" href="#align_genome.QCAnalysis.sample_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.QCAnalysis.requires">
+<code class="sig-name descname">requires</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.QCAnalysis.requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Tasks that this Task depends on.</p>
+<p>A Task will only run if all of the Tasks that it requires are completed.
+If your Task does not require any other Tasks, then you don’t need to
+override this method. Otherwise, a subclass can override this method
+to return a single Task, a list of Task instances, or a dict whose
+values are Task instances.</p>
+<p>See <span class="xref std std-ref">Task.requires</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.QCAnalysis.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.QCAnalysis.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output that this Task produces.</p>
+<p>The output of the Task determines if the Task needs to be run–the task
+is considered finished iff the outputs all exist. Subclasses should
+override this method to return a single <code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> or a list of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> instances.</p>
+<dl class="simple">
+<dt>Implementation note</dt><dd><p>If running multiple workers, the output must be a resource that is accessible
+by all workers, such as a DFS or database. Otherwise, workers might compute
+the same output since they don’t see the work done by other workers.</p>
+</dd>
+</dl>
+<p>See <span class="xref std std-ref">Task.output</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.QCAnalysis.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.QCAnalysis.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>The task run method, to be overridden in a subclass.</p>
+<p>See <span class="xref std std-ref">Task.run</span></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="align_genome.AlignGenome">
+<em class="property">class </em><code class="sig-prename descclassname">align_genome.</code><code class="sig-name descname">AlignGenome</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.AlignGenome" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">luigi.Task</span></code></p>
+<p>Class responsible for aligning the sample to reference genome.</p>
+<dl class="py attribute">
+<dt id="align_genome.AlignGenome.resources">
+<code class="sig-name descname">resources</code><a class="headerlink" href="#align_genome.AlignGenome.resources" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.AlignGenome.working_dir">
+<code class="sig-name descname">working_dir</code><a class="headerlink" href="#align_genome.AlignGenome.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.AlignGenome.file_name_1">
+<code class="sig-name descname">file_name_1</code><a class="headerlink" href="#align_genome.AlignGenome.file_name_1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.AlignGenome.file_name_2">
+<code class="sig-name descname">file_name_2</code><a class="headerlink" href="#align_genome.AlignGenome.file_name_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.AlignGenome.sample_name">
+<code class="sig-name descname">sample_name</code><a class="headerlink" href="#align_genome.AlignGenome.sample_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.AlignGenome.requires">
+<code class="sig-name descname">requires</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.AlignGenome.requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Tasks that this Task depends on.</p>
+<p>A Task will only run if all of the Tasks that it requires are completed.
+If your Task does not require any other Tasks, then you don’t need to
+override this method. Otherwise, a subclass can override this method
+to return a single Task, a list of Task instances, or a dict whose
+values are Task instances.</p>
+<p>See <span class="xref std std-ref">Task.requires</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.AlignGenome.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.AlignGenome.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output that this Task produces.</p>
+<p>The output of the Task determines if the Task needs to be run–the task
+is considered finished iff the outputs all exist. Subclasses should
+override this method to return a single <code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> or a list of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> instances.</p>
+<dl class="simple">
+<dt>Implementation note</dt><dd><p>If running multiple workers, the output must be a resource that is accessible
+by all workers, such as a DFS or database. Otherwise, workers might compute
+the same output since they don’t see the work done by other workers.</p>
+</dd>
+</dl>
+<p>See <span class="xref std std-ref">Task.output</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.AlignGenome.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.AlignGenome.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>The task run method, to be overridden in a subclass.</p>
+<p>See <span class="xref std std-ref">Task.run</span></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="align_genome.ConvertToBam">
+<em class="property">class </em><code class="sig-prename descclassname">align_genome.</code><code class="sig-name descname">ConvertToBam</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.ConvertToBam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">luigi.Task</span></code></p>
+<p>Class responsible for converting the aligned sample to bam file format.</p>
+<dl class="py attribute">
+<dt id="align_genome.ConvertToBam.resources">
+<code class="sig-name descname">resources</code><a class="headerlink" href="#align_genome.ConvertToBam.resources" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.ConvertToBam.working_dir">
+<code class="sig-name descname">working_dir</code><a class="headerlink" href="#align_genome.ConvertToBam.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.ConvertToBam.file_name_1">
+<code class="sig-name descname">file_name_1</code><a class="headerlink" href="#align_genome.ConvertToBam.file_name_1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.ConvertToBam.file_name_2">
+<code class="sig-name descname">file_name_2</code><a class="headerlink" href="#align_genome.ConvertToBam.file_name_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.ConvertToBam.sample_name">
+<code class="sig-name descname">sample_name</code><a class="headerlink" href="#align_genome.ConvertToBam.sample_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.ConvertToBam.requires">
+<code class="sig-name descname">requires</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.ConvertToBam.requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Tasks that this Task depends on.</p>
+<p>A Task will only run if all of the Tasks that it requires are completed.
+If your Task does not require any other Tasks, then you don’t need to
+override this method. Otherwise, a subclass can override this method
+to return a single Task, a list of Task instances, or a dict whose
+values are Task instances.</p>
+<p>See <span class="xref std std-ref">Task.requires</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.ConvertToBam.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.ConvertToBam.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output that this Task produces.</p>
+<p>The output of the Task determines if the Task needs to be run–the task
+is considered finished iff the outputs all exist. Subclasses should
+override this method to return a single <code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> or a list of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> instances.</p>
+<dl class="simple">
+<dt>Implementation note</dt><dd><p>If running multiple workers, the output must be a resource that is accessible
+by all workers, such as a DFS or database. Otherwise, workers might compute
+the same output since they don’t see the work done by other workers.</p>
+</dd>
+</dl>
+<p>See <span class="xref std std-ref">Task.output</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.ConvertToBam.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.ConvertToBam.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>The task run method, to be overridden in a subclass.</p>
+<p>See <span class="xref std std-ref">Task.run</span></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="align_genome.SortBam">
+<em class="property">class </em><code class="sig-prename descclassname">align_genome.</code><code class="sig-name descname">SortBam</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.SortBam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">luigi.Task</span></code></p>
+<p>Class responsible for sorting the bam file.</p>
+<dl class="py attribute">
+<dt id="align_genome.SortBam.resources">
+<code class="sig-name descname">resources</code><a class="headerlink" href="#align_genome.SortBam.resources" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.SortBam.working_dir">
+<code class="sig-name descname">working_dir</code><a class="headerlink" href="#align_genome.SortBam.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.SortBam.file_name_1">
+<code class="sig-name descname">file_name_1</code><a class="headerlink" href="#align_genome.SortBam.file_name_1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.SortBam.file_name_2">
+<code class="sig-name descname">file_name_2</code><a class="headerlink" href="#align_genome.SortBam.file_name_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.SortBam.sample_name">
+<code class="sig-name descname">sample_name</code><a class="headerlink" href="#align_genome.SortBam.sample_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.SortBam.requires">
+<code class="sig-name descname">requires</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.SortBam.requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Tasks that this Task depends on.</p>
+<p>A Task will only run if all of the Tasks that it requires are completed.
+If your Task does not require any other Tasks, then you don’t need to
+override this method. Otherwise, a subclass can override this method
+to return a single Task, a list of Task instances, or a dict whose
+values are Task instances.</p>
+<p>See <span class="xref std std-ref">Task.requires</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.SortBam.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.SortBam.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output that this Task produces.</p>
+<p>The output of the Task determines if the Task needs to be run–the task
+is considered finished iff the outputs all exist. Subclasses should
+override this method to return a single <code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> or a list of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> instances.</p>
+<dl class="simple">
+<dt>Implementation note</dt><dd><p>If running multiple workers, the output must be a resource that is accessible
+by all workers, such as a DFS or database. Otherwise, workers might compute
+the same output since they don’t see the work done by other workers.</p>
+</dd>
+</dl>
+<p>See <span class="xref std std-ref">Task.output</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.SortBam.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.SortBam.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>The task run method, to be overridden in a subclass.</p>
+<p>See <span class="xref std std-ref">Task.run</span></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="align_genome.IndexBam">
+<em class="property">class </em><code class="sig-prename descclassname">align_genome.</code><code class="sig-name descname">IndexBam</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.IndexBam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">luigi.Task</span></code></p>
+<p>Class responsible for indexing the sorted bam file.</p>
+<dl class="py attribute">
+<dt id="align_genome.IndexBam.resources">
+<code class="sig-name descname">resources</code><a class="headerlink" href="#align_genome.IndexBam.resources" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.IndexBam.working_dir">
+<code class="sig-name descname">working_dir</code><a class="headerlink" href="#align_genome.IndexBam.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.IndexBam.file_name_1">
+<code class="sig-name descname">file_name_1</code><a class="headerlink" href="#align_genome.IndexBam.file_name_1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.IndexBam.file_name_2">
+<code class="sig-name descname">file_name_2</code><a class="headerlink" href="#align_genome.IndexBam.file_name_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.IndexBam.sample_name">
+<code class="sig-name descname">sample_name</code><a class="headerlink" href="#align_genome.IndexBam.sample_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.IndexBam.requires">
+<code class="sig-name descname">requires</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.IndexBam.requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Tasks that this Task depends on.</p>
+<p>A Task will only run if all of the Tasks that it requires are completed.
+If your Task does not require any other Tasks, then you don’t need to
+override this method. Otherwise, a subclass can override this method
+to return a single Task, a list of Task instances, or a dict whose
+values are Task instances.</p>
+<p>See <span class="xref std std-ref">Task.requires</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.IndexBam.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.IndexBam.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output that this Task produces.</p>
+<p>The output of the Task determines if the Task needs to be run–the task
+is considered finished iff the outputs all exist. Subclasses should
+override this method to return a single <code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> or a list of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> instances.</p>
+<dl class="simple">
+<dt>Implementation note</dt><dd><p>If running multiple workers, the output must be a resource that is accessible
+by all workers, such as a DFS or database. Otherwise, workers might compute
+the same output since they don’t see the work done by other workers.</p>
+</dd>
+</dl>
+<p>See <span class="xref std std-ref">Task.output</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.IndexBam.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.IndexBam.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>The task run method, to be overridden in a subclass.</p>
+<p>See <span class="xref std std-ref">Task.run</span></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="align_genome.MarkDuplicates">
+<em class="property">class </em><code class="sig-prename descclassname">align_genome.</code><code class="sig-name descname">MarkDuplicates</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.MarkDuplicates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">luigi.Task</span></code></p>
+<p>Class responsible for marking duplicates using bammarkduplicates. Indexes the output as well.</p>
+<dl class="py attribute">
+<dt id="align_genome.MarkDuplicates.resources">
+<code class="sig-name descname">resources</code><a class="headerlink" href="#align_genome.MarkDuplicates.resources" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.MarkDuplicates.working_dir">
+<code class="sig-name descname">working_dir</code><a class="headerlink" href="#align_genome.MarkDuplicates.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.MarkDuplicates.file_name_1">
+<code class="sig-name descname">file_name_1</code><a class="headerlink" href="#align_genome.MarkDuplicates.file_name_1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.MarkDuplicates.file_name_2">
+<code class="sig-name descname">file_name_2</code><a class="headerlink" href="#align_genome.MarkDuplicates.file_name_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.MarkDuplicates.sample_name">
+<code class="sig-name descname">sample_name</code><a class="headerlink" href="#align_genome.MarkDuplicates.sample_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.MarkDuplicates.requires">
+<code class="sig-name descname">requires</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.MarkDuplicates.requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Tasks that this Task depends on.</p>
+<p>A Task will only run if all of the Tasks that it requires are completed.
+If your Task does not require any other Tasks, then you don’t need to
+override this method. Otherwise, a subclass can override this method
+to return a single Task, a list of Task instances, or a dict whose
+values are Task instances.</p>
+<p>See <span class="xref std std-ref">Task.requires</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.MarkDuplicates.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.MarkDuplicates.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output that this Task produces.</p>
+<p>The output of the Task determines if the Task needs to be run–the task
+is considered finished iff the outputs all exist. Subclasses should
+override this method to return a single <code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> or a list of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> instances.</p>
+<dl class="simple">
+<dt>Implementation note</dt><dd><p>If running multiple workers, the output must be a resource that is accessible
+by all workers, such as a DFS or database. Otherwise, workers might compute
+the same output since they don’t see the work done by other workers.</p>
+</dd>
+</dl>
+<p>See <span class="xref std std-ref">Task.output</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.MarkDuplicates.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.MarkDuplicates.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>The task run method, to be overridden in a subclass.</p>
+<p>See <span class="xref std std-ref">Task.run</span></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="align_genome.BaseRecalibrator">
+<em class="property">class </em><code class="sig-prename descclassname">align_genome.</code><code class="sig-name descname">BaseRecalibrator</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.BaseRecalibrator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">luigi.Task</span></code></p>
+<p>Class responsible for base recalibration using gatk.</p>
+<dl class="py attribute">
+<dt id="align_genome.BaseRecalibrator.resources">
+<code class="sig-name descname">resources</code><a class="headerlink" href="#align_genome.BaseRecalibrator.resources" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.BaseRecalibrator.working_dir">
+<code class="sig-name descname">working_dir</code><a class="headerlink" href="#align_genome.BaseRecalibrator.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.BaseRecalibrator.file_name_1">
+<code class="sig-name descname">file_name_1</code><a class="headerlink" href="#align_genome.BaseRecalibrator.file_name_1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.BaseRecalibrator.file_name_2">
+<code class="sig-name descname">file_name_2</code><a class="headerlink" href="#align_genome.BaseRecalibrator.file_name_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.BaseRecalibrator.sample_name">
+<code class="sig-name descname">sample_name</code><a class="headerlink" href="#align_genome.BaseRecalibrator.sample_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.BaseRecalibrator.known_sites">
+<code class="sig-name descname">known_sites</code><em class="property"> = /tools/ALL_20141222.dbSNP142_human_GRCh38.snps.vcf.gz</em><a class="headerlink" href="#align_genome.BaseRecalibrator.known_sites" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.BaseRecalibrator.requires">
+<code class="sig-name descname">requires</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.BaseRecalibrator.requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Tasks that this Task depends on.</p>
+<p>A Task will only run if all of the Tasks that it requires are completed.
+If your Task does not require any other Tasks, then you don’t need to
+override this method. Otherwise, a subclass can override this method
+to return a single Task, a list of Task instances, or a dict whose
+values are Task instances.</p>
+<p>See <span class="xref std std-ref">Task.requires</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.BaseRecalibrator.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.BaseRecalibrator.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output that this Task produces.</p>
+<p>The output of the Task determines if the Task needs to be run–the task
+is considered finished iff the outputs all exist. Subclasses should
+override this method to return a single <code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> or a list of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> instances.</p>
+<dl class="simple">
+<dt>Implementation note</dt><dd><p>If running multiple workers, the output must be a resource that is accessible
+by all workers, such as a DFS or database. Otherwise, workers might compute
+the same output since they don’t see the work done by other workers.</p>
+</dd>
+</dl>
+<p>See <span class="xref std std-ref">Task.output</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.BaseRecalibrator.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.BaseRecalibrator.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>The task run method, to be overridden in a subclass.</p>
+<p>See <span class="xref std std-ref">Task.run</span></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="align_genome.ApplyBQSR">
+<em class="property">class </em><code class="sig-prename descclassname">align_genome.</code><code class="sig-name descname">ApplyBQSR</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.ApplyBQSR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">luigi.Task</span></code></p>
+<p>Class responsible for applying BQSR (Base Quality Score recalibration) using gatk.</p>
+<dl class="py attribute">
+<dt id="align_genome.ApplyBQSR.resources">
+<code class="sig-name descname">resources</code><a class="headerlink" href="#align_genome.ApplyBQSR.resources" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.ApplyBQSR.working_dir">
+<code class="sig-name descname">working_dir</code><a class="headerlink" href="#align_genome.ApplyBQSR.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.ApplyBQSR.file_name_1">
+<code class="sig-name descname">file_name_1</code><a class="headerlink" href="#align_genome.ApplyBQSR.file_name_1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.ApplyBQSR.file_name_2">
+<code class="sig-name descname">file_name_2</code><a class="headerlink" href="#align_genome.ApplyBQSR.file_name_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.ApplyBQSR.sample_name">
+<code class="sig-name descname">sample_name</code><a class="headerlink" href="#align_genome.ApplyBQSR.sample_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.ApplyBQSR.requires">
+<code class="sig-name descname">requires</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.ApplyBQSR.requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Tasks that this Task depends on.</p>
+<p>A Task will only run if all of the Tasks that it requires are completed.
+If your Task does not require any other Tasks, then you don’t need to
+override this method. Otherwise, a subclass can override this method
+to return a single Task, a list of Task instances, or a dict whose
+values are Task instances.</p>
+<p>See <span class="xref std std-ref">Task.requires</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.ApplyBQSR.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.ApplyBQSR.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output that this Task produces.</p>
+<p>The output of the Task determines if the Task needs to be run–the task
+is considered finished iff the outputs all exist. Subclasses should
+override this method to return a single <code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> or a list of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> instances.</p>
+<dl class="simple">
+<dt>Implementation note</dt><dd><p>If running multiple workers, the output must be a resource that is accessible
+by all workers, such as a DFS or database. Otherwise, workers might compute
+the same output since they don’t see the work done by other workers.</p>
+</dd>
+</dl>
+<p>See <span class="xref std std-ref">Task.output</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.ApplyBQSR.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.ApplyBQSR.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>The task run method, to be overridden in a subclass.</p>
+<p>See <span class="xref std std-ref">Task.run</span></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="align_genome.SortFinal">
+<em class="property">class </em><code class="sig-prename descclassname">align_genome.</code><code class="sig-name descname">SortFinal</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.SortFinal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">luigi.Task</span></code></p>
+<p>Class responsible for final sorting.</p>
+<dl class="py attribute">
+<dt id="align_genome.SortFinal.resources">
+<code class="sig-name descname">resources</code><a class="headerlink" href="#align_genome.SortFinal.resources" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.SortFinal.working_dir">
+<code class="sig-name descname">working_dir</code><a class="headerlink" href="#align_genome.SortFinal.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.SortFinal.file_name_1">
+<code class="sig-name descname">file_name_1</code><a class="headerlink" href="#align_genome.SortFinal.file_name_1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.SortFinal.file_name_2">
+<code class="sig-name descname">file_name_2</code><a class="headerlink" href="#align_genome.SortFinal.file_name_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.SortFinal.sample_name">
+<code class="sig-name descname">sample_name</code><a class="headerlink" href="#align_genome.SortFinal.sample_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.SortFinal.train_1000g">
+<code class="sig-name descname">train_1000g</code><a class="headerlink" href="#align_genome.SortFinal.train_1000g" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.SortFinal.requires">
+<code class="sig-name descname">requires</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.SortFinal.requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Tasks that this Task depends on.</p>
+<p>A Task will only run if all of the Tasks that it requires are completed.
+If your Task does not require any other Tasks, then you don’t need to
+override this method. Otherwise, a subclass can override this method
+to return a single Task, a list of Task instances, or a dict whose
+values are Task instances.</p>
+<p>See <span class="xref std std-ref">Task.requires</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.SortFinal.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.SortFinal.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output that this Task produces.</p>
+<p>The output of the Task determines if the Task needs to be run–the task
+is considered finished iff the outputs all exist. Subclasses should
+override this method to return a single <code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> or a list of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> instances.</p>
+<dl class="simple">
+<dt>Implementation note</dt><dd><p>If running multiple workers, the output must be a resource that is accessible
+by all workers, such as a DFS or database. Otherwise, workers might compute
+the same output since they don’t see the work done by other workers.</p>
+</dd>
+</dl>
+<p>See <span class="xref std std-ref">Task.output</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.SortFinal.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.SortFinal.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>The task run method, to be overridden in a subclass.</p>
+<p>See <span class="xref std std-ref">Task.run</span></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="align_genome.IndexFinal">
+<em class="property">class </em><code class="sig-prename descclassname">align_genome.</code><code class="sig-name descname">IndexFinal</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.IndexFinal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">luigi.Task</span></code></p>
+<p>Class responsible for final indexing.</p>
+<dl class="py attribute">
+<dt id="align_genome.IndexFinal.resources">
+<code class="sig-name descname">resources</code><a class="headerlink" href="#align_genome.IndexFinal.resources" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.IndexFinal.working_dir">
+<code class="sig-name descname">working_dir</code><a class="headerlink" href="#align_genome.IndexFinal.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.IndexFinal.file_name_1">
+<code class="sig-name descname">file_name_1</code><a class="headerlink" href="#align_genome.IndexFinal.file_name_1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.IndexFinal.file_name_2">
+<code class="sig-name descname">file_name_2</code><a class="headerlink" href="#align_genome.IndexFinal.file_name_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.IndexFinal.sample_name">
+<code class="sig-name descname">sample_name</code><a class="headerlink" href="#align_genome.IndexFinal.sample_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.IndexFinal.train_1000g">
+<code class="sig-name descname">train_1000g</code><a class="headerlink" href="#align_genome.IndexFinal.train_1000g" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.IndexFinal.requires">
+<code class="sig-name descname">requires</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.IndexFinal.requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Tasks that this Task depends on.</p>
+<p>A Task will only run if all of the Tasks that it requires are completed.
+If your Task does not require any other Tasks, then you don’t need to
+override this method. Otherwise, a subclass can override this method
+to return a single Task, a list of Task instances, or a dict whose
+values are Task instances.</p>
+<p>See <span class="xref std std-ref">Task.requires</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.IndexFinal.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.IndexFinal.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output that this Task produces.</p>
+<p>The output of the Task determines if the Task needs to be run–the task
+is considered finished iff the outputs all exist. Subclasses should
+override this method to return a single <code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> or a list of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> instances.</p>
+<dl class="simple">
+<dt>Implementation note</dt><dd><p>If running multiple workers, the output must be a resource that is accessible
+by all workers, such as a DFS or database. Otherwise, workers might compute
+the same output since they don’t see the work done by other workers.</p>
+</dd>
+</dl>
+<p>See <span class="xref std std-ref">Task.output</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.IndexFinal.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.IndexFinal.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>The task run method, to be overridden in a subclass.</p>
+<p>See <span class="xref std std-ref">Task.run</span></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="align_genome.Get1000G">
+<em class="property">class </em><code class="sig-prename descclassname">align_genome.</code><code class="sig-name descname">Get1000G</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.Get1000G" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">luigi.Task</span></code></p>
+<p>Class responsible for getting 9 high-quality NYGC from the ftp servers. Because of the FTP server connection issues, it is done sequentially.</p>
+<dl class="py attribute">
+<dt id="align_genome.Get1000G.resources">
+<code class="sig-name descname">resources</code><a class="headerlink" href="#align_genome.Get1000G.resources" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.Get1000G.working_dir">
+<code class="sig-name descname">working_dir</code><a class="headerlink" href="#align_genome.Get1000G.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.Get1000G.ftp_link">
+<code class="sig-name descname">ftp_link</code><em class="property"> = ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/hgsv_sv_discovery/data</em><a class="headerlink" href="#align_genome.Get1000G.ftp_link" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.Get1000G.samples_ftp">
+<code class="sig-name descname">samples_ftp</code><a class="headerlink" href="#align_genome.Get1000G.samples_ftp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.Get1000G.requires">
+<code class="sig-name descname">requires</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.Get1000G.requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Tasks that this Task depends on.</p>
+<p>A Task will only run if all of the Tasks that it requires are completed.
+If your Task does not require any other Tasks, then you don’t need to
+override this method. Otherwise, a subclass can override this method
+to return a single Task, a list of Task instances, or a dict whose
+values are Task instances.</p>
+<p>See <span class="xref std std-ref">Task.requires</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.Get1000G.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.Get1000G.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output that this Task produces.</p>
+<p>The output of the Task determines if the Task needs to be run–the task
+is considered finished iff the outputs all exist. Subclasses should
+override this method to return a single <code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> or a list of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> instances.</p>
+<dl class="simple">
+<dt>Implementation note</dt><dd><p>If running multiple workers, the output must be a resource that is accessible
+by all workers, such as a DFS or database. Otherwise, workers might compute
+the same output since they don’t see the work done by other workers.</p>
+</dd>
+</dl>
+<p>See <span class="xref std std-ref">Task.output</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.Get1000G.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.Get1000G.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>The task run method, to be overridden in a subclass.</p>
+<p>See <span class="xref std std-ref">Task.run</span></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="align_genome.PerformAlignment">
+<em class="property">class </em><code class="sig-prename descclassname">align_genome.</code><code class="sig-name descname">PerformAlignment</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.PerformAlignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">luigi.Task</span></code></p>
+<p>Class ending the alignment step, cleaning up the intermediate files, leaving only final, sorted and indexed alignemnt file.</p>
+<dl class="py attribute">
+<dt id="align_genome.PerformAlignment.resources">
+<code class="sig-name descname">resources</code><a class="headerlink" href="#align_genome.PerformAlignment.resources" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.PerformAlignment.working_dir">
+<code class="sig-name descname">working_dir</code><a class="headerlink" href="#align_genome.PerformAlignment.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.PerformAlignment.file_name_1">
+<code class="sig-name descname">file_name_1</code><a class="headerlink" href="#align_genome.PerformAlignment.file_name_1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.PerformAlignment.file_name_2">
+<code class="sig-name descname">file_name_2</code><a class="headerlink" href="#align_genome.PerformAlignment.file_name_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.PerformAlignment.sample_name">
+<code class="sig-name descname">sample_name</code><a class="headerlink" href="#align_genome.PerformAlignment.sample_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="align_genome.PerformAlignment.train_1000g">
+<code class="sig-name descname">train_1000g</code><a class="headerlink" href="#align_genome.PerformAlignment.train_1000g" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.PerformAlignment.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.PerformAlignment.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output that this Task produces.</p>
+<p>The output of the Task determines if the Task needs to be run–the task
+is considered finished iff the outputs all exist. Subclasses should
+override this method to return a single <code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> or a list of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> instances.</p>
+<dl class="simple">
+<dt>Implementation note</dt><dd><p>If running multiple workers, the output must be a resource that is accessible
+by all workers, such as a DFS or database. Otherwise, workers might compute
+the same output since they don’t see the work done by other workers.</p>
+</dd>
+</dl>
+<p>See <span class="xref std std-ref">Task.output</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.PerformAlignment.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.PerformAlignment.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>The task run method, to be overridden in a subclass.</p>
+<p>See <span class="xref std std-ref">Task.run</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align_genome.PerformAlignment.requires">
+<code class="sig-name descname">requires</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align_genome.PerformAlignment.requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Tasks that this Task depends on.</p>
+<p>A Task will only run if all of the Tasks that it requires are completed.
+If your Task does not require any other Tasks, then you don’t need to
+override this method. Otherwise, a subclass can override this method
+to return a single Task, a list of Task instances, or a dict whose
+values are Task instances.</p>
+<p>See <span class="xref std std-ref">Task.requires</span></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Mateusz Chiliński, Dariusz Plewczynski.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,261 @@
+:py:mod:`run_consensusv`
+========================
+
+.. py:module:: run_consensusv
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   run_consensusv.Train1000G
+   run_consensusv.Benchmark1000G
+   run_consensusv.RunConsensuSV
+   run_consensusv.RunCSVFile
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   run_consensusv.start_dt
+
+
+.. py:class:: Train1000G(*args, **kwargs)
+
+   Bases: :py:obj:`luigi.Task`
+
+   Class for running ConsensuSV training on 6 high-quality samples from NYGC.
+
+   .. py:attribute:: working_dir
+      
+
+      
+
+   .. py:method:: requires(self)
+
+      The Tasks that this Task depends on.
+
+      A Task will only run if all of the Tasks that it requires are completed.
+      If your Task does not require any other Tasks, then you don't need to
+      override this method. Otherwise, a subclass can override this method
+      to return a single Task, a list of Task instances, or a dict whose
+      values are Task instances.
+
+      See :ref:`Task.requires`
+
+
+   .. py:method:: output(self)
+
+      The output that this Task produces.
+
+      The output of the Task determines if the Task needs to be run--the task
+      is considered finished iff the outputs all exist. Subclasses should
+      override this method to return a single :py:class:`Target` or a list of
+      :py:class:`Target` instances.
+
+      Implementation note
+        If running multiple workers, the output must be a resource that is accessible
+        by all workers, such as a DFS or database. Otherwise, workers might compute
+        the same output since they don't see the work done by other workers.
+
+      See :ref:`Task.output`
+
+
+   .. py:method:: run(self)
+
+      The task run method, to be overridden in a subclass.
+
+      See :ref:`Task.run`
+
+
+
+.. py:class:: Benchmark1000G(*args, **kwargs)
+
+   Bases: :py:obj:`luigi.Task`
+
+   Class for running ConsensuSV and 1000G benchmark on 9 high-quality samples from NYGC.
+
+   .. py:attribute:: working_dir
+      
+
+      
+
+   .. py:method:: requires(self)
+
+      The Tasks that this Task depends on.
+
+      A Task will only run if all of the Tasks that it requires are completed.
+      If your Task does not require any other Tasks, then you don't need to
+      override this method. Otherwise, a subclass can override this method
+      to return a single Task, a list of Task instances, or a dict whose
+      values are Task instances.
+
+      See :ref:`Task.requires`
+
+
+   .. py:method:: output(self)
+
+      The output that this Task produces.
+
+      The output of the Task determines if the Task needs to be run--the task
+      is considered finished iff the outputs all exist. Subclasses should
+      override this method to return a single :py:class:`Target` or a list of
+      :py:class:`Target` instances.
+
+      Implementation note
+        If running multiple workers, the output must be a resource that is accessible
+        by all workers, such as a DFS or database. Otherwise, workers might compute
+        the same output since they don't see the work done by other workers.
+
+      See :ref:`Task.output`
+
+
+   .. py:method:: run(self)
+
+      The task run method, to be overridden in a subclass.
+
+      See :ref:`Task.run`
+
+
+
+.. py:class:: RunConsensuSV(*args, **kwargs)
+
+   Bases: :py:obj:`luigi.Task`
+
+   Class for running ConsensuSV on one sample.
+
+   .. py:attribute:: working_dir
+      
+
+      
+
+   .. py:attribute:: model
+      
+
+      
+
+   .. py:attribute:: file_name_1
+      
+
+      
+
+   .. py:attribute:: file_name_2
+      
+
+      
+
+   .. py:attribute:: sample_name
+      
+
+      
+
+   .. py:method:: requires(self)
+
+      The Tasks that this Task depends on.
+
+      A Task will only run if all of the Tasks that it requires are completed.
+      If your Task does not require any other Tasks, then you don't need to
+      override this method. Otherwise, a subclass can override this method
+      to return a single Task, a list of Task instances, or a dict whose
+      values are Task instances.
+
+      See :ref:`Task.requires`
+
+
+   .. py:method:: output(self)
+
+      The output that this Task produces.
+
+      The output of the Task determines if the Task needs to be run--the task
+      is considered finished iff the outputs all exist. Subclasses should
+      override this method to return a single :py:class:`Target` or a list of
+      :py:class:`Target` instances.
+
+      Implementation note
+        If running multiple workers, the output must be a resource that is accessible
+        by all workers, such as a DFS or database. Otherwise, workers might compute
+        the same output since they don't see the work done by other workers.
+
+      See :ref:`Task.output`
+
+
+   .. py:method:: run(self)
+
+      The task run method, to be overridden in a subclass.
+
+      See :ref:`Task.run`
+
+
+
+.. py:class:: RunCSVFile(*args, **kwargs)
+
+   Bases: :py:obj:`luigi.Task`
+
+   Class for running CSV file into ConsensuSV-pipeline.
+
+   .. py:attribute:: csv_file
+      
+
+      
+
+   .. py:attribute:: working_dir
+      
+
+      
+
+   .. py:attribute:: model
+      
+
+      
+
+   .. py:method:: requires(self)
+
+      The Tasks that this Task depends on.
+
+      A Task will only run if all of the Tasks that it requires are completed.
+      If your Task does not require any other Tasks, then you don't need to
+      override this method. Otherwise, a subclass can override this method
+      to return a single Task, a list of Task instances, or a dict whose
+      values are Task instances.
+
+      See :ref:`Task.requires`
+
+
+   .. py:method:: output(self)
+
+      The output that this Task produces.
+
+      The output of the Task determines if the Task needs to be run--the task
+      is considered finished iff the outputs all exist. Subclasses should
+      override this method to return a single :py:class:`Target` or a list of
+      :py:class:`Target` instances.
+
+      Implementation note
+        If running multiple workers, the output must be a resource that is accessible
+        by all workers, such as a DFS or database. Otherwise, workers might compute
+        the same output since they don't see the work done by other workers.
+
+      See :ref:`Task.output`
+
+
+   .. py:method:: run(self)
+
+      The task run method, to be overridden in a subclass.
+
+      See :ref:`Task.run`
+
+
+
+.. py:data:: start_dt
+   
+
+   
+

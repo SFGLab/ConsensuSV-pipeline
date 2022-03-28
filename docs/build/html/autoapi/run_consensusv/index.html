@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>run_consensusv &mdash; ConsensuSV-pipeline 1.0 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ConsensuSV-pipeline
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ConsensuSV-pipeline</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">run_consensusv</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/autoapi/run_consensusv/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-run_consensusv">
+<span id="run-consensusv"></span><h1><a class="reference internal" href="#module-run_consensusv" title="run_consensusv"><code class="xref py py-mod docutils literal notranslate"><span class="pre">run_consensusv</span></code></a><a class="headerlink" href="#module-run_consensusv" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#run_consensusv.Train1000G" title="run_consensusv.Train1000G"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Train1000G</span></code></a></p></td>
+<td><p>Class for running ConsensuSV training on 6 high-quality samples from NYGC.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#run_consensusv.Benchmark1000G" title="run_consensusv.Benchmark1000G"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Benchmark1000G</span></code></a></p></td>
+<td><p>Class for running ConsensuSV and 1000G benchmark on 9 high-quality samples from NYGC.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#run_consensusv.RunConsensuSV" title="run_consensusv.RunConsensuSV"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RunConsensuSV</span></code></a></p></td>
+<td><p>Class for running ConsensuSV on one sample.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#run_consensusv.RunCSVFile" title="run_consensusv.RunCSVFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RunCSVFile</span></code></a></p></td>
+<td><p>Class for running CSV file into ConsensuSV-pipeline.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#run_consensusv.start_dt" title="run_consensusv.start_dt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_dt</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt id="run_consensusv.Train1000G">
+<em class="property">class </em><code class="sig-prename descclassname">run_consensusv.</code><code class="sig-name descname">Train1000G</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#run_consensusv.Train1000G" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">luigi.Task</span></code></p>
+<p>Class for running ConsensuSV training on 6 high-quality samples from NYGC.</p>
+<dl class="py attribute">
+<dt id="run_consensusv.Train1000G.working_dir">
+<code class="sig-name descname">working_dir</code><a class="headerlink" href="#run_consensusv.Train1000G.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="run_consensusv.Train1000G.requires">
+<code class="sig-name descname">requires</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#run_consensusv.Train1000G.requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Tasks that this Task depends on.</p>
+<p>A Task will only run if all of the Tasks that it requires are completed.
+If your Task does not require any other Tasks, then you don’t need to
+override this method. Otherwise, a subclass can override this method
+to return a single Task, a list of Task instances, or a dict whose
+values are Task instances.</p>
+<p>See <span class="xref std std-ref">Task.requires</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="run_consensusv.Train1000G.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#run_consensusv.Train1000G.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output that this Task produces.</p>
+<p>The output of the Task determines if the Task needs to be run–the task
+is considered finished iff the outputs all exist. Subclasses should
+override this method to return a single <code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> or a list of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> instances.</p>
+<dl class="simple">
+<dt>Implementation note</dt><dd><p>If running multiple workers, the output must be a resource that is accessible
+by all workers, such as a DFS or database. Otherwise, workers might compute
+the same output since they don’t see the work done by other workers.</p>
+</dd>
+</dl>
+<p>See <span class="xref std std-ref">Task.output</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="run_consensusv.Train1000G.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#run_consensusv.Train1000G.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>The task run method, to be overridden in a subclass.</p>
+<p>See <span class="xref std std-ref">Task.run</span></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="run_consensusv.Benchmark1000G">
+<em class="property">class </em><code class="sig-prename descclassname">run_consensusv.</code><code class="sig-name descname">Benchmark1000G</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#run_consensusv.Benchmark1000G" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">luigi.Task</span></code></p>
+<p>Class for running ConsensuSV and 1000G benchmark on 9 high-quality samples from NYGC.</p>
+<dl class="py attribute">
+<dt id="run_consensusv.Benchmark1000G.working_dir">
+<code class="sig-name descname">working_dir</code><a class="headerlink" href="#run_consensusv.Benchmark1000G.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="run_consensusv.Benchmark1000G.requires">
+<code class="sig-name descname">requires</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#run_consensusv.Benchmark1000G.requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Tasks that this Task depends on.</p>
+<p>A Task will only run if all of the Tasks that it requires are completed.
+If your Task does not require any other Tasks, then you don’t need to
+override this method. Otherwise, a subclass can override this method
+to return a single Task, a list of Task instances, or a dict whose
+values are Task instances.</p>
+<p>See <span class="xref std std-ref">Task.requires</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="run_consensusv.Benchmark1000G.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#run_consensusv.Benchmark1000G.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output that this Task produces.</p>
+<p>The output of the Task determines if the Task needs to be run–the task
+is considered finished iff the outputs all exist. Subclasses should
+override this method to return a single <code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> or a list of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> instances.</p>
+<dl class="simple">
+<dt>Implementation note</dt><dd><p>If running multiple workers, the output must be a resource that is accessible
+by all workers, such as a DFS or database. Otherwise, workers might compute
+the same output since they don’t see the work done by other workers.</p>
+</dd>
+</dl>
+<p>See <span class="xref std std-ref">Task.output</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="run_consensusv.Benchmark1000G.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#run_consensusv.Benchmark1000G.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>The task run method, to be overridden in a subclass.</p>
+<p>See <span class="xref std std-ref">Task.run</span></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="run_consensusv.RunConsensuSV">
+<em class="property">class </em><code class="sig-prename descclassname">run_consensusv.</code><code class="sig-name descname">RunConsensuSV</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#run_consensusv.RunConsensuSV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">luigi.Task</span></code></p>
+<p>Class for running ConsensuSV on one sample.</p>
+<dl class="py attribute">
+<dt id="run_consensusv.RunConsensuSV.working_dir">
+<code class="sig-name descname">working_dir</code><a class="headerlink" href="#run_consensusv.RunConsensuSV.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="run_consensusv.RunConsensuSV.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#run_consensusv.RunConsensuSV.model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="run_consensusv.RunConsensuSV.file_name_1">
+<code class="sig-name descname">file_name_1</code><a class="headerlink" href="#run_consensusv.RunConsensuSV.file_name_1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="run_consensusv.RunConsensuSV.file_name_2">
+<code class="sig-name descname">file_name_2</code><a class="headerlink" href="#run_consensusv.RunConsensuSV.file_name_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="run_consensusv.RunConsensuSV.sample_name">
+<code class="sig-name descname">sample_name</code><a class="headerlink" href="#run_consensusv.RunConsensuSV.sample_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="run_consensusv.RunConsensuSV.requires">
+<code class="sig-name descname">requires</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#run_consensusv.RunConsensuSV.requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Tasks that this Task depends on.</p>
+<p>A Task will only run if all of the Tasks that it requires are completed.
+If your Task does not require any other Tasks, then you don’t need to
+override this method. Otherwise, a subclass can override this method
+to return a single Task, a list of Task instances, or a dict whose
+values are Task instances.</p>
+<p>See <span class="xref std std-ref">Task.requires</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="run_consensusv.RunConsensuSV.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#run_consensusv.RunConsensuSV.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output that this Task produces.</p>
+<p>The output of the Task determines if the Task needs to be run–the task
+is considered finished iff the outputs all exist. Subclasses should
+override this method to return a single <code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> or a list of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> instances.</p>
+<dl class="simple">
+<dt>Implementation note</dt><dd><p>If running multiple workers, the output must be a resource that is accessible
+by all workers, such as a DFS or database. Otherwise, workers might compute
+the same output since they don’t see the work done by other workers.</p>
+</dd>
+</dl>
+<p>See <span class="xref std std-ref">Task.output</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="run_consensusv.RunConsensuSV.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#run_consensusv.RunConsensuSV.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>The task run method, to be overridden in a subclass.</p>
+<p>See <span class="xref std std-ref">Task.run</span></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="run_consensusv.RunCSVFile">
+<em class="property">class </em><code class="sig-prename descclassname">run_consensusv.</code><code class="sig-name descname">RunCSVFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#run_consensusv.RunCSVFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">luigi.Task</span></code></p>
+<p>Class for running CSV file into ConsensuSV-pipeline.</p>
+<dl class="py attribute">
+<dt id="run_consensusv.RunCSVFile.csv_file">
+<code class="sig-name descname">csv_file</code><a class="headerlink" href="#run_consensusv.RunCSVFile.csv_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="run_consensusv.RunCSVFile.working_dir">
+<code class="sig-name descname">working_dir</code><a class="headerlink" href="#run_consensusv.RunCSVFile.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="run_consensusv.RunCSVFile.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#run_consensusv.RunCSVFile.model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="run_consensusv.RunCSVFile.requires">
+<code class="sig-name descname">requires</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#run_consensusv.RunCSVFile.requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Tasks that this Task depends on.</p>
+<p>A Task will only run if all of the Tasks that it requires are completed.
+If your Task does not require any other Tasks, then you don’t need to
+override this method. Otherwise, a subclass can override this method
+to return a single Task, a list of Task instances, or a dict whose
+values are Task instances.</p>
+<p>See <span class="xref std std-ref">Task.requires</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="run_consensusv.RunCSVFile.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#run_consensusv.RunCSVFile.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output that this Task produces.</p>
+<p>The output of the Task determines if the Task needs to be run–the task
+is considered finished iff the outputs all exist. Subclasses should
+override this method to return a single <code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> or a list of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code> instances.</p>
+<dl class="simple">
+<dt>Implementation note</dt><dd><p>If running multiple workers, the output must be a resource that is accessible
+by all workers, such as a DFS or database. Otherwise, workers might compute
+the same output since they don’t see the work done by other workers.</p>
+</dd>
+</dl>
+<p>See <span class="xref std std-ref">Task.output</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="run_consensusv.RunCSVFile.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#run_consensusv.RunCSVFile.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>The task run method, to be overridden in a subclass.</p>
+<p>See <span class="xref std std-ref">Task.run</span></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt id="run_consensusv.start_dt">
+<code class="sig-prename descclassname">run_consensusv.</code><code class="sig-name descname">start_dt</code><a class="headerlink" href="#run_consensusv.start_dt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Mateusz Chiliński, Dariusz Plewczynski.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

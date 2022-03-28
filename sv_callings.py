@@ -6,6 +6,7 @@ import os
 import shutil
 
 class SNPCalling(luigi.Task):
+    """Class responsible for SNP calling using bcftools."""
     resources = {"cores": 1}
 
     working_dir = luigi.Parameter()
@@ -32,6 +33,7 @@ class SNPCalling(luigi.Task):
         os.remove(inter_file)
 
 class IndelCalling(luigi.Task):
+    """Class responsible for Indel calling using bcftools."""
     resources = {"cores": 1}
 
     working_dir = luigi.Parameter()
@@ -58,6 +60,7 @@ class IndelCalling(luigi.Task):
         os.remove(inter_file)
 
 class SVDelly(luigi.Task):
+    """Class responsible for SV calling using Delly."""
     resources = {"cores": 1}
 
     working_dir = luigi.Parameter()
@@ -84,6 +87,7 @@ class SVDelly(luigi.Task):
         os.remove(inter_file+".csi")
 
 class SVBreakdancer(luigi.Task):
+    """Class responsible for SV calling using Breakdancer."""
     resources = {"cores": 1}
 
     working_dir = luigi.Parameter()
@@ -114,6 +118,7 @@ class SVBreakdancer(luigi.Task):
         os.remove(inter_file)
 
 class SVTardis(luigi.Task):
+    """Class responsible for SV calling using Tardis."""
     resources = {"cores": 1}
     
     working_dir = luigi.Parameter()
@@ -140,6 +145,7 @@ class SVTardis(luigi.Task):
         os.remove(log_file)
         
 class SVNovoBreak(luigi.Task):
+    """Class responsible for SV calling using novoBreak. It is disabled in default run because of its computational time."""
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter(default=None)
@@ -171,6 +177,7 @@ class SVNovoBreak(luigi.Task):
         shutil.rmtree(working_dir)
 
 class SVCNVNator(luigi.Task):
+    """Class responsible for SV calling using CNVNator."""
     resources = {"cores": 1} # might take more, but for short time
 
     working_dir = luigi.Parameter()
@@ -204,6 +211,7 @@ class SVCNVNator(luigi.Task):
         os.remove(root_file)
 
 class SVBreakSeq(luigi.Task):
+    """Class responsible for SV calling using BreakSeq."""
     resources = {"io": 1, "cores": no_threads}
 
     working_dir = luigi.Parameter()
@@ -233,6 +241,7 @@ class SVBreakSeq(luigi.Task):
         shutil.rmtree(working_dir)
 
 class SVManta(luigi.Task):
+    """Class responsible for SV calling using Manta."""
     resources = {"io": 1, "cores": no_threads*2}
 
     working_dir = luigi.Parameter()
@@ -261,6 +270,7 @@ class SVManta(luigi.Task):
         shutil.rmtree(working_dir)
 
 class SVLumpy(luigi.Task):
+    """Class responsible for SV calling using Lumpy."""
     resources = {"io": 1, "cores": no_threads}
 
     working_dir = luigi.Parameter()
@@ -298,6 +308,7 @@ class SVLumpy(luigi.Task):
         os.remove(splitters_file)
 
 class SVWhamg(luigi.Task):
+    """Class responsible for SV calling using Whamg."""
     resources = {"cores": 1}
 
     working_dir = luigi.Parameter()
@@ -324,6 +335,7 @@ class SVWhamg(luigi.Task):
         os.remove(error_file)
 
 class SVSvelter(luigi.Task):
+    """Class responsible for SV calling using Svelter."""
     resources = {"cores": 1}
     
     working_dir = luigi.Parameter()
@@ -349,6 +361,7 @@ class SVSvelter(luigi.Task):
         run_command("svelter.py --sample %s --workdir %s --chromosome %s" % (input_file, work_dir, all_chromosomes), "breakseq")
 
 class CallVariants(luigi.Task):
+    """Class responsible for calling variants using various methods."""
     working_dir = luigi.Parameter()
 
     file_name_1 = luigi.Parameter(default=None)

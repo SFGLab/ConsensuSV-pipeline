@@ -6,6 +6,8 @@ import shutil
 from datetime import datetime
 
 class Train1000G(luigi.Task):
+    """Class for running ConsensuSV training on 6 high-quality samples from NYGC."""
+
     working_dir = luigi.Parameter()
     def requires(self):
         return [CallVariants(working_dir=self.working_dir, sample_name="HG00512", train_1000g=True),
@@ -31,6 +33,7 @@ class Train1000G(luigi.Task):
         run_command("python -u /tools/ConsensuSV-core/main.py -f %s/pipeline/ -t -s HG00512,HG00513,HG00514,HG00731,HG00732,HG00733 -c breakdancer,breakseq,cnvnator,delly,lumpy,manta,tardis,whamg -mod %s/1000g_illumina.model" % (self.working_dir, self.working_dir))
 
 class Benchmark1000G(luigi.Task):
+    """Class for running ConsensuSV and 1000G benchmark on 9 high-quality samples from NYGC."""
     working_dir = luigi.Parameter()
     def requires(self):
         return [Train1000G(working_dir=self.working_dir)]
@@ -43,6 +46,7 @@ class Benchmark1000G(luigi.Task):
         run_command("python -u /tools/ConsensuSV-core/charles_filter_n.py -s HG00512,HG00513,HG00514,HG00731,HG00732,HG00733,NA19238,NA19239,NA19240 -o %s/output/consensuSV__HG00512.vcf,%s/output/consensuSV__HG00513.vcf,%s/output/consensuSV__HG00514.vcf,%s/output/consensuSV__HG00731.vcf,%s/output/consensuSV__HG00732.vcf,%s/output/consensuSV__HG00733.vcf,%s/output/consensuSV__NA19238.vcf,%s/output/consensuSV__NA19239.vcf,%s/output/consensuSV__NA19240.vcf > %s/benchmark.txt" %(self.working_dir, self.working_dir, self.working_dir, self.working_dir, self.working_dir, self.working_dir, self.working_dir, self.working_dir, self.working_dir, self.working_dir))
 
 class RunConsensuSV(luigi.Task):
+    """Class for running ConsensuSV on one sample."""
     working_dir = luigi.Parameter()
     model = luigi.Parameter(default="/tools/ConsensuSV-core/pretrained_1000g_illumina.model")
     file_name_1 = luigi.Parameter(default=None)
@@ -64,6 +68,8 @@ class RunConsensuSV(luigi.Task):
         run_command("python -u /tools/ConsensuSV-core/main.py -of %s/output/ -f %s/pipeline/ -s %s -c breakdancer,breakseq,cnvnator,delly,lumpy,manta,tardis,whamg -mod %s" % (self.working_dir, self.working_dir, self.sample_name, self.model))
 
 class RunCSVFile(luigi.Task):
+    """Class for running CSV file into ConsensuSV-pipeline."""
+
     csv_file = luigi.Parameter(default=None)
     working_dir = luigi.Parameter()
     model = luigi.Parameter(default="/tools/ConsensuSV-core/pretrained_1000g_illumina.model")
@@ -89,6 +95,8 @@ class RunCSVFile(luigi.Task):
         pass
 
 if __name__ == '__main__':
+    """Default entrance to the program - prints information about pipeline execution."""
+
     start_dt = datetime.now()
     print("Execution of the pipeline started at: ", start_dt.strftime("%d/%m/%Y %H:%M:%S"))
     luigi.run()

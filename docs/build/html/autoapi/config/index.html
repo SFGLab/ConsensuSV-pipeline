@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>config &mdash; ConsensuSV-pipeline 1.0 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ConsensuSV-pipeline
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ConsensuSV-pipeline</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">config</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/autoapi/config/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-config">
+<span id="config"></span><h1><a class="reference internal" href="#module-config" title="config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">config</span></code></a><a class="headerlink" href="#module-config" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<dl class="py data">
+<dt id="config.reference_genome">
+<code class="sig-prename descclassname">config.</code><code class="sig-name descname">reference_genome</code><em class="property"> = /tools/GRCh38_full_analysis_set_plus_decoy_hla.fa</em><a class="headerlink" href="#config.reference_genome" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to reference genome</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="config.debug">
+<code class="sig-prename descclassname">config.</code><code class="sig-name descname">debug</code><em class="property"> = 1</em><a class="headerlink" href="#config.debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Debug level</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="config.all_chromosomes">
+<code class="sig-prename descclassname">config.</code><code class="sig-name descname">all_chromosomes</code><em class="property"> = chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr1...</em><a class="headerlink" href="#config.all_chromosomes" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of chromosomes to analyse</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="config.no_threads">
+<code class="sig-prename descclassname">config.</code><code class="sig-name descname">no_threads</code><em class="property"> = 4</em><a class="headerlink" href="#config.no_threads" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of threads used for most of the tasks (if possible).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="config.mem_per_thread">
+<code class="sig-prename descclassname">config.</code><code class="sig-name descname">mem_per_thread</code><em class="property"> = 16G</em><a class="headerlink" href="#config.mem_per_thread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Memory per thread.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Mateusz Chiliński, Dariusz Plewczynski.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

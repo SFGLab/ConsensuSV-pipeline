@@ -1,0 +1,983 @@
+:py:mod:`sv_callings`
+=====================
+
+.. py:module:: sv_callings
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   sv_callings.SNPCalling
+   sv_callings.IndelCalling
+   sv_callings.SVDelly
+   sv_callings.SVBreakdancer
+   sv_callings.SVTardis
+   sv_callings.SVNovoBreak
+   sv_callings.SVCNVNator
+   sv_callings.SVBreakSeq
+   sv_callings.SVManta
+   sv_callings.SVLumpy
+   sv_callings.SVWhamg
+   sv_callings.SVSvelter
+   sv_callings.CallVariants
+
+
+
+
+.. py:class:: SNPCalling(*args, **kwargs)
+
+   Bases: :py:obj:`luigi.Task`
+
+   Class responsible for SNP calling using bcftools.
+
+   .. py:attribute:: resources
+      
+
+      
+
+   .. py:attribute:: working_dir
+      
+
+      
+
+   .. py:attribute:: file_name_1
+      
+
+      
+
+   .. py:attribute:: file_name_2
+      
+
+      
+
+   .. py:attribute:: sample_name
+      
+
+      
+
+   .. py:attribute:: train_1000g
+      
+
+      
+
+   .. py:method:: requires(self)
+
+      The Tasks that this Task depends on.
+
+      A Task will only run if all of the Tasks that it requires are completed.
+      If your Task does not require any other Tasks, then you don't need to
+      override this method. Otherwise, a subclass can override this method
+      to return a single Task, a list of Task instances, or a dict whose
+      values are Task instances.
+
+      See :ref:`Task.requires`
+
+
+   .. py:method:: output(self)
+
+      The output that this Task produces.
+
+      The output of the Task determines if the Task needs to be run--the task
+      is considered finished iff the outputs all exist. Subclasses should
+      override this method to return a single :py:class:`Target` or a list of
+      :py:class:`Target` instances.
+
+      Implementation note
+        If running multiple workers, the output must be a resource that is accessible
+        by all workers, such as a DFS or database. Otherwise, workers might compute
+        the same output since they don't see the work done by other workers.
+
+      See :ref:`Task.output`
+
+
+   .. py:method:: run(self)
+
+      The task run method, to be overridden in a subclass.
+
+      See :ref:`Task.run`
+
+
+
+.. py:class:: IndelCalling(*args, **kwargs)
+
+   Bases: :py:obj:`luigi.Task`
+
+   Class responsible for Indel calling using bcftools.
+
+   .. py:attribute:: resources
+      
+
+      
+
+   .. py:attribute:: working_dir
+      
+
+      
+
+   .. py:attribute:: file_name_1
+      
+
+      
+
+   .. py:attribute:: file_name_2
+      
+
+      
+
+   .. py:attribute:: sample_name
+      
+
+      
+
+   .. py:attribute:: train_1000g
+      
+
+      
+
+   .. py:method:: requires(self)
+
+      The Tasks that this Task depends on.
+
+      A Task will only run if all of the Tasks that it requires are completed.
+      If your Task does not require any other Tasks, then you don't need to
+      override this method. Otherwise, a subclass can override this method
+      to return a single Task, a list of Task instances, or a dict whose
+      values are Task instances.
+
+      See :ref:`Task.requires`
+
+
+   .. py:method:: output(self)
+
+      The output that this Task produces.
+
+      The output of the Task determines if the Task needs to be run--the task
+      is considered finished iff the outputs all exist. Subclasses should
+      override this method to return a single :py:class:`Target` or a list of
+      :py:class:`Target` instances.
+
+      Implementation note
+        If running multiple workers, the output must be a resource that is accessible
+        by all workers, such as a DFS or database. Otherwise, workers might compute
+        the same output since they don't see the work done by other workers.
+
+      See :ref:`Task.output`
+
+
+   .. py:method:: run(self)
+
+      The task run method, to be overridden in a subclass.
+
+      See :ref:`Task.run`
+
+
+
+.. py:class:: SVDelly(*args, **kwargs)
+
+   Bases: :py:obj:`luigi.Task`
+
+   Class responsible for SV calling using Delly.
+
+   .. py:attribute:: resources
+      
+
+      
+
+   .. py:attribute:: working_dir
+      
+
+      
+
+   .. py:attribute:: file_name_1
+      
+
+      
+
+   .. py:attribute:: file_name_2
+      
+
+      
+
+   .. py:attribute:: sample_name
+      
+
+      
+
+   .. py:attribute:: train_1000g
+      
+
+      
+
+   .. py:method:: requires(self)
+
+      The Tasks that this Task depends on.
+
+      A Task will only run if all of the Tasks that it requires are completed.
+      If your Task does not require any other Tasks, then you don't need to
+      override this method. Otherwise, a subclass can override this method
+      to return a single Task, a list of Task instances, or a dict whose
+      values are Task instances.
+
+      See :ref:`Task.requires`
+
+
+   .. py:method:: output(self)
+
+      The output that this Task produces.
+
+      The output of the Task determines if the Task needs to be run--the task
+      is considered finished iff the outputs all exist. Subclasses should
+      override this method to return a single :py:class:`Target` or a list of
+      :py:class:`Target` instances.
+
+      Implementation note
+        If running multiple workers, the output must be a resource that is accessible
+        by all workers, such as a DFS or database. Otherwise, workers might compute
+        the same output since they don't see the work done by other workers.
+
+      See :ref:`Task.output`
+
+
+   .. py:method:: run(self)
+
+      The task run method, to be overridden in a subclass.
+
+      See :ref:`Task.run`
+
+
+
+.. py:class:: SVBreakdancer(*args, **kwargs)
+
+   Bases: :py:obj:`luigi.Task`
+
+   Class responsible for SV calling using Breakdancer.
+
+   .. py:attribute:: resources
+      
+
+      
+
+   .. py:attribute:: working_dir
+      
+
+      
+
+   .. py:attribute:: file_name_1
+      
+
+      
+
+   .. py:attribute:: file_name_2
+      
+
+      
+
+   .. py:attribute:: sample_name
+      
+
+      
+
+   .. py:attribute:: train_1000g
+      
+
+      
+
+   .. py:method:: requires(self)
+
+      The Tasks that this Task depends on.
+
+      A Task will only run if all of the Tasks that it requires are completed.
+      If your Task does not require any other Tasks, then you don't need to
+      override this method. Otherwise, a subclass can override this method
+      to return a single Task, a list of Task instances, or a dict whose
+      values are Task instances.
+
+      See :ref:`Task.requires`
+
+
+   .. py:method:: output(self)
+
+      The output that this Task produces.
+
+      The output of the Task determines if the Task needs to be run--the task
+      is considered finished iff the outputs all exist. Subclasses should
+      override this method to return a single :py:class:`Target` or a list of
+      :py:class:`Target` instances.
+
+      Implementation note
+        If running multiple workers, the output must be a resource that is accessible
+        by all workers, such as a DFS or database. Otherwise, workers might compute
+        the same output since they don't see the work done by other workers.
+
+      See :ref:`Task.output`
+
+
+   .. py:method:: run(self)
+
+      The task run method, to be overridden in a subclass.
+
+      See :ref:`Task.run`
+
+
+
+.. py:class:: SVTardis(*args, **kwargs)
+
+   Bases: :py:obj:`luigi.Task`
+
+   Class responsible for SV calling using Tardis.
+
+   .. py:attribute:: resources
+      
+
+      
+
+   .. py:attribute:: working_dir
+      
+
+      
+
+   .. py:attribute:: file_name_1
+      
+
+      
+
+   .. py:attribute:: file_name_2
+      
+
+      
+
+   .. py:attribute:: sample_name
+      
+
+      
+
+   .. py:attribute:: train_1000g
+      
+
+      
+
+   .. py:method:: requires(self)
+
+      The Tasks that this Task depends on.
+
+      A Task will only run if all of the Tasks that it requires are completed.
+      If your Task does not require any other Tasks, then you don't need to
+      override this method. Otherwise, a subclass can override this method
+      to return a single Task, a list of Task instances, or a dict whose
+      values are Task instances.
+
+      See :ref:`Task.requires`
+
+
+   .. py:method:: output(self)
+
+      The output that this Task produces.
+
+      The output of the Task determines if the Task needs to be run--the task
+      is considered finished iff the outputs all exist. Subclasses should
+      override this method to return a single :py:class:`Target` or a list of
+      :py:class:`Target` instances.
+
+      Implementation note
+        If running multiple workers, the output must be a resource that is accessible
+        by all workers, such as a DFS or database. Otherwise, workers might compute
+        the same output since they don't see the work done by other workers.
+
+      See :ref:`Task.output`
+
+
+   .. py:method:: run(self)
+
+      The task run method, to be overridden in a subclass.
+
+      See :ref:`Task.run`
+
+
+
+.. py:class:: SVNovoBreak(*args, **kwargs)
+
+   Bases: :py:obj:`luigi.Task`
+
+   Class responsible for SV calling using novoBreak. It is disabled in default run because of its computational time.
+
+   .. py:attribute:: working_dir
+      
+
+      
+
+   .. py:attribute:: file_name_1
+      
+
+      
+
+   .. py:attribute:: file_name_2
+      
+
+      
+
+   .. py:attribute:: sample_name
+      
+
+      
+
+   .. py:attribute:: train_1000g
+      
+
+      
+
+   .. py:method:: requires(self)
+
+      The Tasks that this Task depends on.
+
+      A Task will only run if all of the Tasks that it requires are completed.
+      If your Task does not require any other Tasks, then you don't need to
+      override this method. Otherwise, a subclass can override this method
+      to return a single Task, a list of Task instances, or a dict whose
+      values are Task instances.
+
+      See :ref:`Task.requires`
+
+
+   .. py:method:: output(self)
+
+      The output that this Task produces.
+
+      The output of the Task determines if the Task needs to be run--the task
+      is considered finished iff the outputs all exist. Subclasses should
+      override this method to return a single :py:class:`Target` or a list of
+      :py:class:`Target` instances.
+
+      Implementation note
+        If running multiple workers, the output must be a resource that is accessible
+        by all workers, such as a DFS or database. Otherwise, workers might compute
+        the same output since they don't see the work done by other workers.
+
+      See :ref:`Task.output`
+
+
+   .. py:method:: run(self)
+
+      The task run method, to be overridden in a subclass.
+
+      See :ref:`Task.run`
+
+
+
+.. py:class:: SVCNVNator(*args, **kwargs)
+
+   Bases: :py:obj:`luigi.Task`
+
+   Class responsible for SV calling using CNVNator.
+
+   .. py:attribute:: resources
+      
+
+      
+
+   .. py:attribute:: working_dir
+      
+
+      
+
+   .. py:attribute:: file_name_1
+      
+
+      
+
+   .. py:attribute:: file_name_2
+      
+
+      
+
+   .. py:attribute:: sample_name
+      
+
+      
+
+   .. py:attribute:: train_1000g
+      
+
+      
+
+   .. py:method:: requires(self)
+
+      The Tasks that this Task depends on.
+
+      A Task will only run if all of the Tasks that it requires are completed.
+      If your Task does not require any other Tasks, then you don't need to
+      override this method. Otherwise, a subclass can override this method
+      to return a single Task, a list of Task instances, or a dict whose
+      values are Task instances.
+
+      See :ref:`Task.requires`
+
+
+   .. py:method:: output(self)
+
+      The output that this Task produces.
+
+      The output of the Task determines if the Task needs to be run--the task
+      is considered finished iff the outputs all exist. Subclasses should
+      override this method to return a single :py:class:`Target` or a list of
+      :py:class:`Target` instances.
+
+      Implementation note
+        If running multiple workers, the output must be a resource that is accessible
+        by all workers, such as a DFS or database. Otherwise, workers might compute
+        the same output since they don't see the work done by other workers.
+
+      See :ref:`Task.output`
+
+
+   .. py:method:: run(self)
+
+      The task run method, to be overridden in a subclass.
+
+      See :ref:`Task.run`
+
+
+
+.. py:class:: SVBreakSeq(*args, **kwargs)
+
+   Bases: :py:obj:`luigi.Task`
+
+   Class responsible for SV calling using BreakSeq.
+
+   .. py:attribute:: resources
+      
+
+      
+
+   .. py:attribute:: working_dir
+      
+
+      
+
+   .. py:attribute:: file_name_1
+      
+
+      
+
+   .. py:attribute:: file_name_2
+      
+
+      
+
+   .. py:attribute:: sample_name
+      
+
+      
+
+   .. py:attribute:: train_1000g
+      
+
+      
+
+   .. py:method:: requires(self)
+
+      The Tasks that this Task depends on.
+
+      A Task will only run if all of the Tasks that it requires are completed.
+      If your Task does not require any other Tasks, then you don't need to
+      override this method. Otherwise, a subclass can override this method
+      to return a single Task, a list of Task instances, or a dict whose
+      values are Task instances.
+
+      See :ref:`Task.requires`
+
+
+   .. py:method:: output(self)
+
+      The output that this Task produces.
+
+      The output of the Task determines if the Task needs to be run--the task
+      is considered finished iff the outputs all exist. Subclasses should
+      override this method to return a single :py:class:`Target` or a list of
+      :py:class:`Target` instances.
+
+      Implementation note
+        If running multiple workers, the output must be a resource that is accessible
+        by all workers, such as a DFS or database. Otherwise, workers might compute
+        the same output since they don't see the work done by other workers.
+
+      See :ref:`Task.output`
+
+
+   .. py:method:: run(self)
+
+      The task run method, to be overridden in a subclass.
+
+      See :ref:`Task.run`
+
+
+
+.. py:class:: SVManta(*args, **kwargs)
+
+   Bases: :py:obj:`luigi.Task`
+
+   Class responsible for SV calling using Manta.
+
+   .. py:attribute:: resources
+      
+
+      
+
+   .. py:attribute:: working_dir
+      
+
+      
+
+   .. py:attribute:: file_name_1
+      
+
+      
+
+   .. py:attribute:: file_name_2
+      
+
+      
+
+   .. py:attribute:: sample_name
+      
+
+      
+
+   .. py:attribute:: train_1000g
+      
+
+      
+
+   .. py:method:: requires(self)
+
+      The Tasks that this Task depends on.
+
+      A Task will only run if all of the Tasks that it requires are completed.
+      If your Task does not require any other Tasks, then you don't need to
+      override this method. Otherwise, a subclass can override this method
+      to return a single Task, a list of Task instances, or a dict whose
+      values are Task instances.
+
+      See :ref:`Task.requires`
+
+
+   .. py:method:: output(self)
+
+      The output that this Task produces.
+
+      The output of the Task determines if the Task needs to be run--the task
+      is considered finished iff the outputs all exist. Subclasses should
+      override this method to return a single :py:class:`Target` or a list of
+      :py:class:`Target` instances.
+
+      Implementation note
+        If running multiple workers, the output must be a resource that is accessible
+        by all workers, such as a DFS or database. Otherwise, workers might compute
+        the same output since they don't see the work done by other workers.
+
+      See :ref:`Task.output`
+
+
+   .. py:method:: run(self)
+
+      The task run method, to be overridden in a subclass.
+
+      See :ref:`Task.run`
+
+
+
+.. py:class:: SVLumpy(*args, **kwargs)
+
+   Bases: :py:obj:`luigi.Task`
+
+   Class responsible for SV calling using Lumpy.
+
+   .. py:attribute:: resources
+      
+
+      
+
+   .. py:attribute:: working_dir
+      
+
+      
+
+   .. py:attribute:: file_name_1
+      
+
+      
+
+   .. py:attribute:: file_name_2
+      
+
+      
+
+   .. py:attribute:: sample_name
+      
+
+      
+
+   .. py:attribute:: train_1000g
+      
+
+      
+
+   .. py:method:: requires(self)
+
+      The Tasks that this Task depends on.
+
+      A Task will only run if all of the Tasks that it requires are completed.
+      If your Task does not require any other Tasks, then you don't need to
+      override this method. Otherwise, a subclass can override this method
+      to return a single Task, a list of Task instances, or a dict whose
+      values are Task instances.
+
+      See :ref:`Task.requires`
+
+
+   .. py:method:: output(self)
+
+      The output that this Task produces.
+
+      The output of the Task determines if the Task needs to be run--the task
+      is considered finished iff the outputs all exist. Subclasses should
+      override this method to return a single :py:class:`Target` or a list of
+      :py:class:`Target` instances.
+
+      Implementation note
+        If running multiple workers, the output must be a resource that is accessible
+        by all workers, such as a DFS or database. Otherwise, workers might compute
+        the same output since they don't see the work done by other workers.
+
+      See :ref:`Task.output`
+
+
+   .. py:method:: run(self)
+
+      The task run method, to be overridden in a subclass.
+
+      See :ref:`Task.run`
+
+
+
+.. py:class:: SVWhamg(*args, **kwargs)
+
+   Bases: :py:obj:`luigi.Task`
+
+   Class responsible for SV calling using Whamg.
+
+   .. py:attribute:: resources
+      
+
+      
+
+   .. py:attribute:: working_dir
+      
+
+      
+
+   .. py:attribute:: file_name_1
+      
+
+      
+
+   .. py:attribute:: file_name_2
+      
+
+      
+
+   .. py:attribute:: sample_name
+      
+
+      
+
+   .. py:attribute:: train_1000g
+      
+
+      
+
+   .. py:method:: requires(self)
+
+      The Tasks that this Task depends on.
+
+      A Task will only run if all of the Tasks that it requires are completed.
+      If your Task does not require any other Tasks, then you don't need to
+      override this method. Otherwise, a subclass can override this method
+      to return a single Task, a list of Task instances, or a dict whose
+      values are Task instances.
+
+      See :ref:`Task.requires`
+
+
+   .. py:method:: output(self)
+
+      The output that this Task produces.
+
+      The output of the Task determines if the Task needs to be run--the task
+      is considered finished iff the outputs all exist. Subclasses should
+      override this method to return a single :py:class:`Target` or a list of
+      :py:class:`Target` instances.
+
+      Implementation note
+        If running multiple workers, the output must be a resource that is accessible
+        by all workers, such as a DFS or database. Otherwise, workers might compute
+        the same output since they don't see the work done by other workers.
+
+      See :ref:`Task.output`
+
+
+   .. py:method:: run(self)
+
+      The task run method, to be overridden in a subclass.
+
+      See :ref:`Task.run`
+
+
+
+.. py:class:: SVSvelter(*args, **kwargs)
+
+   Bases: :py:obj:`luigi.Task`
+
+   Class responsible for SV calling using Svelter.
+
+   .. py:attribute:: resources
+      
+
+      
+
+   .. py:attribute:: working_dir
+      
+
+      
+
+   .. py:attribute:: file_name_1
+      
+
+      
+
+   .. py:attribute:: file_name_2
+      
+
+      
+
+   .. py:attribute:: sample_name
+      
+
+      
+
+   .. py:attribute:: train_1000g
+      
+
+      
+
+   .. py:method:: requires(self)
+
+      The Tasks that this Task depends on.
+
+      A Task will only run if all of the Tasks that it requires are completed.
+      If your Task does not require any other Tasks, then you don't need to
+      override this method. Otherwise, a subclass can override this method
+      to return a single Task, a list of Task instances, or a dict whose
+      values are Task instances.
+
+      See :ref:`Task.requires`
+
+
+   .. py:method:: output(self)
+
+      The output that this Task produces.
+
+      The output of the Task determines if the Task needs to be run--the task
+      is considered finished iff the outputs all exist. Subclasses should
+      override this method to return a single :py:class:`Target` or a list of
+      :py:class:`Target` instances.
+
+      Implementation note
+        If running multiple workers, the output must be a resource that is accessible
+        by all workers, such as a DFS or database. Otherwise, workers might compute
+        the same output since they don't see the work done by other workers.
+
+      See :ref:`Task.output`
+
+
+   .. py:method:: run(self)
+
+      The task run method, to be overridden in a subclass.
+
+      See :ref:`Task.run`
+
+
+
+.. py:class:: CallVariants(*args, **kwargs)
+
+   Bases: :py:obj:`luigi.Task`
+
+   Class responsible for calling variants using various methods.
+
+   .. py:attribute:: working_dir
+      
+
+      
+
+   .. py:attribute:: file_name_1
+      
+
+      
+
+   .. py:attribute:: file_name_2
+      
+
+      
+
+   .. py:attribute:: sample_name
+      
+
+      
+
+   .. py:attribute:: train_1000g
+      
+
+      
+
+   .. py:method:: requires(self)
+
+      The Tasks that this Task depends on.
+
+      A Task will only run if all of the Tasks that it requires are completed.
+      If your Task does not require any other Tasks, then you don't need to
+      override this method. Otherwise, a subclass can override this method
+      to return a single Task, a list of Task instances, or a dict whose
+      values are Task instances.
+
+      See :ref:`Task.requires`
+
+
+   .. py:method:: output(self)
+
+      The output that this Task produces.
+
+      The output of the Task determines if the Task needs to be run--the task
+      is considered finished iff the outputs all exist. Subclasses should
+      override this method to return a single :py:class:`Target` or a list of
+      :py:class:`Target` instances.
+
+      Implementation note
+        If running multiple workers, the output must be a resource that is accessible
+        by all workers, such as a DFS or database. Otherwise, workers might compute
+        the same output since they don't see the work done by other workers.
+
+      See :ref:`Task.output`
+
+
+   .. py:method:: run(self)
+
+      The task run method, to be overridden in a subclass.
+
+      See :ref:`Task.run`
+
+
+
