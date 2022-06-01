@@ -12,6 +12,7 @@ Table of Contents
 * [Pipeline control webservice](#pipeline-control-webservice)
 * [Pipeline details](#pipeline-details)
 * [Setup on NVIDIA DGX A100 systems](#setup-on-nvidia-dgx-a100-systems)
+* [Benchmark](#benchmark)
 ## What is ConsensuSV?
 
 Automatised pipeline of ConsensuSV workflow, going from raw sequencing Illumina data (fastq), to output vcf files (structural variants, indels and SNPs). Easy to run, scalable solution for variant discovery.
@@ -218,3 +219,21 @@ After that, you can start using the software, e.g. run:
 ```
 ./test_run_csv.sh
 ```
+
+## Benchmark
+
+We have used 9 samples for the benchmark provided by NYGC - HG00512, HG00513, HG00514, HG00731, HG00732, HG00733, NA19238, NA19239, NA19240. The comparisons were done using svbench (https://github.com/kcleal/svbench) and Venn diagrams of the common SVs. The results from svbench can be seen below:
+
+<p align="center">
+<img src="https://github.com/SFGLab/ConsensuSV-pipeline/blob/main/benchmark.png" />
+</p>
+
+And the Venn diagrams can be seen there:
+
+<p align="center">
+<img src="https://github.com/SFGLab/ConsensuSV-pipeline/blob/main/average.png" />
+</p>
+
+<p align="center">
+<img src="https://github.com/SFGLab/ConsensuSV-pipeline/blob/main/venns.png" />
+</p>
