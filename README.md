@@ -26,15 +26,12 @@ If you use ConsensuSV in your research, we kidnly as you to cite the following p
 The citation will be updated upon publication.
 
 ```
-@article{doi:
+@article{Chilinski_ConsensuSVfrom_the_whole-genome_2022,
 author = {Chiliński, Mateusz and Plewczynski, Dariusz},
-title = {ConsensuSV},
-journal = {},
-pages = {},
-year = {},
-doi = {},
-URL = {},
-eprint = {}
+doi = {10.1093/bioinformatics/btac709},
+journal = {Bioinformatics},
+title = {{ConsensuSV—from the whole-genome sequencing data to the complete variant list}},
+year = {2022}
 }
 ```
 
