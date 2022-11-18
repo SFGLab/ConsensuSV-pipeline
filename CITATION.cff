@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "ConsensuSV-core"
+authors:
+  - family-names: "Chiliński"
+    given-names: "Mateusz"
+    orcid: "https://orcid.org/0000-0001-6641-8504"
+  - family-names: "Plewczynski"
+    given-names: "Dariusz"
+    orcid: "https://orcid.org/0000-0002-3840-7610"
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Chiliński"
+      given-names: "Mateusz"
+      orcid: "https://orcid.org/0000-0001-6641-8504"
+    - family-names: "Plewczynski"
+      given-names: "Dariusz"
+      orcid: "https://orcid.org/0000-0002-3840-7610"
+  doi: "10.1093/bioinformatics/btac709"
+  journal: "Bioinformatics"
+#  month: 12
+#  start: 1 # First page number
+#  end: 10 # Last page number
+  title: "ConsensuSV—from the whole-genome sequencing data to the complete variant list"
+#  issue: 1
+#  volume: 1
+  year: 2022
