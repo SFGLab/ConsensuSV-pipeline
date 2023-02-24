@@ -19,6 +19,10 @@ Automatised pipeline of ConsensuSV workflow, going from raw sequencing Illumina 
 
 Docker image: https://hub.docker.com/repository/docker/mateuszchilinski/consensusv-pipeline
 
+Based on the feedback from the community, we have created NextFlow version of the algorithm too:
+
+https://github.com/SFGLab/ConsensuSV-nf-pipeline
+
 ## Citation
 
 If you use ConsensuSV in your research, we kidnly as you to cite the following publication:
