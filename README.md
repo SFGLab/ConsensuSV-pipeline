@@ -25,7 +25,7 @@ https://github.com/SFGLab/ConsensuSV-nf-pipeline
 
 ## Citation
 
-If you use ConsensuSV in your research, we kidnly as you to cite the following publication:
+If you use ConsensuSV in your research, we kindly ask you to cite the following publication:
 
 The citation will be updated upon publication.
 
